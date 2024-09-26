@@ -1,82 +1,101 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap'); */
 /* @import url("../../public/assets/css/perfect-scrollbar.css"); */
 
- @tailwind base;
- @tailwind components;
- @tailwind utilities;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
- @layer base {
-     html, body {
-         font-family: 'Poppins', sans-serif;
-         font-size: 14px;
-         line-height: 26px;
-         color: #55585B;
-    }
-     img, svg{
-         display: inline-block;
-    }
-     h1, h2, h3, h4, h5, h6{
-         font-family: 'Poppins', sans-serif;
-         font-weight: 500;
-         line-height: 1.2;
-         margin-bottom: 15px;
-         color: #010F1C;
-    }
-     h1 {
-         font-size: 40px;
-    }
-     h2 {
-         font-size: 36px;
-    }
-     h3 {
-         font-size: 24px;
-    }
-     h4 {
-         font-size: 20px;
-    }
-     h5 {
-         font-size: 16px;
-    }
-     h6 {
-         font-size: 14px;
-    }
-     p{
-         font-family: 'Poppins', sans-serif;
-         font-size: 14px;
-         line-height: 26px;
-         color: #55585B;
-         margin-bottom: 15px;
-    }
-     a, .btn, p, button, input, select, textarea, li, img, .transition-3, h1, h2, h3, h4, h5, h6 {
-         -webkit-transition: all .3s ease-out 0s;
-         -moz-transition: all .3s ease-out 0s;
-         -ms-transition: all .3s ease-out 0s;
-         -o-transition: all .3s ease-out 0s;
-         transition: all .3s ease-out 0s;
-    }
-
-
-    
+@layer base {
+  html,
+  body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    line-height: 26px;
+    color: #55585b;
+  }
+  img,
+  svg {
+    display: inline-block;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 15px;
+    color: #010f1c;
+  }
+  h1 {
+    font-size: 40px;
+  }
+  h2 {
+    font-size: 36px;
+  }
+  h3 {
+    font-size: 24px;
+  }
+  h4 {
+    font-size: 20px;
+  }
+  h5 {
+    font-size: 16px;
+  }
+  h6 {
+    font-size: 14px;
+  }
+  p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    line-height: 26px;
+    color: #55585b;
+    margin-bottom: 15px;
+  }
+  a,
+  .btn,
+  p,
+  button,
+  input,
+  select,
+  textarea,
+  li,
+  img,
+  .transition-3,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    -webkit-transition: all 0.3s ease-out 0s;
+    -moz-transition: all 0.3s ease-out 0s;
+    -ms-transition: all 0.3s ease-out 0s;
+    -o-transition: all 0.3s ease-out 0s;
+    transition: all 0.3s ease-out 0s;
+  }
 }
- @layer components {
-     .tp-svg-2 svg {
-         @apply -translate-y-[2px];
-    }
-     .input{
-         @apply bg-white px-6 outline-none focus-within:outline-none focus-visible:outline-none rounded-md border border-gray focus:border-theme focus:bg-white text-tiny;
-    }
-     .nav-dot{
-         @apply relative px-4 pl-[12px] after:absolute after:top-[11px] after:left-0 after:w-[3px] after:h-[3px] after:rounded-full after:bg-[#6D6F71] after:content-[''];
-    }
-     .tp-btn{
-         @apply inline-flex rounded-md items-center tracking-wide text-base font-medium py-1 px-5 text-white bg-theme hover:bg-themeDark;
-    }
-     .text-hover-primary{
-         @apply hover:text-theme;
-    }
-     .badge{
-         @apply inline-flex items-center justify-center rounded text-tiny font-medium leading-none py-1.5 px-2 transition duration-200 ease-in-expo text-success bg-success/10;
-    }
+@layer components {
+  .tp-svg-2 svg {
+    @apply -translate-y-[2px];
+  }
+  .input {
+    @apply px-6 bg-white border rounded-md outline-none focus-within:outline-none focus-visible:outline-none border-gray focus:border-theme focus:bg-white text-tiny;
+  }
+  .nav-dot {
+    @apply relative px-4 pl-[12px] after:absolute after:top-[11px] after:left-0 after:w-[3px] after:h-[3px] after:rounded-full after:bg-[#6D6F71] after:content-[''];
+  }
+  .tp-btn {
+    @apply inline-flex items-center px-5 py-1 text-base font-medium tracking-wide text-white rounded-md bg-theme hover:bg-themeDark;
+  }
+  .text-hover-primary {
+    @apply hover:text-theme;
+  }
+  .badge {
+    @apply inline-flex items-center justify-center rounded text-tiny font-medium leading-none py-1.5 px-2 transition duration-200 ease-in-expo text-success bg-success/10;
+  }
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -87,28 +106,376 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 
 .pagination ul.list-wrap {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 .pagination ul.list-wrap li {
-    width: 30px;
-    height: 30px;
-    border: 1px solid #dddddd;
-    text-align: center;
-    margin-right: 10px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #dddddd;
+  text-align: center;
+  margin-right: 10px;
 }
-.pagination ul.list-wrap li a{
-    font-weight: 500;
+.pagination ul.list-wrap li a {
+  font-weight: 500;
 }
 .pagination ul.list-wrap li.current {
-    background-color: #0989ff;
-    color: #fff;
+  background-color: #0989ff;
+  color: #fff;
 }
 .pagination ul.list-wrap li.disabled {
-    display: none;
+  display: none;
+}
+
+/* tip tap editor start */
+
+/* .tiptap {
+  min-height: 300px;
+  background-color: #f8f8f8;
+} */
+
+/* tip tap */
+
+.tippy-svg-arrow svg {
+  bottom: 6px;
+  background: #fff;
+  fill: #aaa;
+}
+.toolbar > button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  margin: 0.25rem;
+}
+.toolbar > button[disabled] {
+  background-color: #eee;
+}
+/* Basic editor styles */
+.ProseMirror {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+  padding: 6px;
+}
+.ProseMirror > * + * {
+  margin-top: 0.75em;
+}
+.ProseMirror a {
+  color: #68cef8;
+}
+.ProseMirror ul,
+.ProseMirror ol {
+  padding: 0 1rem;
+}
+
+.ProseMirror ul {
+  list-style-type: disc;
+}
+
+.ProseMirror ol {
+  list-style-type: decimal;
+}
+.ProseMirror ul p {
+  margin-bottom: 0px !important;
+}
+
+.ProseMirror ol p {
+  margin-bottom: 0px !important;
+}
+
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3,
+.ProseMirror h4,
+.ProseMirror h5,
+.ProseMirror h6 {
+  line-height: 1.1;
+}
+.ProseMirror code {
+  background-color: rgba(97, 97, 97, 0.1);
+  color: #616161;
+}
+.ProseMirror pre {
+  background: #0d0d0d;
+  color: #fff;
+  font-family: 'JetBrainsMono', monospace;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
+.ProseMirror pre code {
+  color: inherit;
+  padding: 0;
+  background: none;
+  font-size: 0.8rem;
+}
+.ProseMirror img {
+  max-width: 100%;
+  height: auto;
+}
+.ProseMirror blockquote {
+  padding-left: 1rem;
+  border-left: 2px solid rgba(13, 13, 13, 0.1);
+}
+.ProseMirror hr {
+  border: none;
+  border-top: 2px solid rgba(13, 13, 13, 0.1);
+  margin: 2rem 0;
+}
+/** hyperlink styles **/
+/** hyperlink styles **/
+.tippy-box .hyperlink-preview-modal,
+.tippy-box .hyperlink-set-modal,
+.tippy-box .hyperlink-edit-modal {
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid #dadce0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 6px;
+  box-shadow: 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+  margin-top: -6px;
+}
+.tippy-box .hyperlink-preview-modal__metadata,
+.tippy-box .hyperlink-set-modal__metadata,
+.tippy-box .hyperlink-edit-modal__metadata {
+  width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: row-reverse;
+}
+.tippy-box .hyperlink-preview-modal__metadata a,
+.tippy-box .hyperlink-set-modal__metadata a,
+.tippy-box .hyperlink-edit-modal__metadata a {
+  font-size: 0.9rem;
+  margin-right: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tippy-box .hyperlink-preview-modal__metadata img,
+.tippy-box .hyperlink-set-modal__metadata img,
+.tippy-box .hyperlink-edit-modal__metadata img {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+.tippy-box .hyperlink-preview-modal__remove-button,
+.tippy-box .hyperlink-set-modal__remove-button,
+.tippy-box .hyperlink-edit-modal__remove-button,
+.tippy-box .hyperlink-preview-modal__edit-button,
+.tippy-box .hyperlink-set-modal__edit-button,
+.tippy-box .hyperlink-edit-modal__edit-button,
+.tippy-box .hyperlink-preview-modal__copy-button,
+.tippy-box .hyperlink-set-modal__copy-button,
+.tippy-box .hyperlink-edit-modal__copy-button,
+.tippy-box .hyperlink-preview-modal__apply-button,
+.tippy-box .hyperlink-set-modal__apply-button,
+.tippy-box .hyperlink-edit-modal__apply-button {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin: 0 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.1s ease-in-out;
+}
+.tippy-box .hyperlink-preview-modal__remove-button:hover,
+.tippy-box .hyperlink-set-modal__remove-button:hover,
+.tippy-box .hyperlink-edit-modal__remove-button:hover,
+.tippy-box .hyperlink-preview-modal__edit-button:hover,
+.tippy-box .hyperlink-set-modal__edit-button:hover,
+.tippy-box .hyperlink-edit-modal__edit-button:hover,
+.tippy-box .hyperlink-preview-modal__copy-button:hover,
+.tippy-box .hyperlink-set-modal__copy-button:hover,
+.tippy-box .hyperlink-edit-modal__copy-button:hover,
+.tippy-box .hyperlink-preview-modal__apply-button:hover,
+.tippy-box .hyperlink-set-modal__apply-button:hover,
+.tippy-box .hyperlink-edit-modal__apply-button:hover {
+  background-color: #eee;
+}
+.tippy-box .hyperlink-preview-modal__remove-button > svg,
+.tippy-box .hyperlink-set-modal__remove-button > svg,
+.tippy-box .hyperlink-edit-modal__remove-button > svg,
+.tippy-box .hyperlink-preview-modal__edit-button > svg,
+.tippy-box .hyperlink-set-modal__edit-button > svg,
+.tippy-box .hyperlink-edit-modal__edit-button > svg,
+.tippy-box .hyperlink-preview-modal__copy-button > svg,
+.tippy-box .hyperlink-set-modal__copy-button > svg,
+.tippy-box .hyperlink-edit-modal__copy-button > svg,
+.tippy-box .hyperlink-preview-modal__apply-button > svg,
+.tippy-box .hyperlink-set-modal__apply-button > svg,
+.tippy-box .hyperlink-edit-modal__apply-button > svg {
+  width: 16px;
+  height: 16px;
+}
+.tippy-box .hyperlink-preview-modal form,
+.tippy-box .hyperlink-set-modal form,
+.tippy-box .hyperlink-edit-modal form {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+}
+.tippy-box .hyperlink-preview-modal form input,
+.tippy-box .hyperlink-set-modal form input,
+.tippy-box .hyperlink-edit-modal form input {
+  border: 1px solid #dadce0;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  margin-bottom: 0.2rem;
+  width: 100%;
+}
+.tippy-box .hyperlink-preview-modal form input:last-of-type,
+.tippy-box .hyperlink-set-modal form input:last-of-type,
+.tippy-box .hyperlink-edit-modal form input:last-of-type {
+  margin-bottom: 0;
+}
+.tippy-box .hyperlink-preview-modal form .hyperlink-set-modal__buttons-wrapper,
+.tippy-box .hyperlink-set-modal form .hyperlink-set-modal__buttons-wrapper,
+.tippy-box .hyperlink-edit-modal form .hyperlink-set-modal__buttons-wrapper,
+.tippy-box .hyperlink-preview-modal form .hyperlink-edit-modal__buttons-wrapper,
+.tippy-box .hyperlink-set-modal form .hyperlink-edit-modal__buttons-wrapper,
+.tippy-box .hyperlink-edit-modal form .hyperlink-edit-modal__buttons-wrapper {
+  margin-left: 8px;
+}
+.tippy-box
+  .hyperlink-preview-modal
+  form
+  .hyperlink-set-modal__buttons-wrapper
+  button,
+.tippy-box
+  .hyperlink-set-modal
+  form
+  .hyperlink-set-modal__buttons-wrapper
+  button,
+.tippy-box
+  .hyperlink-edit-modal
+  form
+  .hyperlink-set-modal__buttons-wrapper
+  button,
+.tippy-box
+  .hyperlink-preview-modal
+  form
+  .hyperlink-edit-modal__buttons-wrapper
+  button,
+.tippy-box
+  .hyperlink-set-modal
+  form
+  .hyperlink-edit-modal__buttons-wrapper
+  button,
+.tippy-box
+  .hyperlink-edit-modal
+  form
+  .hyperlink-edit-modal__buttons-wrapper
+  button {
+  border-radius: 6px;
+  padding: 4px 14px;
+  width: 70px;
+  margin-bottom: 0.2rem;
+  color: #1a73e8;
+}
+.tippy-box
+  .hyperlink-preview-modal
+  form
+  .hyperlink-set-modal__buttons-wrapper
+  button:hover,
+.tippy-box
+  .hyperlink-set-modal
+  form
+  .hyperlink-set-modal__buttons-wrapper
+  button:hover,
+.tippy-box
+  .hyperlink-edit-modal
+  form
+  .hyperlink-set-modal__buttons-wrapper
+  button:hover,
+.tippy-box
+  .hyperlink-preview-modal
+  form
+  .hyperlink-edit-modal__buttons-wrapper
+  button:hover,
+.tippy-box
+  .hyperlink-set-modal
+  form
+  .hyperlink-edit-modal__buttons-wrapper
+  button:hover,
+.tippy-box
+  .hyperlink-edit-modal
+  form
+  .hyperlink-edit-modal__buttons-wrapper
+  button:hover {
+  background: rgba(26, 115, 232, 0.04);
+  color: #174ea6;
+}
+.tippy-box .tippy-svg-arrow {
+  top: -6px !important;
+}
+
+/* Table-specific styling */
+table {
+  border-collapse: collapse;
+  margin: 0;
+  overflow: hidden;
+  table-layout: fixed;
+  width: 100%;
+
+  td,
+  th {
+    border: 1px solid var(--gray-3);
+    box-sizing: border-box;
+    min-width: 1em;
+    padding: 6px 8px;
+    position: relative;
+    vertical-align: top;
+
+    > * {
+      margin-bottom: 0;
+    }
+  }
+
+  th {
+    background-color: var(--gray-1);
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .selectedCell:after {
+    background: var(--gray-2);
+    content: '';
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: 2;
+  }
+
+  .column-resize-handle {
+    background-color: var(--purple);
+    bottom: -2px;
+    pointer-events: none;
+    position: absolute;
+    right: -2px;
+    top: 0;
+    width: 4px;
+  }
+}
+
+.tableWrapper {
+  margin: 1.5rem 0;
+  overflow-x: auto;
+}
+
+&.resize-cursor {
+  cursor: ew-resize;
+  cursor: col-resize;
 }

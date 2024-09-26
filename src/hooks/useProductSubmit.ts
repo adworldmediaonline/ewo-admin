@@ -1,10 +1,13 @@
-"use client";
-import { useEffect, useState } from "react";
-import slugify from "slugify";
-import { useForm } from "react-hook-form";
-import {useRouter} from 'next/navigation';
-import { useAddProductMutation, useEditProductMutation } from "@/redux/product/productApi";
-import { notifyError, notifySuccess } from "@/utils/toast";
+'use client';
+import { useEffect, useState } from 'react';
+import slugify from 'slugify';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
+import {
+  useAddProductMutation,
+  useEditProductMutation,
+} from '@/redux/product/productApi';
+import { notifyError, notifySuccess } from '@/utils/toast';
 
 // ImageURL type
 export interface ImageURL {
@@ -24,26 +27,26 @@ type ICategory = {
   id: string;
 };
 
-type status = "in-stock" | "out-of-stock" | "discontinued";
+type status = 'in-stock' | 'out-of-stock' | 'discontinued';
 
 const useProductSubmit = () => {
-  const [sku, setSku] = useState<string>("");
-  const [img, setImg] = useState<string>("");
-  const [title, setTitle] = useState<string>("");
-  const [slug, setSlug] = useState<string>("");
-  const [unit, setUnit] = useState<string>("");
+  const [sku, setSku] = useState<string>('');
+  const [img, setImg] = useState<string>('');
+  const [title, setTitle] = useState<string>('');
+  const [slug, setSlug] = useState<string>('');
+  const [unit, setUnit] = useState<string>('');
   const [imageURLs, setImageURLs] = useState<ImageURL[]>([]);
-  const [parent, setParent] = useState<string>("");
-  const [children, setChildren] = useState<string>("");
+  const [parent, setParent] = useState<string>('');
+  const [children, setChildren] = useState<string>('');
   const [price, setPrice] = useState<number>(0);
   const [discount, setDiscount] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
-  const [brand, setBrand] = useState<IBrand>({ name: "", id: "" });
-  const [category, setCategory] = useState<ICategory>({ name: "", id: "" });
-  const [status, setStatus] = useState<status>("in-stock");
-  const [productType, setProductType] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [videoId, setVideoId] = useState<string>("");
+  const [brand, setBrand] = useState<IBrand>({ name: '', id: '' });
+  const [category, setCategory] = useState<ICategory>({ name: '', id: '' });
+  const [status, setStatus] = useState<status>('in-stock');
+  const [productType, setProductType] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [videoId, setVideoId] = useState<string>('');
   const [offerDate, setOfferDate] = useState<{
     startDate: null;
     endDate: null;
@@ -63,13 +66,14 @@ const useProductSubmit = () => {
 
   const router = useRouter();
 
-
   // useAddProductMutation
   const [addProduct, { data: addProductData, isError, isLoading }] =
     useAddProductMutation();
   // useAddProductMutation
-  const [editProduct, { data: editProductData, isError: editErr, isLoading: editLoading }] =
-    useEditProductMutation();
+  const [
+    editProduct,
+    { data: editProductData, isError: editErr, isLoading: editLoading },
+  ] = useEditProductMutation();
 
   const {
     register,
@@ -81,23 +85,23 @@ const useProductSubmit = () => {
   } = useForm();
   // resetForm
   const resetForm = () => {
-    setSku("");
-    setImg("");
-    setTitle("");
-    setSlug("");
-    setUnit("");
+    setSku('');
+    setImg('');
+    setTitle('');
+    setSlug('');
+    setUnit('');
     setImageURLs([]);
-    setParent("");
-    setChildren("");
+    setParent('');
+    setChildren('');
     setPrice(0);
     setDiscount(0);
     setQuantity(0);
-    setBrand({ name: "", id: "" });
-    setCategory({ name: "", id: "" });
-    setStatus("in-stock");
-    setProductType("");
-    setDescription("");
-    setVideoId("");
+    setBrand({ name: '', id: '' });
+    setCategory({ name: '', id: '' });
+    setStatus('in-stock');
+    setProductType('');
+    setDescription('');
+    setVideoId('');
     setOfferDate({
       startDate: null,
       endDate: null,
@@ -117,7 +121,7 @@ const useProductSubmit = () => {
       sku: data.SKU,
       img: img,
       title: data.title,
-      slug: slugify(data.title, { replacement: "-", lower: true }),
+      slug: slugify(data.title, { replacement: '-', lower: true }),
       unit: data.unit,
       imageURLs: imageURLs,
       parent: parent,
@@ -139,31 +143,30 @@ const useProductSubmit = () => {
       tags: tags,
     };
 
-    console.log('productData-------------------..>',productData)
-
+    console.log('productData-------------------..>', productData);
 
     if (!img) {
-      return notifyError("Product image is required");
+      return notifyError('Product image is required');
     }
     if (!category.name) {
-      return notifyError("Category is required");
+      return notifyError('Category is required');
     }
     if (Number(data.discount) > Number(data.price)) {
-      return notifyError("Product price must be gether than discount");
+      return notifyError('Product price must be gether than discount');
     } else {
       const res = await addProduct(productData);
-      if ("error" in res) {
-        if ("data" in res.error) {
+      if ('error' in res) {
+        if ('data' in res.error) {
           const errorData = res.error.data as { message?: string };
-          if (typeof errorData.message === "string") {
+          if (typeof errorData.message === 'string') {
             return notifyError(errorData.message);
           }
         }
       } else {
-        notifySuccess("Product created successFully");
+        notifySuccess('Product created successFully');
         setIsSubmitted(true);
         resetForm();
-        router.push('/product-grid')
+        router.push('/product-grid');
       }
     }
   };
@@ -174,7 +177,7 @@ const useProductSubmit = () => {
       sku: data.SKU,
       img: img,
       title: data.title,
-      slug: slugify(data.title, { replacement: "-", lower: true }),
+      slug: slugify(data.title, { replacement: '-', lower: true }),
       unit: data.unit,
       imageURLs: imageURLs,
       parent: parent,
@@ -195,19 +198,19 @@ const useProductSubmit = () => {
       additionalInformation: additionalInformation,
       tags: tags,
     };
-    console.log('edit productData---->',productData)
+    console.log('edit productData---->', productData);
     const res = await editProduct({ id: id, data: productData });
-    if ("error" in res) {
-      if ("data" in res.error) {
+    if ('error' in res) {
+      if ('data' in res.error) {
         const errorData = res.error.data as { message?: string };
-        if (typeof errorData.message === "string") {
+        if (typeof errorData.message === 'string') {
           return notifyError(errorData.message);
         }
       }
     } else {
-      notifySuccess("Product edit successFully");
+      notifySuccess('Product edit successFully');
       setIsSubmitted(true);
-      router.push('/product-grid')
+      router.push('/product-grid');
       resetForm();
     }
   };

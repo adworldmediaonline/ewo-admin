@@ -1,11 +1,11 @@
-import Link from "next/link";
-import Swal from "sweetalert2";
-import React, { useState } from "react";
-import { Delete, Edit } from "@/svg";
-import { notifyError } from "@/utils/toast";
-import { useDeleteProductMutation } from "@/redux/product/productApi";
-import DeleteTooltip from "../tooltip/delete-tooltip";
-import EditTooltip from "../tooltip/edit-tooltip";
+import Link from 'next/link';
+import Swal from 'sweetalert2';
+import React, { useState } from 'react';
+import { Delete, Edit } from '@/svg';
+import { notifyError } from '@/utils/toast';
+import { useDeleteProductMutation } from '@/redux/product/productApi';
+import DeleteTooltip from '../tooltip/delete-tooltip';
+import EditTooltip from '../tooltip/edit-tooltip';
 
 const EditDeleteBtn = ({ id }: { id: string }) => {
   const [showEdit, setShowEdit] = useState<boolean>(false);
@@ -14,26 +14,26 @@ const EditDeleteBtn = ({ id }: { id: string }) => {
 
   const handleDelete = async (productId: string) => {
     Swal.fire({
-      title: "Are you sure?",
+      title: 'Are you sure?',
       text: `Delete this product ?`,
-      icon: "warning",
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!",
-    }).then(async (result) => {
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+    }).then(async result => {
       if (result.isConfirmed) {
         try {
           const res = await deleteProduct(productId);
-          if ("error" in res) {
-            if ("data" in res.error) {
+          if ('error' in res) {
+            if ('data' in res.error) {
               const errorData = res.error.data as { message?: string };
-              if (typeof errorData.message === "string") {
+              if (typeof errorData.message === 'string') {
                 return notifyError(errorData.message);
               }
             }
           } else {
-            Swal.fire("Deleted!", `Your product has been deleted.`, "success");
+            Swal.fire('Deleted!', `Your product has been deleted.`, 'success');
           }
         } catch (error) {}
       }
@@ -43,15 +43,15 @@ const EditDeleteBtn = ({ id }: { id: string }) => {
   return (
     <>
       <div className="relative">
-        <Link href={`/edit-product/${id}`}>
+        <a href={`/edit-product/${id}`}>
           <button
             onMouseEnter={() => setShowEdit(true)}
             onMouseLeave={() => setShowEdit(false)}
-            className="w-10 h-10 leading-10 text-tiny bg-success text-white rounded-md hover:bg-green-600"
+            className="w-10 h-10 leading-10 text-white rounded-md text-tiny bg-success hover:bg-green-600"
           >
             <Edit />
           </button>
-        </Link>
+        </a>
         <EditTooltip showEdit={showEdit} />
       </div>
       <div className="relative">

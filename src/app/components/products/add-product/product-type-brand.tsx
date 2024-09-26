@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   FieldErrors,
   UseFormRegister,
   Controller,
   Control,
-} from "react-hook-form";
-import { useGetAllBrandsQuery } from "@/redux/brand/brandApi";
+} from 'react-hook-form';
+import { useGetAllBrandsQuery } from '@/redux/brand/brandApi';
 
-import ReactSelect, { GroupBase } from "react-select";
-import ErrorMsg from "../../common/error-msg";
-import Loading from "../../common/loading";
-import ProductType from "./product-type";
+import ReactSelect, { GroupBase } from 'react-select';
+import ErrorMsg from '../../common/error-msg';
+import Loading from '../../common/loading';
+import ProductType from './product-type';
 // prop type
 type IPropType = {
   register: UseFormRegister<any>;
@@ -45,7 +45,7 @@ const ProductTypeBrand = ({
       default_value.brand &&
       !hasDefaultValues
     ) {
-      const brand = brands?.result.find((b) => b.name === default_value.brand);
+      const brand = brands?.result.find(b => b.name === default_value.brand);
       if (brand) {
         setSelectBrand({ id: brand._id as string, name: default_value.brand });
         setSelectProductType(default_value.product_type);
@@ -82,10 +82,10 @@ const ProductTypeBrand = ({
 
     // handleBrandChange
     const handleBrandChange = (selectBrand: string) => {
-      const brand = brandItems.find((b) => b.name === selectBrand);
+      const brand = brandItems.find(b => b.name === selectBrand);
       setSelectBrand({ id: brand?._id as string, name: selectBrand });
     };
-    const option = brandItems.map((b) => ({
+    const option = brandItems.map(b => ({
       value: b.name,
       label: b.name,
     })) as unknown as readonly (string | GroupBase<string>)[];
@@ -97,7 +97,7 @@ const ProductTypeBrand = ({
           name="brand"
           control={control}
           rules={{
-            required: default_value?.brand ? false : "Brand is required!",
+            required: default_value?.brand ? false : 'Brand is required!',
           }}
           render={({ field }) => (
             <ReactSelect
@@ -110,11 +110,11 @@ const ProductTypeBrand = ({
                       value: default_value.brand,
                     }
                   : {
-                      label: "Select..",
+                      label: 'Select..',
                       value: 0,
                     }
               }
-              onChange={(selectedOption) => {
+              onChange={selectedOption => {
                 field.onChange(selectedOption);
                 handleBrandChange(selectedOption?.value);
               }}
@@ -123,12 +123,12 @@ const ProductTypeBrand = ({
           )}
         />
         <ErrorMsg msg={errors?.brand?.message as string} />
-        <span className="text-tiny leading-4">Set the product Brand.</span>
+        <span className="leading-4 text-tiny">Set the product Brand.</span>
       </div>
     );
   }
   return (
-    <div className="bg-white px-8 py-8 rounded-md mb-6">
+    <div className="px-8 py-8 mb-6 bg-white rounded-md">
       <div className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-3 gap-x-6">
         <div className="mb-5">
           <p className="mb-0 text-base text-black">ProductType</p>
@@ -138,7 +138,7 @@ const ProductTypeBrand = ({
             default_value={default_value?.product_type}
             setSelectProductType={setSelectProductType}
           />
-          <span className="text-tiny leading-4">
+          <span className="leading-4 text-tiny">
             Set the product ProductType.
           </span>
         </div>
@@ -151,14 +151,14 @@ const ProductTypeBrand = ({
           </p>
           <input
             id="unit"
-            {...register("unit", { required: `unit is required!` })}
+            {...register('unit', { required: `unit is required!` })}
             defaultValue={default_value?.unit}
             className="input w-full h-[44px] rounded-md border border-gray6 px-6 text-base"
             type="text"
             placeholder="Product unit"
           />
           <ErrorMsg msg={errors?.unit?.message as string} />
-          <span className="text-tiny leading-4">Set the unit of product.</span>
+          <span className="leading-4 text-tiny">Set the unit of product.</span>
         </div>
       </div>
     </div>

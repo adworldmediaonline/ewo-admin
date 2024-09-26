@@ -1,15 +1,19 @@
-"use client";
-import React from "react";
-import useProductSubmit from "@/hooks/useProductSubmit";
-import DescriptionTextarea from "./description-textarea";
-import OfferDatePicker from "./offer-date-picker";
-import ProductTypeBrand from "./product-type-brand";
-import AdditionalInformation from "./additional-information";
-import ProductVariants from "./product-variants";
-import ProductImgUpload from "./product-img-upload";
-import ProductCategory from "../../category/product-category";
-import Tags from "./tags";
-import FormField from "../form-field";
+'use client';
+import React from 'react';
+import useProductSubmit from '@/hooks/useProductSubmit';
+import DescriptionTextarea from './description-textarea';
+import OfferDatePicker from './offer-date-picker';
+import ProductTypeBrand from './product-type-brand';
+import AdditionalInformation from './additional-information';
+import ProductVariants from './product-variants';
+import ProductImgUpload from './product-img-upload';
+import ProductCategory from '../../category/product-category';
+import Tags from './tags';
+import FormField from '../form-field';
+import { Controller } from 'react-hook-form';
+import ErrorMsg from '../../common/error-msg';
+
+import Tiptap from '@/components/tipTap/Tiptap';
 
 const ProductSubmit = () => {
   const {
@@ -36,14 +40,19 @@ const ProductSubmit = () => {
     imageURLs,
   } = useProductSubmit();
 
-  console.log('additionalInformation--->',additionalInformation,'imageURLs--->',imageURLs)
+  console.log(
+    'additionalInformation--->',
+    additionalInformation,
+    'imageURLs--->',
+    imageURLs
+  );
 
   return (
     <form onSubmit={handleSubmit(handleSubmitProduct)}>
       <div className="grid grid-cols-12 gap-6 mb-6">
         {/* left side */}
         <div className="col-span-12 xl:col-span-8 2xl:col-span-9">
-          <div className="mb-6 bg-white px-8 py-8 rounded-md">
+          <div className="px-8 py-8 mb-6 bg-white rounded-md">
             <h4 className="text-[22px]">General</h4>
             <FormField
               title="title"
@@ -52,10 +61,41 @@ const ProductSubmit = () => {
               register={register}
               errors={errors}
             />
-            <DescriptionTextarea register={register} errors={errors} />
+            {/* <DescriptionTextarea register={register} errors={errors} /> */}
+            {/* tip tap editor start */}
+            {/* <div className="mb-5">
+              <p className="mb-0 text-base text-black capitalize">
+                Description <span className="text-red">*</span>
+              </p>
+              <Controller
+                name="description"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <RichTextEditor content={field.value} {...field} />
+                )}
+              />
+              <ErrorMsg msg={(errors?.description?.message as string) || ''} />
+            </div> */}
+            {/* tip tap editor end */}
+
+            {/* tip tap editor start */}
+            <div className="mb-5">
+              <p className="mb-0 text-base text-black capitalize">
+                Description <span className="text-red">*</span>
+              </p>
+              <Controller
+                name="description"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => <Tiptap {...field} />}
+              />
+              <ErrorMsg msg={(errors?.description?.message as string) || ''} />
+            </div>
+            {/* tip tap editor end */}
           </div>
 
-          <div className="bg-white px-8 py-8 rounded-md mb-6">
+          <div className="px-8 py-8 mb-6 bg-white rounded-md">
             <div className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-6">
               <FormField
                 title="price"
@@ -95,7 +135,7 @@ const ProductSubmit = () => {
             </div>
           </div>
 
-          <div className="bg-white px-8 py-8 rounded-md mb-6">
+          <div className="px-8 py-8 mb-6 bg-white rounded-md">
             <div className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-x-6">
               <FormField
                 title="youtube video Id"
@@ -114,7 +154,7 @@ const ProductSubmit = () => {
                   offerDate={offerDate}
                   setOfferDate={setOfferDate}
                 />
-                <span className="text-tiny leading-4">
+                <span className="leading-4 text-tiny">
                   set the product offer and end date
                 </span>
               </div>
@@ -154,10 +194,10 @@ const ProductSubmit = () => {
             isSubmitted={isSubmitted}
           />
 
-          <div className="bg-white px-8 py-8 rounded-md mb-6">
+          <div className="px-8 py-8 mb-6 bg-white rounded-md">
             <p className="mb-5 text-base text-black">Product Category</p>
             {/* category start */}
-            <div className="grid grid-cols-1 sm:grid-cols-1 gap-3 mb-5">
+            <div className="grid grid-cols-1 gap-3 mb-5 sm:grid-cols-1">
               <ProductCategory
                 setCategory={setCategory}
                 setParent={setParent}
@@ -166,16 +206,16 @@ const ProductSubmit = () => {
             </div>
           </div>
 
-          <div className="bg-white px-8 py-8 rounded-md mb-6">
+          <div className="px-8 py-8 mb-6 bg-white rounded-md">
             <p className="mb-5 text-base text-black">Product Tags</p>
             {/* tags start */}
-            <div className="grid grid-cols-1 sm:grid-cols-1 gap-3 mb-5">
+            <div className="grid grid-cols-1 gap-3 mb-5 sm:grid-cols-1">
               <Tags tags={tags} setTags={setTags} />
             </div>
           </div>
         </div>
       </div>
-      <button className="tp-btn px-5 py-2 mt-5" type="submit">
+      <button className="px-5 py-2 mt-5 tp-btn" type="submit">
         Submit Product
       </button>
     </form>

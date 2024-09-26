@@ -1,6 +1,6 @@
-import { SmClose } from "@/svg";
-import { notifySuccess } from "@/utils/toast";
-import { useState, ChangeEvent, SetStateAction, useEffect } from "react";
+import { SmClose } from '@/svg';
+import { notifySuccess } from '@/utils/toast';
+import { useState, ChangeEvent, SetStateAction, useEffect } from 'react';
 
 interface FormData {
   key: string;
@@ -24,9 +24,10 @@ const AdditionalInformation = ({
   default_value,
 }: IPropType) => {
   const [formData, setFormData] = useState<FormData[]>(
-    default_value ? default_value : [{ key: "", value: "" }]
+    default_value ? default_value : [{ key: '', value: '' }]
   );
   const [hasDefaultValues, setHasDefaultValues] = useState<boolean>(false);
+
   // default value set
   useEffect(() => {
     if (default_value && !hasDefaultValues) {
@@ -44,8 +45,8 @@ const AdditionalInformation = ({
   // handle add field
   const handleAddField = () => {
     const lastField = formData[formData.length - 1];
-    if (lastField.key.trim() !== "" || lastField.value.trim() !== "") {
-      setFormData([...formData, { key: "", value: "" }]);
+    if (lastField.key.trim() !== '' || lastField.value.trim() !== '') {
+      setFormData([...formData, { key: '', value: '' }]);
       setAdditionalInformation([...formData]);
     }
   };
@@ -59,7 +60,7 @@ const AdditionalInformation = ({
 
   return (
     <>
-      <div className="bg-white px-8 py-8 rounded-md mb-6">
+      <div className="px-8 py-8 mb-6 bg-white rounded-md">
         <h4 className="text-[22px]">Additional Information</h4>
         <div>
           {formData.map((data, index) => {
@@ -77,7 +78,7 @@ const AdditionalInformation = ({
                     name="key"
                     placeholder="Enter key"
                     value={data.key}
-                    onChange={(e) => handleChange(index, e)}
+                    onChange={e => handleChange(index, e)}
                   />
                 </div>
 
@@ -89,7 +90,7 @@ const AdditionalInformation = ({
                     name="value"
                     placeholder="Enter value"
                     value={data.value}
-                    onChange={(e) => handleChange(index, e)}
+                    onChange={e => handleChange(index, e)}
                   />
                 </div>
 
@@ -101,7 +102,7 @@ const AdditionalInformation = ({
                       type="button"
                       onClick={() => handleRemoveField(index)}
                     >
-                      <SmClose/>
+                      <SmClose />
                     </button>
                   </div>
                 )}
@@ -110,7 +111,7 @@ const AdditionalInformation = ({
           })}
           <div className="flex items-center justify-between mt-8">
             <button
-              className=" tp-btn px-5 py-2"
+              className="px-5 py-2 tp-btn"
               type="button"
               onClick={handleAddField}
             >

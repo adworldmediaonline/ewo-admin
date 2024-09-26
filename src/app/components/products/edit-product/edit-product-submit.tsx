@@ -1,17 +1,19 @@
-"use client";
-import React from "react";
-import useProductSubmit from "@/hooks/useProductSubmit";
-import ErrorMsg from "../../common/error-msg";
-import FormField from "../form-field";
-import DescriptionTextarea from "../add-product/description-textarea";
-import { useGetProductQuery } from "@/redux/product/productApi";
-import OfferDatePicker from "../add-product/offer-date-picker";
-import ProductTypeBrand from "../add-product/product-type-brand";
-import AdditionalInformation from "../add-product/additional-information";
-import ProductVariants from "../add-product/product-variants";
-import ProductImgUpload from "../add-product/product-img-upload";
-import Tags from "../add-product/tags";
-import ProductCategory from "../../category/product-category";
+'use client';
+import React from 'react';
+import useProductSubmit from '@/hooks/useProductSubmit';
+import ErrorMsg from '../../common/error-msg';
+import FormField from '../form-field';
+import DescriptionTextarea from '../add-product/description-textarea';
+import { useGetProductQuery } from '@/redux/product/productApi';
+import OfferDatePicker from '../add-product/offer-date-picker';
+import ProductTypeBrand from '../add-product/product-type-brand';
+import AdditionalInformation from '../add-product/additional-information';
+import ProductVariants from '../add-product/product-variants';
+import ProductImgUpload from '../add-product/product-img-upload';
+import Tags from '../add-product/tags';
+import ProductCategory from '../../category/product-category';
+import Tiptap from '@/components/tipTap/Tiptap';
+import { Controller } from 'react-hook-form';
 
 const EditProductSubmit = ({ id }: { id: string }) => {
   const { data: product, isError, isLoading } = useGetProductQuery(id);
@@ -53,11 +55,11 @@ const EditProductSubmit = ({ id }: { id: string }) => {
   }
   if (!isLoading && !isError && product) {
     content = (
-      <form onSubmit={handleSubmit((data) => handleEditProduct(data, id))}>
+      <form onSubmit={handleSubmit(data => handleEditProduct(data, id))}>
         <div className="grid grid-cols-12 gap-6 mb-6">
           {/* left side */}
           <div className="col-span-12 xl:col-span-8 2xl:col-span-9">
-            <div className="mb-6 bg-white px-8 py-8 rounded-md">
+            <div className="px-8 py-8 mb-6 bg-white rounded-md">
               <h4 className="text-[22px]">General</h4>
               <FormField
                 title="title"
@@ -67,14 +69,31 @@ const EditProductSubmit = ({ id }: { id: string }) => {
                 errors={errors}
                 defaultValue={product.title}
               />
-              <DescriptionTextarea
+              {/* <DescriptionTextarea
                 register={register}
                 errors={errors}
                 defaultValue={product.description}
-              />
+              /> */}
+              {/* tip tap editor start */}
+              <div className="mb-5">
+                <p className="mb-0 text-base text-black capitalize">
+                  Description <span className="text-red">*</span>
+                </p>
+                <Controller
+                  name="description"
+                  control={control}
+                  defaultValue={product.description}
+                  rules={{ required: true }}
+                  render={({ field }) => <Tiptap {...field} />}
+                />
+                <ErrorMsg
+                  msg={(errors?.description?.message as string) || ''}
+                />
+              </div>
+              {/* tip tap editor end */}
             </div>
 
-            <div className="bg-white px-8 py-8 rounded-md mb-6">
+            <div className="px-8 py-8 mb-6 bg-white rounded-md">
               <div className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-x-6">
                 <FormField
                   title="price"
@@ -118,7 +137,7 @@ const EditProductSubmit = ({ id }: { id: string }) => {
               </div>
             </div>
 
-            <div className="bg-white px-8 py-8 rounded-md mb-6">
+            <div className="px-8 py-8 mb-6 bg-white rounded-md">
               <div className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-x-6">
                 <FormField
                   title="youtube video Id"
@@ -139,7 +158,7 @@ const EditProductSubmit = ({ id }: { id: string }) => {
                     setOfferDate={setOfferDate}
                     defaultValue={product.offerDate}
                   />
-                  <span className="text-tiny leading-4">
+                  <span className="leading-4 text-tiny">
                     set the product offer and end date
                   </span>
                 </div>
@@ -187,10 +206,10 @@ const EditProductSubmit = ({ id }: { id: string }) => {
               isSubmitted={isSubmitted}
             />
 
-            <div className="bg-white px-8 py-8 rounded-md mb-6">
+            <div className="px-8 py-8 mb-6 bg-white rounded-md">
               <p className="mb-5 text-base text-black">Product Category</p>
               {/* category start */}
-              <div className="grid grid-cols-1 sm:grid-cols-1 gap-3 mb-5">
+              <div className="grid grid-cols-1 gap-3 mb-5 sm:grid-cols-1">
                 <ProductCategory
                   setCategory={setCategory}
                   setParent={setParent}
@@ -210,7 +229,7 @@ const EditProductSubmit = ({ id }: { id: string }) => {
             </div>
           </div>
         </div>
-        <button className="tp-btn px-5 py-2 mt-5" type="submit">
+        <button className="px-5 py-2 mt-5 tp-btn" type="submit">
           Submit Product
         </button>
       </form>
