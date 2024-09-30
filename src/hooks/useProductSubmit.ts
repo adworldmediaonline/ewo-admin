@@ -127,7 +127,7 @@ const useProductSubmit = () => {
       parent: parent,
       children: children,
       price: data.price,
-      discount: data.discount_percentage,
+      discount: data.discount,
       quantity: data.quantity,
       brand: brand,
       category: category,
@@ -183,7 +183,7 @@ const useProductSubmit = () => {
       parent: parent,
       children: children,
       price: data.price,
-      discount: data.discount_percentage,
+      discount: data.discount,
       quantity: data.quantity,
       brand: brand,
       category: category,
@@ -199,6 +199,7 @@ const useProductSubmit = () => {
       tags: tags,
     };
     console.log('edit productData---->', productData);
+
     const res = await editProduct({ id: id, data: productData });
     if ('error' in res) {
       if ('data' in res.error) {

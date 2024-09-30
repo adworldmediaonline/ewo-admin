@@ -125,7 +125,7 @@ const EditProductSubmit = ({ id }: { id: string }) => {
                   errors={errors}
                 />
                 <FormField
-                  title="discount percentage"
+                  title="discount"
                   type="number"
                   isRequired={false}
                   placeHolder="Discount"
