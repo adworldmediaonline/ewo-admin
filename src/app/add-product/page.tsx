@@ -9,7 +9,7 @@ const AddProduct = () => {
         {/* breadcrumb start */}
         <Breadcrumb title="Add Product" subtitle="Add Product" />
         {/* breadcrumb end */}
-
+        {/*  */}
         {/* add a product start */}
         <div className="grid grid-cols-12">
           <div className="col-span-12 2xl:col-span-10">
