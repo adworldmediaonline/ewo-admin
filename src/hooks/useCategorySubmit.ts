@@ -1,15 +1,18 @@
-import { notifySuccess, notifyError } from "@/utils/toast";
-import { useAddCategoryMutation, useEditCategoryMutation } from "@/redux/category/categoryApi";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { useRouter } from 'next/navigation'
+import { notifySuccess, notifyError } from '@/utils/toast';
+import {
+  useAddCategoryMutation,
+  useEditCategoryMutation,
+} from '@/redux/category/categoryApi';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 
 const useCategorySubmit = () => {
-  const [categoryImg, setCategoryImg] = useState<string>("");
-  const [parent, setParent] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [error, setError] = useState<string>("");
-  const [selectProductType, setSelectProductType] = useState<string>("");
+  const [categoryImg, setCategoryImg] = useState<string>('');
+  const [parent, setParent] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [error, setError] = useState<string>('');
+  const [selectProductType, setSelectProductType] = useState<string>('');
   const [categoryChildren, setCategoryChildren] = useState<string[]>([]);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const router = useRouter();
@@ -21,7 +24,12 @@ const useCategorySubmit = () => {
   // edit
   const [
     editCategory,
-    { data: editCateData, isError: editErr, isLoading: editLoading, error: editCateErr },
+    {
+      data: editCateData,
+      isError: editErr,
+      isLoading: editLoading,
+      error: editCateErr,
+    },
   ] = useEditCategoryMutation();
 
   // react hook form
@@ -45,23 +53,23 @@ const useCategorySubmit = () => {
         children: categoryChildren,
       };
       const res = await addCategory({ ...category_data });
-      if ("error" in res) {
-        if ("data" in res.error) {
+      if ('error' in res) {
+        if ('data' in res.error) {
           const errorData = res.error.data as { message?: string };
-          if (typeof errorData.message === "string") {
+          if (typeof errorData.message === 'string') {
             return notifyError(errorData.message);
           }
         }
       } else {
-        notifySuccess("Category added successfully");
+        notifySuccess('Category added successfully');
         setIsSubmitted(true);
         reset();
         setCategoryChildren([]);
-        setCategoryImg("");
+        setCategoryImg('');
       }
     } catch (error) {
       console.log(error);
-      notifyError("Something went wrong");
+      notifyError('Something went wrong');
     }
   };
   //handle Submit edit Category
@@ -76,22 +84,22 @@ const useCategorySubmit = () => {
       };
       const res = await editCategory({ id, data: category_data });
       // console.log(res)
-      if ("error" in res) {
-        if ("data" in res.error) {
+      if ('error' in res) {
+        if ('data' in res.error) {
           const errorData = res.error.data as { message?: string };
-          if (typeof errorData.message === "string") {
+          if (typeof errorData.message === 'string') {
             return notifyError(errorData.message);
           }
         }
       } else {
-        notifySuccess("Category update successfully");
-        router.push('/category')
+        notifySuccess('Category update successfully');
+        router.push('/category');
         setIsSubmitted(true);
         reset();
       }
     } catch (error) {
       console.log(error);
-      notifyError("Something went wrong");
+      notifyError('Something went wrong');
     }
   };
 

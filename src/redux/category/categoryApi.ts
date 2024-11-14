@@ -1,18 +1,18 @@
-import { apiSlice } from "../api/apiSlice";
+import { apiSlice } from '../api/apiSlice';
 import {
   CategoryResponse,
   IAddCategory,
   IAddCategoryResponse,
   ICategoryDeleteRes,
-} from "@/types/category-type";
+} from '@/types/category-type';
 
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     // get all categories
     getAllCategories: builder.query<CategoryResponse, void>({
       query: () => `/api/category/all`,
-      providesTags: ["AllCategory"],
+      providesTags: ['AllCategory'],
       keepUnusedDataFor: 600,
     }),
     // add category
@@ -20,37 +20,40 @@ export const authApi = apiSlice.injectEndpoints({
       query(data: IAddCategory) {
         return {
           url: `/api/category/add`,
-          method: "POST",
+          method: 'POST',
           body: data,
         };
       },
-      invalidatesTags: ["AllCategory"],
+      invalidatesTags: ['AllCategory'],
     }),
     // delete category
     deleteCategory: builder.mutation<ICategoryDeleteRes, string>({
       query(id: string) {
         return {
           url: `/api/category/delete/${id}`,
-          method: "DELETE",
+          method: 'DELETE',
         };
       },
-      invalidatesTags: ["AllCategory"],
+      invalidatesTags: ['AllCategory'],
     }),
     // editCategory
-    editCategory: builder.mutation<IAddCategoryResponse, { id: string; data: Partial<IAddCategory> }>({
+    editCategory: builder.mutation<
+      IAddCategoryResponse,
+      { id: string; data: Partial<IAddCategory> }
+    >({
       query({ id, data }) {
         return {
           url: `/api/category/edit/${id}`,
-          method: "PATCH",
+          method: 'PATCH',
           body: data,
         };
       },
-      invalidatesTags: ["AllCategory","getCategory"],
+      invalidatesTags: ['AllCategory', 'getCategory'],
     }),
     // get single product
     getCategory: builder.query<IAddCategory, string>({
-      query: (id) => `/api/category/get/${id}`,
-      providesTags:['getCategory']
+      query: id => `/api/category/get/${id}`,
+      providesTags: ['getCategory'],
     }),
   }),
 });
@@ -60,5 +63,5 @@ export const {
   useAddCategoryMutation,
   useDeleteCategoryMutation,
   useEditCategoryMutation,
-  useGetCategoryQuery, 
+  useGetCategoryQuery,
 } = authApi;
