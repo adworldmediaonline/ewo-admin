@@ -1,11 +1,11 @@
-import Wrapper from "@/layout/wrapper";
-import Breadcrumb from "@/app/components/breadcrumb/breadcrumb";
-import EditProductSubmit from "@/app/components/products/edit-product/edit-product-submit";
+import Wrapper from '@/layout/wrapper';
+import Breadcrumb from '@/app/components/breadcrumb/breadcrumb';
+import EditProductSubmit from '@/app/components/products/edit-product/edit-product-submit';
 
 const EditProduct = ({ params }: { params: { id: string } }) => {
   return (
     <Wrapper>
-      <div className="body-content px-8 py-8 bg-slate-100">
+      <div className="px-8 py-8 body-content bg-slate-100">
         {/* breadcrumb start */}
         <Breadcrumb title="Edit Product" subtitle="Edit Product" />
         {/* breadcrumb end */}

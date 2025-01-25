@@ -1,5 +1,5 @@
-"use client";
-import React, { SetStateAction, useEffect, useState } from "react";
+'use client';
+import React, { SetStateAction, useEffect, useState } from 'react';
 import {
   Card,
   Typography,
@@ -8,10 +8,10 @@ import {
   Accordion,
   AccordionHeader,
   AccordionBody,
-} from "@material-tailwind/react";
-import { ChevronDownIcon } from "@heroicons/react/24/outline";
-import { useGetAllCategoriesQuery } from "@/redux/category/categoryApi";
-import ErrorMsg from "../common/error-msg";
+} from '@material-tailwind/react';
+import { ChevronDownIcon } from '@heroicons/react/24/outline';
+import { useGetAllCategoriesQuery } from '@/redux/category/categoryApi';
+import ErrorMsg from '../common/error-msg';
 
 // prop type
 type IPropType = {
@@ -31,7 +31,7 @@ export default function ProductCategory({
   setChildren,
   default_value,
 }: IPropType) {
-  const [open, setOpen] = React.useState<string>("");
+  const [open, setOpen] = React.useState<string>('');
   const { data: categories, isError, isLoading } = useGetAllCategoriesQuery();
   const [selectedCategory, setSelectedCategory] = useState<string[]>(
     default_value ? [default_value.parent, default_value.children] : []
@@ -49,14 +49,14 @@ export default function ProductCategory({
 
   // handleCategory
   const handleCategory = (value: string, title: string) => {
-    setOpen(open === value ? "" : value);
+    setOpen(open === value ? '' : value);
     if (value && title) {
       setCategory({ id: value, name: title });
       setParent(title);
     }
     if (title) {
       if (selectedCategory.includes(title)) {
-        setSelectedCategory(selectedCategory.filter((c) => c !== title));
+        setSelectedCategory(selectedCategory.filter(c => c !== title));
       } else {
         setSelectedCategory([...selectedCategory, title]);
       }
@@ -67,7 +67,7 @@ export default function ProductCategory({
   const handleSubCategory = (subCate: string) => {
     setChildren(subCate);
     if (selectedCategory.includes(subCate)) {
-      setSelectedCategory(selectedCategory.filter((c) => c !== subCate));
+      setSelectedCategory(selectedCategory.filter(c => c !== subCate));
     } else {
       setSelectedCategory([...selectedCategory, subCate]);
     }
@@ -92,7 +92,7 @@ export default function ProductCategory({
     content = (
       <>
         <List className="p-0">
-          {categoryItems.map((item) => (
+          {categoryItems.map(item => (
             <Accordion
               key={item._id}
               open={open === item._id}
@@ -100,7 +100,7 @@ export default function ProductCategory({
                 <ChevronDownIcon
                   strokeWidth={2.5}
                   className={`mx-auto h-4 w-4 transition-transform ${
-                    open === item._id ? "rotate-180" : ""
+                    open === item._id ? 'rotate-180' : ''
                   }`}
                 />
               }
@@ -142,7 +142,7 @@ export default function ProductCategory({
         {selectedCategory.map((c, i) => (
           <span key={i} className="tag">
             {c}
-            <b onClick={() => handleCategory("", c)}>×</b>
+            <b onClick={() => handleCategory('', c)}>×</b>
           </span>
         ))}
       </div>

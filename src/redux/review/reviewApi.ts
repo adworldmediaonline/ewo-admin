@@ -1,22 +1,20 @@
-import { apiSlice } from "../api/apiSlice";
-import { IDelReviewsRes } from "@/types/product-type";
+import { apiSlice } from '../api/apiSlice';
+import { IDelReviewsRes } from '@/types/product';
 
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     // delete review product
     deleteReviews: builder.mutation<IDelReviewsRes, string>({
       query(id) {
         return {
           url: `/api/review/delete/${id}`,
-          method: "DELETE",
+          method: 'DELETE',
         };
       },
-      invalidatesTags: ["ReviewProducts"],
+      invalidatesTags: ['ReviewProducts'],
     }),
   }),
 });
 
-export const {
-  useDeleteReviewsMutation
-} = authApi;
+export const { useDeleteReviewsMutation } = authApi;

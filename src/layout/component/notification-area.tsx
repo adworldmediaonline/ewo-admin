@@ -1,9 +1,9 @@
-import Image from "next/image";
-import dayjs from "dayjs";
-import React, { useState, useEffect } from "react";
-import { Notification, Close } from "@/svg";
-import { useGetStockOutProductsQuery } from "@/redux/product/productApi";
-import { IProduct } from "@/types/product-type";
+import Image from 'next/image';
+import dayjs from 'dayjs';
+import React, { useState, useEffect } from 'react';
+import { Notification, Close } from '@/svg';
+import { useGetStockOutProductsQuery } from '@/redux/product/productApi';
+import { IProduct } from '@/types/product';
 
 // prop type
 type IPropType = {
@@ -12,8 +12,16 @@ type IPropType = {
   handleNotificationOpen: () => void;
 };
 
-const NotificationArea = ({nRef,notificationOpen,handleNotificationOpen}: IPropType) => {
-  const {data: stockOutProduct,isError,isLoading} = useGetStockOutProductsQuery();
+const NotificationArea = ({
+  nRef,
+  notificationOpen,
+  handleNotificationOpen,
+}: IPropType) => {
+  const {
+    data: stockOutProduct,
+    isError,
+    isLoading,
+  } = useGetStockOutProductsQuery();
   const [products, setProducts] = useState<IProduct[] | undefined>(
     stockOutProduct?.data
   );
@@ -39,10 +47,10 @@ const NotificationArea = ({nRef,notificationOpen,handleNotificationOpen}: IPropT
       {notificationOpen && (
         <div className="absolute w-[280px] sm:w-[350px] h-auto top-full -right-[60px] sm:right-0 shadow-lg rounded-md bg-white py-5 px-5">
           {products &&
-            products.slice(0,5).map((item) => (
+            products.slice(0, 5).map(item => (
               <div
                 key={item._id}
-                className="flex items-center justify-between last:border-0 border-b border-gray pb-4 mb-4 last:pb-0 last:mb-0"
+                className="flex items-center justify-between pb-4 mb-4 border-b last:border-0 border-gray last:pb-0 last:mb-0"
               >
                 <div className="flex items-center space-x-3">
                   <div className="">
@@ -56,7 +64,7 @@ const NotificationArea = ({nRef,notificationOpen,handleNotificationOpen}: IPropT
                     />
                   </div>
                   <div className="">
-                    <h5 className="text-base mb-0 leading-none">
+                    <h5 className="mb-0 text-base leading-none">
                       {item.title}
                     </h5>
                     <div className="flex items-center mt-2">
@@ -66,8 +74,8 @@ const NotificationArea = ({nRef,notificationOpen,handleNotificationOpen}: IPropT
                         {item.status}
                       </span>
 
-                      <span className="text-tiny leading-none">
-                        {dayjs(item.createdAt).format("MMM D, YYYY h:mm A")}
+                      <span className="leading-none text-tiny">
+                        {dayjs(item.createdAt).format('MMM D, YYYY h:mm A')}
                       </span>
                     </div>
                   </div>

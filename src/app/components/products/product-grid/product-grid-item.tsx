@@ -1,12 +1,18 @@
-import React from "react";
-import Image from "next/image";
-import { Rating } from "react-simple-star-rating";
+import React from 'react';
+import Image from 'next/image';
+import { Rating } from 'react-simple-star-rating';
 // internal
-import { IProduct } from "@/types/product-type";
-import ProductGridAction from "./product-grid-action";
+import { IProduct } from '@/types/product';
+import ProductGridAction from './product-grid-action';
 
-const ProductGridItem = ({ product }: { product: IProduct }) => {
-  const { _id,img, title, sku, price, reviews, status, quantity } = product || {};
+// prop type
+type IProps = {
+  product: IProduct;
+};
+
+const ProductGridItem = ({ product }: IProps) => {
+  const { _id, img, title, sku, price, reviews, status, quantity } =
+    product || {};
   // averageRating
   const averageRating =
     reviews && reviews?.length > 0
@@ -25,7 +31,7 @@ const ProductGridItem = ({ product }: { product: IProduct }) => {
           />
         </a>
         <div className="absolute top-5 right-5 z-10">
-          <ProductGridAction id={_id}/>
+          <ProductGridAction id={_id} />
         </div>
       </div>
       <div className="px-5 py-5">

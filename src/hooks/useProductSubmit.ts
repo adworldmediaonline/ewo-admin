@@ -9,10 +9,6 @@ import {
 } from '@/redux/product/productApi';
 import { notifyError, notifySuccess } from '@/utils/toast';
 
-type IBrand = {
-  name: string;
-  id: string;
-};
 type ICategory = {
   name: string;
   id: string;
@@ -32,10 +28,8 @@ const useProductSubmit = () => {
   const [price, setPrice] = useState<number>(0);
   const [discount, setDiscount] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
-  const [brand, setBrand] = useState<IBrand>({ name: '', id: '' });
   const [category, setCategory] = useState<ICategory>({ name: '', id: '' });
   const [status, setStatus] = useState<status>('in-stock');
-  const [productType, setProductType] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [videoId, setVideoId] = useState<string>('');
   const [offerDate, setOfferDate] = useState<{
@@ -87,10 +81,8 @@ const useProductSubmit = () => {
     setPrice(0);
     setDiscount(0);
     setQuantity(0);
-    setBrand({ name: '', id: '' });
     setCategory({ name: '', id: '' });
     setStatus('in-stock');
-    setProductType('');
     setDescription('');
     setVideoId('');
     setOfferDate({
@@ -110,21 +102,18 @@ const useProductSubmit = () => {
       img: img,
       title: data.title,
       slug: slugify(data.title, { replacement: '-', lower: true }),
-      unit: data.unit,
       imageURLs,
       parent: parent,
       children: children,
       price: data.price,
       discount: data.discount,
       quantity: data.quantity,
-      brand: brand,
       category: category,
       status: status,
       offerDate: {
         startDate: offerDate.startDate,
         endDate: offerDate.endDate,
       },
-      productType: productType,
       description: data.description,
       videoId: data.youtube_video_Id,
       additionalInformation: additionalInformation,
@@ -134,8 +123,11 @@ const useProductSubmit = () => {
     if (!img) {
       return notifyError('Product image is required');
     }
-    if (!category.name) {
-      return notifyError('Category is required');
+    if (!category.name || !category.id) {
+      return notifyError('Category name and id are required');
+    }
+    if (!parent) {
+      return notifyError('Parent category is required');
     }
     if (Number(data.discount) > Number(data.price)) {
       return notifyError('Product price must be greater than discount');
@@ -159,46 +151,47 @@ const useProductSubmit = () => {
 
   // handle edit product
   const handleEditProduct = async (data: any, id: string) => {
-    // product data
-    const productData = {
-      sku: data.SKU,
-      img: img,
-      title: data.title,
-      slug: slugify(data.title, { replacement: '-', lower: true }),
-      unit: data.unit,
-      imageURLs,
-      parent: parent,
-      children: children,
-      price: data.price,
-      discount: data.discount,
-      quantity: data.quantity,
-      brand: brand,
-      category: category,
-      status: status,
-      offerDate: {
-        startDate: offerDate.startDate,
-        endDate: offerDate.endDate,
-      },
-      productType: productType,
-      description: data.description,
-      videoId: data.youtube_video_Id,
-      additionalInformation: additionalInformation,
-      tags: tags,
-    };
+    try {
+      // product data
+      const productData = {
+        sku: data.SKU,
+        img: img,
+        title: data.title,
+        slug: slugify(data.title, { replacement: '-', lower: true }),
+        imageURLs,
+        parent: parent,
+        children: children,
+        price: data.price,
+        discount: data.discount,
+        quantity: data.quantity,
+        category: category,
+        status: status,
+        offerDate: {
+          startDate: offerDate.startDate,
+          endDate: offerDate.endDate,
+        },
+        description: data.description,
+        videoId: data.youtube_video_Id,
+        additionalInformation: additionalInformation,
+        tags: tags,
+      };
 
-    const res = await editProduct({ id: id, data: productData as any });
-    if ('error' in res) {
-      if ('data' in res.error) {
-        const errorData = res.error.data as { message?: string };
-        if (typeof errorData.message === 'string') {
-          return notifyError(errorData.message);
+      const res = await editProduct({ id: id, data: productData as any });
+      if ('error' in res) {
+        if ('data' in res.error) {
+          const errorData = res.error.data as { message?: string };
+          if (typeof errorData.message === 'string') {
+            return notifyError(errorData.message);
+          }
         }
+      } else {
+        notifySuccess('Product updated successfully');
+        setIsSubmitted(true);
+        router.push('/product-grid');
+        resetForm();
       }
-    } else {
-      notifySuccess('Product updated successfully');
-      setIsSubmitted(true);
-      router.push('/product-grid');
-      resetForm();
+    } catch (error) {
+      notifyError('Something went wrong updating the product');
     }
   };
 
@@ -216,8 +209,6 @@ const useProductSubmit = () => {
     setChildren,
     setImg,
     img,
-    setBrand,
-    setProductType,
     imageURLs,
     setImageURLs,
     offerDate,
@@ -225,6 +216,9 @@ const useProductSubmit = () => {
     isSubmitted,
     setIsSubmitted,
     handleEditProduct,
+    additionalInformation,
+    isLoading,
+    editLoading,
   };
 };
 

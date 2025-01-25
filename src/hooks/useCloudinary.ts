@@ -1,11 +1,10 @@
-import { useState, useEffect } from "react";
-import { notifyError, notifySuccess } from "@/utils/toast";
-import { useDeleteCloudinaryImgMutation } from "@/redux/cloudinary/cloudinaryApi";
-import { ImageURL } from "./useProductSubmit";
+import { useState, useEffect } from 'react';
+import { notifyError, notifySuccess } from '@/utils/toast';
+import { useDeleteCloudinaryImgMutation } from '@/redux/cloudinary/cloudinaryApi';
 
 const useCloudinary = (
   file: { url: string; id: string },
-  setFormData?: React.Dispatch<React.SetStateAction<ImageURL[]>>,
+  setFormData?: React.Dispatch<React.SetStateAction<string[]>>,
   setImgUrl?: React.Dispatch<React.SetStateAction<string>>
 ) => {
   const [
@@ -16,46 +15,43 @@ const useCloudinary = (
 
   // set image url
   useEffect(() => {
-    setItem({url:file.url,id:file.id})
-  },[file.id, file.url])
+    setItem({ url: file.url, id: file.id });
+  }, [file.id, file.url]);
 
   // update state when delData was changes
   useEffect(() => {
     if (delData && setFormData) {
-      setFormData((prevFormData) => {
+      setFormData(prevFormData => {
         const updatedFormData = [...prevFormData];
-        const index = updatedFormData.findIndex(
-          (item) => item.img === file.url
-        );
-        console.log('index',index)
+        const index = updatedFormData.findIndex(url => url === file.url);
         if (index !== -1) {
-          updatedFormData[index] = { ...updatedFormData[index], img: "" };
-        } 
+          updatedFormData[index] = '';
+        }
         return updatedFormData;
       });
     }
     if (delData && !delError && setImgUrl) {
-      setItem({ url: "", id: "" });
-      setImgUrl("");
+      setItem({ url: '', id: '' });
+      setImgUrl('');
     }
   }, [delData, delError, file, item.id, file.url, setFormData, setImgUrl]);
 
-  // handle delete image 
+  // handle delete image
   const handleDeleteImg = (file: { url: string; id: string }) => {
     try {
       const { id } = file;
-      const folder_name = id.split("/")[0];
-      const public_id = id.split("/")[1];
+      const folder_name = id.split('/')[0];
+      const public_id = id.split('/')[1];
       deleteCloudinaryImg({
         folder_name: folder_name,
         id: public_id,
       });
-      notifySuccess("Image deleted successfully");
-      setItem({ url: "", id: "" });
+      notifySuccess('Image deleted successfully');
+      setItem({ url: '', id: '' });
     } catch (error) {
       // Handle the error
-      console.log(error)
-      notifyError("Something went wrong");
+      console.log(error);
+      notifyError('Something went wrong');
     }
   };
 

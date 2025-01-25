@@ -1,19 +1,20 @@
-"use client";
-import React, { useState } from "react";
-import { useGetAllProductsQuery } from "@/redux/product/productApi";
-import ErrorMsg from "../../common/error-msg";
-import ProductGridItem from "./product-grid-item";
-import Pagination from "../../ui/Pagination";
-import { Search } from "@/svg";
-import Link from "next/link";
-import usePagination from "@/hooks/use-pagination";
+'use client';
+import React, { useState } from 'react';
+import { useGetAllProductsQuery } from '@/redux/product/productApi';
+import { IProduct } from '@/types/product';
+import ErrorMsg from '../../common/error-msg';
+import ProductGridItem from './product-grid-item';
+import Pagination from '../../ui/Pagination';
+import { Search } from '@/svg';
+import Link from 'next/link';
+import usePagination from '@/hooks/use-pagination';
 
 const ProductGridArea = () => {
   const { data: products, isError, isLoading } = useGetAllProductsQuery();
-  const paginationData = usePagination(products?.data || [], 10);
+  const paginationData = usePagination<IProduct>(products?.data || [], 10);
   const { currentItems, handlePageClick, pageCount } = paginationData;
-  const [searchValue, setSearchValue] = useState<string>("");
-  const [selectValue, setSelectValue] = useState<string>("");
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [selectValue, setSelectValue] = useState<string>('');
 
   // search field
   const handleSearchProduct = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,24 +40,24 @@ const ProductGridArea = () => {
   }
 
   if (!isLoading && !isError && products?.success) {
-    let productItems =[...currentItems].reverse();
+    let productItems = [...currentItems].reverse() as IProduct[];
 
     // search field
     if (searchValue) {
-      productItems = productItems.filter((p) =>
+      productItems = productItems.filter(p =>
         p.title.toLowerCase().includes(searchValue.toLowerCase())
       );
     }
 
     if (selectValue) {
-      productItems = productItems.filter((p) => p.productType === selectValue);
+      productItems = productItems.filter(p => p.category.name === selectValue);
     }
 
     content = (
       <>
         <div className="relative mx-8 mb-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6 ">
-            {productItems.map((prd) => (
+            {productItems.map(prd => (
               <ProductGridItem key={prd._id} product={prd} />
             ))}
           </div>
@@ -65,8 +66,7 @@ const ProductGridArea = () => {
         {/* bottom  */}
         <div className="flex justify-between items-center flex-wrap mx-8">
           <p className="mb-0 text-tiny">
-            Showing {currentItems.length} of{" "}
-            {products?.data.length}
+            Showing {currentItems.length} of {products?.data.length}
           </p>
           <div className="pagination py-3 flex justify-end items-center mx-8 pagination">
             <Pagination
@@ -95,15 +95,15 @@ const ProductGridArea = () => {
         <div className="flex sm:justify-end sm:space-x-6 flex-wrap">
           <div className="search-select mr-3 flex items-center space-x-3 ">
             <span className="text-tiny inline-block leading-none -translate-y-[2px]">
-              Categories :{" "}
+              Categories :{' '}
             </span>
             <select onChange={handleSelectField}>
-                <option value="">Categories</option>
-                <option value="electronics">Electronics</option>
-                <option value="fashion">Fashion</option>
-                <option value="beauty">beauty</option>
-                <option value="jewelry">jewelry</option>
-              </select>
+              <option value="">Categories</option>
+              <option value="electronics">Electronics</option>
+              <option value="fashion">Fashion</option>
+              <option value="beauty">Beauty</option>
+              <option value="jewelry">Jewelry</option>
+            </select>
           </div>
           <div className="product-add-btn flex ">
             <Link href="/add-product" className="tp-btn">

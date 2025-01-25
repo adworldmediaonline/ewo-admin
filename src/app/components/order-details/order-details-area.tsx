@@ -1,12 +1,12 @@
-"use client";
-import dayjs from "dayjs";
-import React,{useRef} from "react";
-import ErrorMsg from "../common/error-msg";
-import { Card, Typography } from "@material-tailwind/react";
-import { useGetSingleOrderQuery } from "@/redux/order/orderApi";
-import { Invoice } from "@/svg";
-import { useReactToPrint } from "react-to-print";
-import { notifyError } from "@/utils/toast";
+'use client';
+import dayjs from 'dayjs';
+import React, { useRef } from 'react';
+import ErrorMsg from '../common/error-msg';
+import { Card, Typography } from '@material-tailwind/react';
+import { useGetSingleOrderQuery } from '@/redux/order/orderApi';
+import { Invoice } from '@/svg';
+import { useReactToPrint } from 'react-to-print';
+import { notifyError } from '@/utils/toast';
 
 const OrderDetailsArea = ({ id }: { id: string }) => {
   const { data: orderData, isLoading, isError } = useGetSingleOrderQuery(id);
@@ -24,11 +24,11 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
 
   if (!isLoading && !isError && orderData) {
     const TABLE_HEAD = [
-      "SL",
-      "Product Name",
-      "	Quantity",
-      "Item Price",
-      "Amount",
+      'SL',
+      'Product Name',
+      '	Quantity',
+      'Item Price',
+      'Amount',
     ];
     const total = orderData.cart.reduce((acc, curr) => acc + curr.price, 0);
     const grand_total = (total +
@@ -40,15 +40,18 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
           <h1 className="my-6 text-lg font-bold text-gray-700 dark:text-gray-300">
             Invoice
           </h1>
-          <div ref={printRef} className="bg-white mb-4 p-6 lg:p-8 rounded-xl shadow-sm overflow-hidden">
+          <div
+            ref={printRef}
+            className="p-6 mb-4 overflow-hidden bg-white shadow-sm lg:p-8 rounded-xl"
+          >
             <div className=" mb-7">
-              <div className="flex lg:flex-row md:flex-row flex-col lg:items-center justify-between pb-4 border-b border-slate-200">
-                <h1 className="font-bold font-heading text-xl uppercase">
+              <div className="flex flex-col justify-between pb-4 border-b lg:flex-row md:flex-row lg:items-center border-slate-200">
+                <h1 className="text-xl font-bold uppercase font-heading">
                   Invoice
-                  <p className="text-base mt-1 text-gray-500">
+                  <p className="mt-1 text-base text-gray-500">
                     Status
-                    <span className="pl-2 font-medium text-base capitalize">
-                      {" "}
+                    <span className="pl-2 text-base font-medium capitalize">
+                      {' '}
                       <span className="font-heading">
                         <span className="inline-flex px-2 text-base font-medium leading-5 rounded-full">
                           {orderData.status}
@@ -57,41 +60,41 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                     </span>
                   </p>
                 </h1>
-                <div className="lg:text-right text-left">
-                  <h2 className="lg:flex lg:justify-end text-lg font-semibold mt-4 lg:mt-0 lg:ml-0 md:mt-0">
+                <div className="text-left lg:text-right">
+                  <h2 className="mt-4 text-lg font-semibold lg:flex lg:justify-end lg:mt-0 lg:ml-0 md:mt-0">
                     {/* <img
                       src="/static/media/logo-dark.acf69e90.svg"
                       alt="dashtar"
                       width="110"
                     /> */}
                   </h2>
-                  <p className="text-base text-gray-500 dark:text-gray-400 mt-2">
+                  <p className="mt-2 text-base text-gray-500 dark:text-gray-400">
                     Dhaka, Bangladesh
                   </p>
                 </div>
               </div>
-              <div className="flex lg:flex-row md:flex-row flex-col justify-between pt-4">
-                <div className="mb-3 md:mb-0 lg:mb-0 flex flex-col">
-                  <span className="font-bold text-base uppercase block">
+              <div className="flex flex-col justify-between pt-4 lg:flex-row md:flex-row">
+                <div className="flex flex-col mb-3 md:mb-0 lg:mb-0">
+                  <span className="block text-base font-bold uppercase">
                     DATE
                   </span>
-                  <span className="text-base block">
+                  <span className="block text-base">
                     <span>
-                      {dayjs(orderData.createdAt).format("MMMM D, YYYY")}
+                      {dayjs(orderData.createdAt).format('MMMM D, YYYY')}
                     </span>
                   </span>
                 </div>
-                <div className="mb-3 md:mb-0 lg:mb-0 flex flex-col">
-                  <span className="font-bold text-base uppercase block">
+                <div className="flex flex-col mb-3 md:mb-0 lg:mb-0">
+                  <span className="block text-base font-bold uppercase">
                     INVOICE NO
                   </span>
-                  <span className="text-base block">#{orderData.invoice}</span>
+                  <span className="block text-base">#{orderData.invoice}</span>
                 </div>
-                <div className="flex flex-col lg:text-right text-left">
-                  <span className="font-bold text-base uppercase block">
+                <div className="flex flex-col text-left lg:text-right">
+                  <span className="block text-base font-bold uppercase">
                     INVOICE TO
                   </span>
-                  <span className="text-base text-gray-500 block">
+                  <span className="block text-base text-gray-500">
                     {orderData?.user?.name} <br />
                     <span className="ml-2">{orderData.contact}</span>
                     <br />
@@ -103,34 +106,44 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
               </div>
             </div>
             <div className="mb-12">
-              <div className="relative rounded-b-md bg-white">
+              <div className="relative bg-white rounded-b-md">
                 <div className="w-full overflow-x-auto">
                   <table className="w-full text-base text-left text-gray-500 whitespace-no-wrap">
                     <thead className="bg-white">
                       <tr className="border-b border-gray6 text-tiny">
-                        <td className="pl-3 py-3 text-tiny text-textBody uppercase font-semibold">SR.</td>
-                        <td className="pr-8 py-3 text-tiny text-textBody uppercase font-semibold">Product Title</td>
-                        <td className="pr-8 py-3 text-tiny text-textBody uppercase font-semibold text-center">QUANTITY</td>
-                        <td className="pr-3 py-3 text-tiny text-textBody uppercase font-semibold text-center">ITEM PRICE</td>
-                        <td className="pr-3 py-3 text-tiny text-textBody uppercase font-semibold text-right">AMOUNT</td>
+                        <td className="py-3 pl-3 font-semibold uppercase text-tiny text-textBody">
+                          SR.
+                        </td>
+                        <td className="py-3 pr-8 font-semibold uppercase text-tiny text-textBody">
+                          Product Title
+                        </td>
+                        <td className="py-3 pr-8 font-semibold text-center uppercase text-tiny text-textBody">
+                          QUANTITY
+                        </td>
+                        <td className="py-3 pr-3 font-semibold text-center uppercase text-tiny text-textBody">
+                          ITEM PRICE
+                        </td>
+                        <td className="py-3 pr-3 font-semibold text-right uppercase text-tiny text-textBody">
+                          AMOUNT
+                        </td>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y text-base ">
+                    <tbody className="text-base bg-white divide-y ">
                       {orderData.cart.map((item, i) => (
                         <tr key={item._id} className="">
-                          <td className="bg-white border-b border-gray6 px-3 py-3 text-start">
+                          <td className="px-3 py-3 bg-white border-b border-gray6 text-start">
                             {i + 1}
                           </td>
-                          <td className="bg-white border-b border-gray6 px-3 pl-0 py-3 text-start">
+                          <td className="px-3 py-3 pl-0 bg-white border-b border-gray6 text-start">
                             {item.title}
                           </td>
-                          <td className="bg-white border-b border-gray6 px-3 py-3 font-bold text-center">
+                          <td className="px-3 py-3 font-bold text-center bg-white border-b border-gray6">
                             {item.orderQuantity}
                           </td>
-                          <td className="bg-white border-b border-gray6 px-3 py-3 font-bold text-center">
+                          <td className="px-3 py-3 font-bold text-center bg-white border-b border-gray6">
                             ${item.price.toFixed(2)}
                           </td>
-                          <td className="bg-white border-b border-gray6 px-3 py-3 text-right font-bold">
+                          <td className="px-3 py-3 font-bold text-right bg-white border-b border-gray6">
                             ${(item.price * item.orderQuantity).toFixed(2)}
                           </td>
                         </tr>
@@ -140,37 +153,37 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
                 </div>
               </div>
             </div>
-            <div className="border border-slate-200 rounded-xl p-8 py-6">
-              <div className="flex lg:flex-row md:flex-row flex-col justify-between">
-                <div className="mb-3 md:mb-0 lg:mb-0  flex flex-col sm:flex-wrap">
-                  <span className="mb-1 font-bold text-base uppercase block">
+            <div className="p-8 py-6 border border-slate-200 rounded-xl">
+              <div className="flex flex-col justify-between lg:flex-row md:flex-row">
+                <div className="flex flex-col mb-3 md:mb-0 lg:mb-0 sm:flex-wrap">
+                  <span className="block mb-1 text-base font-bold uppercase">
                     PAYMENT METHOD
                   </span>
-                  <span className="text-base font-semibold block">
+                  <span className="block text-base font-semibold">
                     {orderData.paymentMethod}
                   </span>
                 </div>
-                <div className="mb-3 md:mb-0 lg:mb-0  flex flex-col sm:flex-wrap">
-                  <span className="mb-1 font-bold text-base uppercase block">
+                <div className="flex flex-col mb-3 md:mb-0 lg:mb-0 sm:flex-wrap">
+                  <span className="block mb-1 text-base font-bold uppercase">
                     SHIPPING COST
                   </span>
-                  <span className="text-base font-semibold font-heading block">
+                  <span className="block text-base font-semibold font-heading">
                     ${orderData.shippingCost}
                   </span>
                 </div>
-                <div className="mb-3 md:mb-0 lg:mb-0  flex flex-col sm:flex-wrap">
-                  <span className="mb-1 font-bold font-heading text-base uppercase block">
+                <div className="flex flex-col mb-3 md:mb-0 lg:mb-0 sm:flex-wrap">
+                  <span className="block mb-1 text-base font-bold uppercase font-heading">
                     DISCOUNT
                   </span>
-                  <span className="text-base text-gray-500 font-semibold font-heading block">
+                  <span className="block text-base font-semibold text-gray-500 font-heading">
                     ${orderData?.discount}
                   </span>
                 </div>
                 <div className="flex flex-col sm:flex-wrap">
-                  <span className="mb-1 font-bold text-base uppercase block">
+                  <span className="block mb-1 text-base font-bold uppercase">
                     TOTAL AMOUNT
                   </span>
-                  <span className="text-xl font-bold block">
+                  <span className="block text-xl font-bold">
                     ${grand_total.toFixed(2)}
                   </span>
                 </div>
@@ -184,15 +197,15 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
 
   const handlePrint = useReactToPrint({
     content: () => printRef?.current,
-    documentTitle: "Receipt",
+    documentTitle: 'Receipt',
   });
 
   const handlePrintReceipt = async () => {
     try {
       handlePrint();
     } catch (err) {
-      console.log("order by user id error", err);
-      notifyError("Failed to print");
+      console.log('order by user id error', err);
+      notifyError('Failed to print');
     }
     // console.log('id', id);
   };
@@ -201,8 +214,8 @@ const OrderDetailsArea = ({ id }: { id: string }) => {
     <>
       <div className="">{content}</div>
       <div className="container grid px-6 mx-auto">
-        <div className="mb-4 mt-3 flex justify-between">
-          <button onClick={handlePrintReceipt} className="tp-btn px-5 py-2">
+        <div className="flex justify-between mt-3 mb-4">
+          <button onClick={handlePrintReceipt} className="px-5 py-2 tp-btn">
             Print Invoice
             <span className="ml-2">
               <Invoice />
