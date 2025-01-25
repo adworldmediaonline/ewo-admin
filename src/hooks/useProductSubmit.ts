@@ -9,15 +9,6 @@ import {
 } from '@/redux/product/productApi';
 import { notifyError, notifySuccess } from '@/utils/toast';
 
-// ImageURL type
-export interface ImageURL {
-  color: {
-    name?: string;
-    clrCode?: string;
-  };
-  img: string;
-  sizes?: string[];
-}
 type IBrand = {
   name: string;
   id: string;
@@ -35,7 +26,7 @@ const useProductSubmit = () => {
   const [title, setTitle] = useState<string>('');
   const [slug, setSlug] = useState<string>('');
   const [unit, setUnit] = useState<string>('');
-  const [imageURLs, setImageURLs] = useState<ImageURL[]>([]);
+  const [imageURLs, setImageURLs] = useState<string[]>([]);
   const [parent, setParent] = useState<string>('');
   const [children, setChildren] = useState<string>('');
   const [price, setPrice] = useState<number>(0);
@@ -61,7 +52,6 @@ const useProductSubmit = () => {
     }[]
   >([]);
   const [tags, setTags] = useState<string[]>([]);
-  const [sizes, setSizes] = useState<string[]>([]);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const router = useRouter();
@@ -83,6 +73,7 @@ const useProductSubmit = () => {
     formState: { errors },
     reset,
   } = useForm();
+
   // resetForm
   const resetForm = () => {
     setSku('');
@@ -108,14 +99,11 @@ const useProductSubmit = () => {
     });
     setAdditionalInformation([]);
     setTags([]);
-    setSizes([]);
     reset();
   };
 
   // handle submit product
   const handleSubmitProduct = async (data: any) => {
-    // console.log("product data--->", data);
-
     // product data
     const productData = {
       sku: data.SKU,
@@ -123,7 +111,7 @@ const useProductSubmit = () => {
       title: data.title,
       slug: slugify(data.title, { replacement: '-', lower: true }),
       unit: data.unit,
-      imageURLs: imageURLs,
+      imageURLs,
       parent: parent,
       children: children,
       price: data.price,
@@ -143,8 +131,6 @@ const useProductSubmit = () => {
       tags: tags,
     };
 
-    console.log('productData-------------------..>', productData);
-
     if (!img) {
       return notifyError('Product image is required');
     }
@@ -152,9 +138,9 @@ const useProductSubmit = () => {
       return notifyError('Category is required');
     }
     if (Number(data.discount) > Number(data.price)) {
-      return notifyError('Product price must be gether than discount');
+      return notifyError('Product price must be greater than discount');
     } else {
-      const res = await addProduct(productData);
+      const res = await addProduct(productData as any);
       if ('error' in res) {
         if ('data' in res.error) {
           const errorData = res.error.data as { message?: string };
@@ -163,13 +149,14 @@ const useProductSubmit = () => {
           }
         }
       } else {
-        notifySuccess('Product created successFully');
+        notifySuccess('Product created successfully');
         setIsSubmitted(true);
         resetForm();
         router.push('/product-grid');
       }
     }
   };
+
   // handle edit product
   const handleEditProduct = async (data: any, id: string) => {
     // product data
@@ -179,7 +166,7 @@ const useProductSubmit = () => {
       title: data.title,
       slug: slugify(data.title, { replacement: '-', lower: true }),
       unit: data.unit,
-      imageURLs: imageURLs,
+      imageURLs,
       parent: parent,
       children: children,
       price: data.price,
@@ -198,9 +185,8 @@ const useProductSubmit = () => {
       additionalInformation: additionalInformation,
       tags: tags,
     };
-    console.log('edit productData---->', productData);
 
-    const res = await editProduct({ id: id, data: productData });
+    const res = await editProduct({ id: id, data: productData as any });
     if ('error' in res) {
       if ('data' in res.error) {
         const errorData = res.error.data as { message?: string };
@@ -209,7 +195,7 @@ const useProductSubmit = () => {
         }
       }
     } else {
-      notifySuccess('Product edit successFully');
+      notifySuccess('Product updated successfully');
       setIsSubmitted(true);
       router.push('/product-grid');
       resetForm();
@@ -217,56 +203,28 @@ const useProductSubmit = () => {
   };
 
   return {
-    sku,
-    setSku,
-    img,
-    setImg,
-    title,
-    setTitle,
-    slug,
-    setSlug,
-    unit,
-    setUnit,
-    imageURLs,
-    setImageURLs,
-    parent,
-    setParent,
-    children,
-    setChildren,
-    price,
-    setPrice,
-    discount,
-    setDiscount,
-    quantity,
-    setQuantity,
-    brand,
-    setBrand,
-    category,
-    setCategory,
-    status,
-    setStatus,
-    productType,
-    setProductType,
-    description,
-    setDescription,
-    videoId,
-    setVideoId,
-    additionalInformation,
-    setAdditionalInformation,
-    tags,
-    setTags,
-    sizes,
-    setSizes,
-    handleSubmitProduct,
-    handleEditProduct,
     register,
     handleSubmit,
+    handleSubmitProduct,
     errors,
+    tags,
+    setTags,
+    setAdditionalInformation,
     control,
+    setCategory,
+    setParent,
+    setChildren,
+    setImg,
+    img,
+    setBrand,
+    setProductType,
+    imageURLs,
+    setImageURLs,
     offerDate,
     setOfferDate,
-    setIsSubmitted,
     isSubmitted,
+    setIsSubmitted,
+    handleEditProduct,
   };
 };
 

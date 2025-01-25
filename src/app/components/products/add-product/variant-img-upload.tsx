@@ -1,127 +1,121 @@
-import React, { useEffect, useState } from "react";
-import { Drug } from "@/svg";
-import Loading from "../../common/loading";
-import { useUploadImageMutation } from "@/redux/cloudinary/cloudinaryApi";
-import UploadImage from "./upload-image";
-import { ImageURL } from "@/hooks/useProductSubmit";
-import DefaultUploadImg from "./default-upload-img";
+import React, { useEffect, useState } from 'react';
+import { Drug } from '@/svg';
+import Loading from '../../common/loading';
+import { useUploadImageMultipleMutation } from '@/redux/cloudinary/cloudinaryApi';
+import { notifyError, notifySuccess } from '@/utils/toast';
 
 type IPropType = {
-  index: number;
-  formData: ImageURL[];
-  setFormData: React.Dispatch<React.SetStateAction<ImageURL[]>>;
-  setImageURLs?: React.Dispatch<React.SetStateAction<ImageURL[]>>;
-  isSubmitField: boolean;
+  formData: string[];
+  setFormData: React.Dispatch<React.SetStateAction<string[]>>;
+  setImageURLs: React.Dispatch<React.SetStateAction<string[]>>;
   isSubmitted: boolean;
-  setIsSubmitField: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
 const VariantImgUpload = ({
   setFormData,
-  index,
   formData,
-  isSubmitField,
-  isSubmitted,
-  setIsSubmitField,
   setImageURLs,
+  isSubmitted,
 }: IPropType) => {
-  const [uploadImage, { data: uploadData, isError, isLoading, error }] =
-    useUploadImageMutation();
+  const [uploadImages, { data: uploadData, isError, isLoading }] =
+    useUploadImageMultipleMutation();
 
-  // handle image upload
+  // handle multiple image upload
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target && e.target.files && e.target.files.length > 0) {
-      const file = e.target.files[0];
+      const files = Array.from(e.target.files);
       const formData = new FormData();
-      formData.append("image", file);
-      uploadImage(formData);
-      setIsSubmitField(false);
+
+      files.forEach(file => {
+        formData.append('images', file);
+      });
+
+      uploadImages(formData)
+        .unwrap()
+        .then(response => {
+          if (response.success && response.data) {
+            const newUrls = response.data.map(item => item.url);
+            setFormData(prevUrls => [...prevUrls, ...newUrls]);
+            setImageURLs(prevUrls => [...prevUrls, ...newUrls]);
+            notifySuccess('Images uploaded successfully');
+          }
+        })
+        .catch(error => {
+          console.error('Upload failed:', error);
+          notifyError('Failed to upload images');
+        });
     }
   };
-  useEffect(() => {
-    if (uploadData && !isError) {
-      setFormData((prevFormData) => {
-        const updatedFormData = [...prevFormData];
-        updatedFormData[index] = {
-          ...updatedFormData[index],
-          img: uploadData.data.url,
-        };
-        return updatedFormData;
-      });
-    }
-    if (uploadData && !isError && setImageURLs) {
-      setImageURLs((prevFormData) => {
-        const updatedFormData = [...prevFormData];
-        updatedFormData[index] = {
-          ...updatedFormData[index],
-          img: uploadData.data.url,
-        };
-        return updatedFormData;
-      });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [index, uploadData, isError]);
 
+  // Handle image removal
+  const handleRemoveImage = (index: number) => {
+    setFormData(prev => prev.filter((_, i) => i !== index));
+    setImageURLs(prev => prev.filter((_, i) => i !== index));
+  };
 
+  // Sync formData with imageURLs on mount
   useEffect(() => {
-    if (uploadData && !isError) {
-      setIsSubmitField(false);
-    }
-  }, [uploadData, isError, setIsSubmitField]);
+    setImageURLs(formData);
+  }, []);
 
   return (
-    <>
+    <div className="px-8 py-8 mb-6 bg-white rounded-md">
       <div className="mb-5">
-        <p className="mb-0 text-base text-black">Upload your image here</p>
+        <p className="mb-2 text-base text-black">
+          Upload variant images (multiple)
+        </p>
         <input
           onChange={handleImageUpload}
           type="file"
-          name="image"
-          id={`product_image_${index + 1}`}
+          name="images"
+          id="variant_images"
           className="hidden"
+          multiple
+          accept="image/*"
         />
         <label
-          htmlFor={`product_image_${index + 1}`}
-          className="border-2 border-gray6 dark:border-gray-600 border-dashed rounded-md cursor-pointer  flex items-center justify-center h-[44px] leading-[44px] hover:bg-slate-100 transition-all linear ease"
+          htmlFor="variant_images"
+          className="flex items-center justify-center h-[100px] border-2 border-gray6 dark:border-gray-600 border-dashed rounded-md cursor-pointer hover:bg-slate-100 transition-all linear ease"
         >
-          <span className="mx-auto flex justify-center">
-            <Drug />
-          </span>
+          <div className="text-center">
+            <span className="flex justify-center mx-auto mb-2">
+              <Drug />
+            </span>
+            <span className="text-gray-600">
+              Drop images here or click to upload
+              <br />
+              <span className="text-sm text-gray-400">
+                (You can select multiple images)
+              </span>
+            </span>
+          </div>
         </label>
       </div>
 
-      {isSubmitField || isSubmitted || !formData[index].img ? (
-        <div className="mb-5">
-          <p className="mb-0 text-base text-black">Image</p>
-          <DefaultUploadImg isLoading={isLoading} wh={100} />
-        </div>
-      ) : uploadData && !isError ? (
-        <div>
-          <p className="text-base text-black mb-3">image</p>
-          <span className="mx-auto">
-            {isLoading ? (
-              <Loading loading={isLoading} spinner="scale" />
-            ) : (
-              <UploadImage
-                file={{
-                  url: uploadData ? uploadData.data.url : formData[index].img,
-                  id: uploadData?.data.id,
-                }}
-                setFormData={setFormData}
+      <div className="grid grid-cols-4 gap-4">
+        {isLoading ? (
+          <div className="flex justify-center col-span-4">
+            <Loading loading={isLoading} spinner="scale" />
+          </div>
+        ) : (
+          formData.map((url, idx) => (
+            <div key={idx} className="relative group">
+              <img
+                src={url}
+                alt={`Variant ${idx + 1}`}
+                className="object-cover w-full h-32 rounded-md"
               />
-            )}
-          </span>
-        </div>
-      ) : (
-        <div className="mb-5">
-          <p className="mb-0 text-base text-black">Image</p>
-          <DefaultUploadImg
-            img={formData[index].img}
-            isLoading={isLoading}
-            wh={40}
-          />
-        </div>
-      )}
-    </>
+              <button
+                onClick={() => handleRemoveImage(idx)}
+                className="absolute flex items-center justify-center w-6 h-6 text-white transition-opacity bg-red-500 rounded-full opacity-0 top-1 right-1 hover:bg-red-600 group-hover:opacity-100"
+              >
+                ×
+              </button>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
   );
 };
 
