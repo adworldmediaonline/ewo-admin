@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Drug } from '@/svg';
 import Loading from '../../common/loading';
-import { useUploadImageMultipleMutation } from '@/redux/cloudinary/cloudinaryApi';
+import {
+  useUploadImageMultipleMutation,
+  useDeleteCloudinaryImgMutation,
+} from '@/redux/cloudinary/cloudinaryApi';
 import { notifyError, notifySuccess } from '@/utils/toast';
 
 type IPropType = {
@@ -11,6 +14,8 @@ type IPropType = {
   isSubmitted: boolean;
 };
 
+const MAX_IMAGES = 10;
+
 const VariantImgUpload = ({
   setFormData,
   formData,
@@ -19,38 +24,62 @@ const VariantImgUpload = ({
 }: IPropType) => {
   const [uploadImages, { data: uploadData, isError, isLoading }] =
     useUploadImageMultipleMutation();
+  const [deleteImage] = useDeleteCloudinaryImgMutation();
 
   // handle multiple image upload
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target && e.target.files && e.target.files.length > 0) {
+      // Check if adding new images would exceed the limit
+      if (formData.length + e.target.files.length > MAX_IMAGES) {
+        notifyError(`You can only upload up to ${MAX_IMAGES} images in total`);
+        return;
+      }
+
       const files = Array.from(e.target.files);
-      const formData = new FormData();
+      const uploadFormData = new FormData();
 
       files.forEach(file => {
-        formData.append('images', file);
+        uploadFormData.append('images', file);
       });
 
-      uploadImages(formData)
-        .unwrap()
-        .then(response => {
-          if (response.success && response.data) {
-            const newUrls = response.data.map(item => item.url);
-            setFormData(prevUrls => [...prevUrls, ...newUrls]);
-            setImageURLs(prevUrls => [...prevUrls, ...newUrls]);
-            notifySuccess('Images uploaded successfully');
-          }
-        })
-        .catch(error => {
-          console.error('Upload failed:', error);
-          notifyError('Failed to upload images');
-        });
+      try {
+        const response = await uploadImages(uploadFormData).unwrap();
+        if (response.success && response.data) {
+          const newUrls = response.data.map((item: any) => item.url);
+          setFormData(prevUrls => [...prevUrls, ...newUrls]);
+          setImageURLs(prevUrls => [...prevUrls, ...newUrls]);
+          notifySuccess('Images uploaded successfully');
+        }
+      } catch (error) {
+        console.error('Upload failed:', error);
+        notifyError('Failed to upload images');
+      }
     }
   };
 
   // Handle image removal
-  const handleRemoveImage = (index: number) => {
-    setFormData(prev => prev.filter((_, i) => i !== index));
-    setImageURLs(prev => prev.filter((_, i) => i !== index));
+  const handleRemoveImage = async (url: string, index: number) => {
+    try {
+      // Extract public_id from cloudinary URL
+      const urlParts = url.split('/');
+      const publicIdWithExt = urlParts[urlParts.length - 1];
+      const publicId = publicIdWithExt.split('.')[0];
+      const folder = urlParts[urlParts.length - 2];
+
+      // Delete from cloudinary
+      await deleteImage({
+        folder_name: folder,
+        id: publicId,
+      }).unwrap();
+
+      // Remove from local state
+      setFormData(prev => prev.filter((_, i) => i !== index));
+      setImageURLs(prev => prev.filter((_, i) => i !== index));
+      notifySuccess('Image removed successfully');
+    } catch (error) {
+      console.error('Failed to remove image:', error);
+      notifyError('Failed to remove image');
+    }
   };
 
   // Sync formData with imageURLs on mount
@@ -64,6 +93,11 @@ const VariantImgUpload = ({
         <p className="mb-2 text-base text-black">
           Upload variant images (multiple)
         </p>
+        <div className="mb-2">
+          <span className="text-sm text-gray-500">
+            {formData.length} of {MAX_IMAGES} images uploaded
+          </span>
+        </div>
         <input
           onChange={handleImageUpload}
           type="file"
@@ -72,21 +106,30 @@ const VariantImgUpload = ({
           className="hidden"
           multiple
           accept="image/*"
+          disabled={formData.length >= MAX_IMAGES}
         />
         <label
           htmlFor="variant_images"
-          className="flex items-center justify-center h-[100px] border-2 border-gray6 dark:border-gray-600 border-dashed rounded-md cursor-pointer hover:bg-slate-100 transition-all linear ease"
+          className={`flex items-center justify-center h-[100px] border-2 border-gray6 dark:border-gray-600 border-dashed rounded-md cursor-pointer hover:bg-slate-100 transition-all linear ease ${
+            formData.length >= MAX_IMAGES ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
         >
           <div className="text-center">
             <span className="flex justify-center mx-auto mb-2">
               <Drug />
             </span>
             <span className="text-gray-600">
-              Drop images here or click to upload
-              <br />
-              <span className="text-sm text-gray-400">
-                (You can select multiple images)
-              </span>
+              {formData.length >= MAX_IMAGES ? (
+                'Maximum number of images reached'
+              ) : (
+                <>
+                  Drop images here or click to upload
+                  <br />
+                  <span className="text-sm text-gray-400">
+                    (You can select multiple images, up to {MAX_IMAGES} total)
+                  </span>
+                </>
+              )}
             </span>
           </div>
         </label>
@@ -106,8 +149,33 @@ const VariantImgUpload = ({
                 className="object-cover w-full h-32 rounded-md"
               />
               <button
-                onClick={() => handleRemoveImage(idx)}
-                className="absolute flex items-center justify-center w-6 h-6 text-white transition-opacity bg-red-500 rounded-full opacity-0 top-1 right-1 hover:bg-red-600 group-hover:opacity-100"
+                type="button"
+                onClick={() => handleRemoveImage(url, idx)}
+                style={{
+                  position: 'absolute',
+                  top: '4px',
+                  right: '4px',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: '#EF4444',
+                  color: 'white',
+                  borderRadius: '50%',
+                  cursor: 'pointer',
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  border: 'none',
+                  zIndex: 10,
+                  transition: 'background-color 0.2s ease',
+                }}
+                onMouseOver={e =>
+                  (e.currentTarget.style.backgroundColor = '#DC2626')
+                }
+                onMouseOut={e =>
+                  (e.currentTarget.style.backgroundColor = '#EF4444')
+                }
               >
                 ×
               </button>
