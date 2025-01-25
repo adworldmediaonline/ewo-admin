@@ -1,20 +1,21 @@
-"use client";
-import Link from "next/link";
-import React, { useState } from "react";
-import ProductTableHead from "./prd-table-head";
-import ProductTableItem from "./prd-table-item";
-import Pagination from "../../ui/Pagination";
-import { Search } from "@/svg";
-import ErrorMsg from "../../common/error-msg";
-import { useGetAllProductsQuery } from "@/redux/product/productApi";
-import usePagination from "@/hooks/use-pagination";
+'use client';
+import Link from 'next/link';
+import React, { useState } from 'react';
+import ProductTableHead from './prd-table-head';
+import ProductTableItem from './prd-table-item';
+import Pagination from '../../ui/Pagination';
+import { Search } from '@/svg';
+import ErrorMsg from '../../common/error-msg';
+import { useGetAllProductsQuery } from '@/redux/product/productApi';
+import usePagination from '@/hooks/use-pagination';
+import { IProduct } from '@/types/product';
 
 const ProductListArea = () => {
   const { data: products, isError, isLoading } = useGetAllProductsQuery();
-  const paginationData = usePagination(products?.data || [], 8);
+  const paginationData = usePagination<IProduct>(products?.data || [], 8);
   const { currentItems, handlePageClick, pageCount } = paginationData;
-  const [searchValue, setSearchValue] = useState<string>("");
-  const [selectValue, setSelectValue] = useState<string>("");
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [selectValue, setSelectValue] = useState<string>('');
 
   // search field
   const handleSearchProduct = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,28 +41,28 @@ const ProductListArea = () => {
   }
 
   if (!isLoading && !isError && products?.success) {
-    let productItems = [...currentItems].reverse();
+    let productItems: IProduct[] = [...currentItems].reverse();
 
     // search field
     if (searchValue) {
-      productItems = productItems.filter((p) =>
+      productItems = productItems.filter(p =>
         p.title.toLowerCase().includes(searchValue.toLowerCase())
       );
     }
 
     if (selectValue) {
-      productItems = productItems.filter((p) => p.status === selectValue);
+      productItems = productItems.filter(p => p.status === selectValue);
     }
 
     content = (
       <>
-        <div className="relative overflow-x-auto  mx-8">
+        <div className="relative mx-8 overflow-x-auto">
           <table className="w-full text-base text-left text-gray-500">
             {/* table head start */}
             <ProductTableHead />
             {/* table head end */}
             <tbody>
-              {productItems.map((prd) => (
+              {productItems.map(prd => (
                 <ProductTableItem key={prd._id} product={prd} />
               ))}
             </tbody>
@@ -69,12 +70,11 @@ const ProductListArea = () => {
         </div>
 
         {/* bottom  */}
-        <div className="flex justify-between items-center flex-wrap mx-8">
+        <div className="flex flex-wrap items-center justify-between mx-8">
           <p className="mb-0 text-tiny">
-            Showing {currentItems.length} of{" "}
-            {products?.data.length}
+            Showing {currentItems.length} of {products?.data.length}
           </p>
-          <div className="pagination py-3 flex justify-end items-center mx-8 pagination">
+          <div className="flex items-center justify-end py-3 mx-8 pagination">
             <Pagination
               handlePageClick={handlePageClick}
               pageCount={pageCount}
@@ -87,9 +87,9 @@ const ProductListArea = () => {
   return (
     <>
       {/* table start */}
-      <div className="bg-white rounded-t-md rounded-b-md shadow-xs py-4">
-        <div className="tp-search-box flex items-center justify-between px-8 py-8">
-          <div className="search-input relative">
+      <div className="py-4 bg-white shadow-xs rounded-t-md rounded-b-md">
+        <div className="flex items-center justify-between px-8 py-8 tp-search-box">
+          <div className="relative search-input">
             <input
               onChange={handleSearchProduct}
               className="input h-[44px] w-full pl-14"
@@ -101,9 +101,9 @@ const ProductListArea = () => {
             </button>
           </div>
           <div className="flex justify-end space-x-6">
-            <div className="search-select mr-3 flex items-center space-x-3 ">
+            <div className="flex items-center mr-3 space-x-3 search-select ">
               <span className="text-tiny inline-block leading-none -translate-y-[2px]">
-                Status :{" "}
+                Status :{' '}
               </span>
               <select onChange={handleSelectField}>
                 <option value="">Status</option>
@@ -111,7 +111,7 @@ const ProductListArea = () => {
                 <option value="out-of-stock">Out of stock</option>
               </select>
             </div>
-            <div className="product-add-btn flex ">
+            <div className="flex product-add-btn ">
               <Link href="/add-product" className="tp-btn">
                 Add Product
               </Link>

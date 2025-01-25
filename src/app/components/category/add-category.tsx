@@ -1,17 +1,14 @@
-"use client";
-import React from "react";
-import useCategorySubmit from "@/hooks/useCategorySubmit";
-import ProductType from "../products/add-product/product-type";
-import CategoryTables from "./category-tables";
-import CategoryImgUpload from "./global-img-upload";
-import CategoryChildren from "./category-children";
-import CategoryParent from "./category-parent";
-import CategoryDescription from "./category-description";
+'use client';
+import React from 'react';
+import useCategorySubmit from '@/hooks/useCategorySubmit';
+import CategoryTables from './category-tables';
+import CategoryImgUpload from './global-img-upload';
+import CategoryChildren from './category-children';
+import CategoryParent from './category-parent';
+import CategoryDescription from './category-description';
 
 const AddCategory = () => {
   const {
-    selectProductType,
-    setSelectProductType,
     errors,
     control,
     categoryChildren,
@@ -46,19 +43,6 @@ const AddCategory = () => {
               setCategoryChildren={setCategoryChildren}
               error={error}
             />
-
-            {/* Product Type */}
-            <div className="mb-6">
-              <p className="mb-0 text-base text-black">Product Type</p>
-              <div className="category-add-select select-bordered">
-                <ProductType
-                  setSelectProductType={setSelectProductType}
-                  control={control}
-                  errors={errors}
-                />
-              </div>
-            </div>
-            {/* Product Type */}
 
             {/* Category Description */}
             <CategoryDescription register={register} />

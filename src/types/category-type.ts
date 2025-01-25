@@ -1,10 +1,8 @@
-
 export interface ICategoryItem {
   _id: string;
   img: string;
   parent: string;
   children: string[];
-  productType: string;
   products?: string[];
   status: string;
   createdAt: string;
@@ -20,7 +18,6 @@ export interface IAddCategory {
   img?: string;
   parent: string;
   children?: string[];
-  productType: string;
   description?: string;
 }
 
@@ -30,7 +27,6 @@ export interface IAddCategoryResponse {
   data: {
     parent: string;
     children?: string[];
-    productType: string;
     products?: any[];
     _id: string;
     createdAt: string;
@@ -42,5 +38,3 @@ export interface ICategoryDeleteRes {
   success?: boolean;
   message?: string;
 }
-
-

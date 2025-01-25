@@ -1,14 +1,13 @@
-import React from "react";
-import { CloseTwo } from "@/svg";
-import GlobalImgUpload from "../category/global-img-upload";
+import React from 'react';
+import { CloseTwo } from '@/svg';
+import GlobalImgUpload from '../category/global-img-upload';
 import {
   Control,
   FieldErrors,
   UseFormHandleSubmit,
   UseFormRegister,
-} from "react-hook-form";
-import CouponFormField from "../brand/form-field-two";
-import ProductType from "../products/add-product/product-type";
+} from 'react-hook-form';
+import CouponFormField from '../brand/form-field-two';
 
 // prop type
 type IPropType = {
@@ -16,7 +15,6 @@ type IPropType = {
     openSidebar: boolean;
     setOpenSidebar: React.Dispatch<React.SetStateAction<boolean>>;
     setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
-    setSelectProductType: React.Dispatch<React.SetStateAction<string>>;
     setLogo: React.Dispatch<React.SetStateAction<string>>;
     handleCouponSubmit: (data: any) => void;
     isSubmitted: boolean;
@@ -41,16 +39,17 @@ const CouponOffcanvas = ({ propsItems }: IPropType) => {
     logo,
     register,
     control,
-    setSelectProductType,
   } = propsItems;
   return (
     <>
       <div
-        className={`offcanvas-area fixed top-0 right-0 h-full bg-white w-[280px] sm:w-[400px] z-[999] overflow-y-scroll overscroll-y-contain scrollbar-hide shadow-md translate-x-[calc(100%+80px)]  transition duration-300 ${openSidebar ? "offcanvas-opened" : ""}`}
+        className={`offcanvas-area fixed top-0 right-0 h-full bg-white w-[280px] sm:w-[400px] z-[999] overflow-y-scroll overscroll-y-contain scrollbar-hide shadow-md translate-x-[calc(100%+80px)]  transition duration-300 ${
+          openSidebar ? 'offcanvas-opened' : ''
+        }`}
       >
         <div className="flex flex-col justify-between h-full">
           {/* main wrap */}
-          <form onSubmit={handleSubmit((data) => handleCouponSubmit(data))}>
+          <form onSubmit={handleSubmit(data => handleCouponSubmit(data))}>
             <div className="flex items-center space-x-3 py-3 px-8 shadow-md sticky top-0 left-0 right-0 w-full z-[99] bg-white">
               <button
                 onClick={() => setOpenSidebar(false)}
@@ -106,18 +105,6 @@ const CouponOffcanvas = ({ propsItems }: IPropType) => {
                   name="minimumAmount"
                   isReq={true}
                 />
-                {/* Product Type */}
-                <div className="mb-6">
-                  <p className="mb-0 text-base text-black">Product Type</p>
-                  <div className="category-add-select select-bordered">
-                    <ProductType
-                      setSelectProductType={setSelectProductType}
-                      control={control}
-                      errors={errors}
-                    />
-                  </div>
-                </div>
-                {/* Product Type */}
               </div>
             </div>
             <div className="sm:flex items-center sm:space-x-3 py-6 px-8 sticky bottom-0 left-0 right-0 w-full z-[99] bg-white shadow-_md mt-8 flex-wrap sm:flex-nowrap">
@@ -127,7 +114,10 @@ const CouponOffcanvas = ({ propsItems }: IPropType) => {
               >
                 Add Coupon
               </button>
-              <button  onClick={() => setOpenSidebar(false)} className="tp-btn w-full sm:w-1/2 items-center justify-around border border-gray6 bg-white text-black hover:text-white hover:border-danger hover:bg-danger">
+              <button
+                onClick={() => setOpenSidebar(false)}
+                className="tp-btn w-full sm:w-1/2 items-center justify-around border border-gray6 bg-white text-black hover:text-white hover:border-danger hover:bg-danger"
+              >
                 Cancel
               </button>
             </div>
@@ -136,7 +126,9 @@ const CouponOffcanvas = ({ propsItems }: IPropType) => {
       </div>
       <div
         onClick={() => setOpenSidebar(false)}
-        className={`body-overlay fixed bg-black top-0 left-0 w-full h-full z-[60] invisible opacity-0 transition-all duration-300 ${openSidebar ? "opened" : ""}`}
+        className={`body-overlay fixed bg-black top-0 left-0 w-full h-full z-[60] invisible opacity-0 transition-all duration-300 ${
+          openSidebar ? 'opened' : ''
+        }`}
       ></div>
     </>
   );

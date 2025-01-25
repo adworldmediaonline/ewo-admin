@@ -6,7 +6,6 @@ import FormField from '../form-field';
 import DescriptionTextarea from '../add-product/description-textarea';
 import { useGetProductQuery } from '@/redux/product/productApi';
 import OfferDatePicker from '../add-product/offer-date-picker';
-import ProductTypeBrand from '../add-product/product-type-brand';
 import AdditionalInformation from '../add-product/additional-information';
 import ProductVariants from '../add-product/product-variants';
 import ProductImgUpload from '../add-product/product-img-upload';
@@ -24,8 +23,6 @@ const EditProductSubmit = ({ id }: { id: string }) => {
     errors,
     tags,
     setTags,
-    setSizes,
-    sizes,
     setAdditionalInformation,
     control,
     setCategory,
@@ -33,8 +30,6 @@ const EditProductSubmit = ({ id }: { id: string }) => {
     setChildren,
     setImg,
     img,
-    setBrand,
-    setProductType,
     imageURLs,
     setImageURLs,
     offerDate,
@@ -42,6 +37,7 @@ const EditProductSubmit = ({ id }: { id: string }) => {
     isSubmitted,
     setIsSubmitted,
     handleEditProduct,
+    editLoading,
   } = useProductSubmit();
 
   // decide what to render
@@ -166,21 +162,6 @@ const EditProductSubmit = ({ id }: { id: string }) => {
               </div>
             </div>
 
-            {/* product type and brands start */}
-            <ProductTypeBrand
-              register={register}
-              errors={errors}
-              control={control}
-              setSelectBrand={setBrand}
-              setSelectProductType={setProductType}
-              default_value={{
-                brand: product.brand.name,
-                product_type: product.productType,
-                unit: product.unit,
-              }}
-            />
-            {/* product type and brands end */}
-
             {/* additional information page start */}
             <AdditionalInformation
               setAdditionalInformation={setAdditionalInformation}
@@ -229,9 +210,22 @@ const EditProductSubmit = ({ id }: { id: string }) => {
             </div>
           </div>
         </div>
-        <button className="px-5 py-2 mt-5 tp-btn" type="submit">
-          Submit Product
-        </button>
+        <div className="flex justify-end gap-3">
+          <button
+            type="submit"
+            className="flex items-center gap-2 rounded bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-green-600 dark:bg-green-500 dark:hover:bg-green-600"
+            disabled={editLoading}
+          >
+            {editLoading ? (
+              <>
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                <span>Updating...</span>
+              </>
+            ) : (
+              'Update Product'
+            )}
+          </button>
+        </div>
       </form>
     );
   }

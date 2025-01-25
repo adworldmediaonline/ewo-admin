@@ -1,5 +1,9 @@
-import { apiSlice } from "../api/apiSlice";
-import { IAddProduct,IReviewProductRes, ProductResponse } from "@/types/product-type";
+import { apiSlice } from '../api/apiSlice';
+import {
+  IAddProduct,
+  IReviewProductRes,
+  ProductResponse,
+} from '@/types/product';
 
 interface IProductResponse {
   success: boolean;
@@ -15,11 +19,11 @@ interface IProductEditResponse {
 
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     // getUserOrders
     getAllProducts: builder.query<ProductResponse, void>({
       query: () => `/api/product/all`,
-      providesTags: ["AllProducts"],
+      providesTags: ['AllProducts'],
       keepUnusedDataFor: 600,
     }),
     // add product
@@ -27,11 +31,11 @@ export const authApi = apiSlice.injectEndpoints({
       query(data: IAddProduct) {
         return {
           url: `/api/product/add`,
-          method: "POST",
+          method: 'POST',
           body: data,
         };
       },
-      invalidatesTags: ["AllProducts"],
+      invalidatesTags: ['AllProducts'],
     }),
     // edit product
     editProduct: builder.mutation<
@@ -41,35 +45,35 @@ export const authApi = apiSlice.injectEndpoints({
       query({ id, data }) {
         return {
           url: `/api/product/edit-product/${id}`,
-          method: "PATCH",
+          method: 'PATCH',
           body: data,
         };
       },
-      invalidatesTags: ["AllProducts"],
+      invalidatesTags: ['AllProducts'],
     }),
     // get single product
     getProduct: builder.query<IAddProduct, string>({
-      query: (id) => `/api/product/single-product/${id}`,
+      query: id => `/api/product/single-product/${id}`,
     }),
     // get single product
     getReviewProducts: builder.query<IReviewProductRes, void>({
       query: () => `/api/product/review-product`,
-      providesTags: ["ReviewProducts"]
+      providesTags: ['ReviewProducts'],
     }),
     // get single product
     getStockOutProducts: builder.query<IReviewProductRes, void>({
       query: () => `/api/product/stock-out`,
-      providesTags: ["StockOutProducts"]
+      providesTags: ['StockOutProducts'],
     }),
-     // delete category
-     deleteProduct: builder.mutation<{message:string}, string>({
+    // delete category
+    deleteProduct: builder.mutation<{ message: string }, string>({
       query(id: string) {
         return {
           url: `/api/product/${id}`,
-          method: "DELETE",
+          method: 'DELETE',
         };
       },
-      invalidatesTags: ["AllProducts"],
+      invalidatesTags: ['AllProducts'],
     }),
   }),
 });

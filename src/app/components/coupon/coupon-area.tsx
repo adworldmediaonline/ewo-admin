@@ -1,9 +1,9 @@
-"use client";
-import React, { useState } from "react";
-import { Search } from "@/svg";
-import CouponTable from "./coupon-table";
-import CouponOffcanvas from "./coupon-offcanvas";
-import useCouponSubmit from "@/hooks/useCouponSubmit";
+'use client';
+import React, { useState } from 'react';
+import { Search } from '@/svg';
+import CouponTable from './coupon-table';
+import CouponOffcanvas from './coupon-offcanvas';
+import useCouponSubmit from '@/hooks/useCouponSubmit';
 
 const CouponArea = () => {
   const {
@@ -18,18 +18,17 @@ const CouponArea = () => {
     setLogo,
     setOpenSidebar,
     control,
-    setSelectProductType,
   } = useCouponSubmit();
-  const [searchValue,setSearchValue] = useState<string>("");
-  const [selectValue,setSelectValue] = useState<string>("");
+  const [searchValue, setSearchValue] = useState<string>('');
+  const [selectValue, setSelectValue] = useState<string>('');
   // handle search value
-  const handleSearchValue = (e:React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value)
-  }
+  const handleSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
   // handle select value
-  const handleSelectValue = (e:React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectValue(e.target.value)
-  }
+  const handleSelectValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectValue(e.target.value);
+  };
   return (
     <>
       <div className="bg-white rounded-t-md rounded-b-md shadow-xs py-4">
@@ -50,7 +49,7 @@ const CouponArea = () => {
               <div className="flex justify-end space-x-6">
                 <div className="search-select mr-3 flex items-center space-x-3 ">
                   <span className="text-tiny inline-block leading-none -translate-y-[2px]">
-                    Status :{" "}
+                    Status :{' '}
                   </span>
                   <select onChange={handleSelectValue}>
                     <option value="">Status</option>
@@ -92,7 +91,6 @@ const CouponArea = () => {
           isSubmitted,
           setIsSubmitted,
           control,
-          setSelectProductType,
         }}
       />
       {/* coupon offcanvas end */}

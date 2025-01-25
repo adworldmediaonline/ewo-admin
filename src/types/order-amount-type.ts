@@ -1,6 +1,6 @@
-import { IProduct } from "./product-type";
+import { IProduct, IOrderProduct } from './product';
 
-// user 
+// user
 interface IUser {
   _id: string;
   name: string;
@@ -16,8 +16,8 @@ interface IUser {
 
 export interface Order {
   _id: string;
-  user:IUser;
-  cart: IProduct[];
+  user: IUser;
+  cart: IOrderProduct[];
   name: string;
   address: string;
   email: string;
@@ -38,7 +38,6 @@ export interface Order {
   updatedAt?: string;
 }
 
-
 export interface IOrderAmounts {
   todayOrderAmount: number;
   yesterdayOrderAmount: number;
@@ -50,8 +49,6 @@ export interface IOrderAmounts {
   yesterDayCashPaymentAmount: number;
 }
 
-
-
 export interface ISalesEntry {
   date: string;
   total: number;
@@ -61,7 +58,6 @@ export interface ISalesEntry {
 export interface ISalesReport {
   salesReport: ISalesEntry[];
 }
-
 
 export interface IMostSellingCategory {
   categoryData: {
@@ -88,12 +84,12 @@ export interface IDashboardRecentOrders {
   totalOrder: number;
 }
 
-// get all orders type 
+// get all orders type
 export interface IGetAllOrdersRes {
   success: boolean;
   data: Order[];
 }
-// get all orders type 
+// get all orders type
 export interface IUpdateStatusOrderRes {
   success: boolean;
   message: string;

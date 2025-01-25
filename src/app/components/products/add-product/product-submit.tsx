@@ -3,7 +3,6 @@ import React from 'react';
 import useProductSubmit from '@/hooks/useProductSubmit';
 import DescriptionTextarea from './description-textarea';
 import OfferDatePicker from './offer-date-picker';
-import ProductTypeBrand from './product-type-brand';
 import AdditionalInformation from './additional-information';
 import ProductVariants from './product-variants';
 import ProductImgUpload from './product-img-upload';
@@ -30,8 +29,6 @@ const ProductSubmit = () => {
     setChildren,
     setImg,
     img,
-    setBrand,
-    setProductType,
     setImageURLs,
     offerDate,
     setOfferDate,
@@ -61,24 +58,6 @@ const ProductSubmit = () => {
               register={register}
               errors={errors}
             />
-            {/* <DescriptionTextarea register={register} errors={errors} /> */}
-            {/* tip tap editor start */}
-            {/* <div className="mb-5">
-              <p className="mb-0 text-base text-black capitalize">
-                Description <span className="text-red">*</span>
-              </p>
-              <Controller
-                name="description"
-                control={control}
-                rules={{ required: true }}
-                render={({ field }) => (
-                  <RichTextEditor content={field.value} {...field} />
-                )}
-              />
-              <ErrorMsg msg={(errors?.description?.message as string) || ''} />
-            </div> */}
-            {/* tip tap editor end */}
-
             {/* tip tap editor start */}
             <div className="mb-5">
               <p className="mb-0 text-base text-black capitalize">
@@ -161,16 +140,6 @@ const ProductSubmit = () => {
               {/* date picker start */}
             </div>
           </div>
-
-          {/* product type and brands start */}
-          <ProductTypeBrand
-            register={register}
-            errors={errors}
-            control={control}
-            setSelectBrand={setBrand}
-            setSelectProductType={setProductType}
-          />
-          {/* product type and brands end */}
 
           {/* additional information page start */}
           <AdditionalInformation
