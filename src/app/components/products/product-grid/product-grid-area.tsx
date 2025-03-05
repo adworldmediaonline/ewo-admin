@@ -28,7 +28,7 @@ export default function ProductGridArea() {
           p.sku.toLowerCase().includes(searchTerm)
       );
     }
-
+    //
     if (selectValue) {
       filtered = filtered.filter(p => p.category.name === selectValue);
     }
