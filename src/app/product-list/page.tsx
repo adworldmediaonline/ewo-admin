@@ -1,7 +1,7 @@
-import React from "react";
-import Breadcrumb from "../components/breadcrumb/breadcrumb";
-import Wrapper from "@/layout/wrapper";
-import ProductListArea from "../components/products/product-lists/product-list-area";
+import React from 'react';
+import Breadcrumb from '../components/breadcrumb/breadcrumb';
+import Wrapper from '@/layout/wrapper';
+import ProductListArea from '../components/products/product-lists/product-list-area';
 
 const ProductList = () => {
   return (
