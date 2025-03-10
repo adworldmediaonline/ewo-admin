@@ -160,7 +160,7 @@ const useProductSubmit = () => {
         slug: slugify(data.title, { replacement: '-', lower: true }),
         imageURLs,
         parent: parent,
-        children: children,
+        children: children || '',
         price: data.price,
         discount: data.discount,
         quantity: data.quantity,
@@ -175,6 +175,19 @@ const useProductSubmit = () => {
         additionalInformation: additionalInformation,
         tags: tags,
       };
+
+      if (!img) {
+        return notifyError('Product image is required');
+      }
+      if (!category.name || !category.id) {
+        return notifyError('Category name and id are required');
+      }
+      if (!parent) {
+        return notifyError('Parent category is required');
+      }
+      if (Number(data.discount) > Number(data.price)) {
+        return notifyError('Product price must be greater than discount');
+      }
 
       const res = await editProduct({ id: id, data: productData as any });
       if ('error' in res) {

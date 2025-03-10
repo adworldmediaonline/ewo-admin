@@ -34,17 +34,23 @@ export default function ProductCategory({
   const [open, setOpen] = React.useState<string>('');
   const { data: categories, isError, isLoading } = useGetAllCategoriesQuery();
   const [selectedCategory, setSelectedCategory] = useState<string[]>(
-    default_value ? [default_value.parent, default_value.children] : []
+    default_value
+      ? [
+          default_value.parent,
+          ...(default_value.children ? [default_value.children] : []),
+        ]
+      : []
   );
 
   useEffect(() => {
-    if (default_value?.parent && default_value.id && default_value.children) {
+    if (default_value?.parent && default_value.id) {
       const { id, parent, children } = default_value;
       setCategory({ id: id, name: parent });
       setParent(parent);
-      setChildren(children);
+      if (children) {
+        setChildren(children);
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // handleCategory
@@ -53,6 +59,7 @@ export default function ProductCategory({
     if (value && title) {
       setCategory({ id: value, name: title });
       setParent(title);
+      setChildren('');
     }
     if (title) {
       if (selectedCategory.includes(title)) {
