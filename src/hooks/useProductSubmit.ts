@@ -32,6 +32,9 @@ const useProductSubmit = () => {
   const [status, setStatus] = useState<status>('in-stock');
   const [description, setDescription] = useState<string>('');
   const [videoId, setVideoId] = useState<string>('');
+  const [options, setOptions] = useState<{ title: string; price: number }[]>(
+    []
+  );
   const [offerDate, setOfferDate] = useState<{
     startDate: null;
     endDate: null;
@@ -85,6 +88,7 @@ const useProductSubmit = () => {
     setStatus('in-stock');
     setDescription('');
     setVideoId('');
+    setOptions([]);
     setOfferDate({
       startDate: null,
       endDate: null,
@@ -110,6 +114,7 @@ const useProductSubmit = () => {
       quantity: data.quantity,
       category: category,
       status: status,
+      options: options.filter(option => option.title.trim() !== ''),
       offerDate: {
         startDate: offerDate.startDate,
         endDate: offerDate.endDate,
@@ -131,21 +136,37 @@ const useProductSubmit = () => {
     }
     if (Number(data.discount) > Number(data.price)) {
       return notifyError('Product price must be greater than discount');
-    } else {
-      const res = await addProduct(productData as any);
-      if ('error' in res) {
-        if ('data' in res.error) {
-          const errorData = res.error.data as { message?: string };
-          if (typeof errorData.message === 'string') {
-            return notifyError(errorData.message);
-          }
-        }
-      } else {
-        notifySuccess('Product created successfully');
-        setIsSubmitted(true);
-        resetForm();
-        router.push('/product-grid');
+    }
+    // Validate options if any are provided
+    if (
+      options.length > 0 &&
+      options.some(option => option.title.trim() !== '')
+    ) {
+      const invalidOptions = options.filter(
+        option =>
+          option.title.trim() !== '' &&
+          (option.price < 0 || isNaN(option.price))
+      );
+      if (invalidOptions.length > 0) {
+        return notifyError(
+          'All option prices must be valid numbers greater than or equal to 0'
+        );
       }
+    }
+
+    const res = await addProduct(productData as any);
+    if ('error' in res) {
+      if ('data' in res.error) {
+        const errorData = res.error.data as { message?: string };
+        if (typeof errorData.message === 'string') {
+          return notifyError(errorData.message);
+        }
+      }
+    } else {
+      notifySuccess('Product created successfully');
+      setIsSubmitted(true);
+      resetForm();
+      router.push('/product-grid');
     }
   };
 
@@ -166,6 +187,7 @@ const useProductSubmit = () => {
         quantity: data.quantity,
         category: category,
         status: status,
+        options: options.filter(option => option.title.trim() !== ''),
         offerDate: {
           startDate: offerDate.startDate,
           endDate: offerDate.endDate,
@@ -187,6 +209,22 @@ const useProductSubmit = () => {
       }
       if (Number(data.discount) > Number(data.price)) {
         return notifyError('Product price must be greater than discount');
+      }
+      // Validate options if any are provided
+      if (
+        options.length > 0 &&
+        options.some(option => option.title.trim() !== '')
+      ) {
+        const invalidOptions = options.filter(
+          option =>
+            option.title.trim() !== '' &&
+            (option.price < 0 || isNaN(option.price))
+        );
+        if (invalidOptions.length > 0) {
+          return notifyError(
+            'All option prices must be valid numbers greater than or equal to 0'
+          );
+        }
       }
 
       const res = await editProduct({ id: id, data: productData as any });
@@ -226,6 +264,8 @@ const useProductSubmit = () => {
     setImageURLs,
     offerDate,
     setOfferDate,
+    options,
+    setOptions,
     isSubmitted,
     setIsSubmitted,
     handleEditProduct,

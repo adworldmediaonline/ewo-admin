@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import useProductSubmit from '@/hooks/useProductSubmit';
-import DescriptionTextarea from './description-textarea';
+// import DescriptionTextarea from './description-textarea';
 import OfferDatePicker from './offer-date-picker';
 import AdditionalInformation from './additional-information';
 import ProductVariants from './product-variants';
@@ -11,6 +11,7 @@ import Tags from './tags';
 import FormField from '../form-field';
 import { Controller } from 'react-hook-form';
 import ErrorMsg from '../../common/error-msg';
+import ProductOptions from './product-options';
 
 import Tiptap from '@/components/tipTap/Tiptap';
 
@@ -32,6 +33,8 @@ const ProductSubmit = () => {
     setImageURLs,
     offerDate,
     setOfferDate,
+    options,
+    setOptions,
     isSubmitted,
     additionalInformation,
     imageURLs,
@@ -146,6 +149,10 @@ const ProductSubmit = () => {
             setAdditionalInformation={setAdditionalInformation}
           />
           {/* additional information page end */}
+
+          {/* product options start */}
+          <ProductOptions setOptions={setOptions} isSubmitted={isSubmitted} />
+          {/* product options end */}
 
           {/* product variations start */}
           <ProductVariants
