@@ -53,6 +53,8 @@ const EditProductSubmit = ({ id }: { id: string }) => {
     content = <ErrorMsg msg="There was an error" />;
   }
   if (!isLoading && !isError && product) {
+    console.log('product--->', product);
+    console.log('product.options', product.options);
     content = (
       <form onSubmit={handleSubmit(data => handleEditProduct(data, id))}>
         <div className="grid grid-cols-12 gap-6 mb-6">

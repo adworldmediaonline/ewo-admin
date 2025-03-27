@@ -25,7 +25,9 @@ export default function ProductOptions({
   isSubmitted,
 }: IPropType) {
   const [formData, setFormData] = useState<OptionData[]>(
-    default_value ? default_value : [{ title: '', price: '' }]
+    default_value && default_value.length > 0
+      ? default_value
+      : [{ title: '', price: '' }]
   );
   const [hasDefaultValues, setHasDefaultValues] = useState<boolean>(false);
 
@@ -56,12 +58,15 @@ export default function ProductOptions({
   // default value set
   useEffect(() => {
     if (default_value && !hasDefaultValues) {
-      setOptions(
-        default_value.map(item => ({
-          ...item,
-          price: parsePrice(item.price),
-        }))
-      );
+      const processedValues =
+        default_value.length > 0
+          ? default_value.map(item => ({
+              ...item,
+              price: parsePrice(item.price),
+            }))
+          : [];
+
+      setOptions(processedValues);
       setHasDefaultValues(true);
     }
   }, [default_value, hasDefaultValues, setOptions]);
@@ -100,8 +105,16 @@ export default function ProductOptions({
 
   // handle add field
   const handleAddField = () => {
+    // Safety check to ensure formData is not empty
+    if (formData.length === 0) {
+      const newData = [{ title: '', price: '' }];
+      setFormData(newData);
+      setOptions([]);
+      return;
+    }
+
     const lastField = formData[formData.length - 1];
-    if (lastField.title.trim() !== '') {
+    if (lastField && lastField.title.trim() !== '') {
       setFormData([...formData, { title: '', price: '' }]);
 
       // Convert price to number when sending to parent
