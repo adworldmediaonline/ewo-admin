@@ -48,6 +48,10 @@ export interface IProduct {
     key: string;
     value: string;
   }>;
+  options?: Array<{
+    title: string;
+    price: number;
+  }>;
   tags: string[];
   offerDate?: {
     startDate: string | null;

@@ -13,6 +13,7 @@ import Tags from '../add-product/tags';
 import ProductCategory from '../../category/product-category';
 import Tiptap from '@/components/tipTap/Tiptap';
 import { Controller } from 'react-hook-form';
+import ProductOptions from '../add-product/product-options';
 
 const EditProductSubmit = ({ id }: { id: string }) => {
   const { data: product, isError, isLoading } = useGetProductQuery(id);
@@ -34,6 +35,8 @@ const EditProductSubmit = ({ id }: { id: string }) => {
     setImageURLs,
     offerDate,
     setOfferDate,
+    options,
+    setOptions,
     isSubmitted,
     setIsSubmitted,
     handleEditProduct,
@@ -168,6 +171,14 @@ const EditProductSubmit = ({ id }: { id: string }) => {
               default_value={product.additionalInformation}
             />
             {/* additional information page end */}
+
+            {/* product options start */}
+            <ProductOptions
+              setOptions={setOptions}
+              default_value={product.options}
+              isSubmitted={isSubmitted}
+            />
+            {/* product options end */}
 
             {/* product variations start */}
             <ProductVariants
