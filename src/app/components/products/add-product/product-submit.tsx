@@ -87,6 +87,7 @@ const ProductSubmit = () => {
                 type="number"
                 register={register}
                 errors={errors}
+                step="0.01"
               />
               <FormField
                 title="SKU"
@@ -113,6 +114,7 @@ const ProductSubmit = () => {
                 bottomTitle="Set the product Discount."
                 register={register}
                 errors={errors}
+                step="0.01"
               />
             </div>
           </div>
