@@ -105,6 +105,7 @@ const EditProductSubmit = ({ id }: { id: string }) => {
                   defaultValue={product.price}
                   register={register}
                   errors={errors}
+                  step="0.01"
                 />
                 <FormField
                   title="SKU"
@@ -134,6 +135,7 @@ const EditProductSubmit = ({ id }: { id: string }) => {
                   defaultValue={product.discount}
                   register={register}
                   errors={errors}
+                  step="0.01"
                 />
               </div>
             </div>

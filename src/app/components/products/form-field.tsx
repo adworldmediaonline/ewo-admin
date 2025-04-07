@@ -1,15 +1,16 @@
-import { FieldErrors, UseFormRegister } from "react-hook-form";
-import ErrorMsg from "../common/error-msg";
+import { FieldErrors, UseFormRegister } from 'react-hook-form';
+import ErrorMsg from '../common/error-msg';
 
 export default function FormField({
   title,
   isRequired,
   bottomTitle,
-  type = "text",
+  type = 'text',
   placeHolder,
   register,
   errors,
   defaultValue,
+  step,
 }: {
   title: string;
   isRequired: boolean;
@@ -18,7 +19,8 @@ export default function FormField({
   placeHolder: string;
   register: UseFormRegister<any>;
   errors: FieldErrors<any>;
-  defaultValue?:string | number;
+  defaultValue?: string | number;
+  step?: string | number;
 }) {
   return (
     <div className="mb-5">
@@ -28,7 +30,7 @@ export default function FormField({
         </p>
       )}
       <input
-        {...register(title.split(" ").join("_"), {
+        {...register(title.split(' ').join('_'), {
           required: isRequired ? `${title} is required!` : false,
         })}
         className="input w-full h-[44px] rounded-md border border-gray6 px-6 text-base"
@@ -37,9 +39,10 @@ export default function FormField({
         id={title}
         placeholder={placeHolder}
         defaultValue={defaultValue}
+        step={step}
       />
       {isRequired && (
-        <ErrorMsg msg={(errors?.[title]?.message as string) || ""} />
+        <ErrorMsg msg={(errors?.[title]?.message as string) || ''} />
       )}
       {bottomTitle && (
         <span className="text-tiny leading-4">{bottomTitle}</span>

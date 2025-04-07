@@ -153,7 +153,7 @@ const useProductSubmit = () => {
         );
       }
     }
-
+    console.log('productData--->', productData);
     const res = await addProduct(productData as any);
     if ('error' in res) {
       if ('data' in res.error) {
