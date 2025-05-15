@@ -111,6 +111,10 @@ const useProductSubmit = () => {
       children: children,
       price: data.price,
       discount: data.discount,
+      shipping: {
+        price: data.shipping?.price || 0,
+        description: data.shipping?.description || '',
+      },
       quantity: data.quantity,
       category: category,
       status: status,
@@ -184,6 +188,10 @@ const useProductSubmit = () => {
         children: children || '',
         price: data.price,
         discount: data.discount,
+        shipping: {
+          price: data.shipping?.price || 0,
+          description: data.shipping?.description || '',
+        },
         quantity: data.quantity,
         category: category,
         status: status,

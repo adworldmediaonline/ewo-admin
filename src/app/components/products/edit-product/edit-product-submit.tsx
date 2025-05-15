@@ -14,6 +14,7 @@ import ProductCategory from '../../category/product-category';
 import Tiptap from '@/components/tipTap/Tiptap';
 import { Controller } from 'react-hook-form';
 import ProductOptions from '../add-product/product-options';
+import ShippingPrice from '../shipping-price';
 
 const EditProductSubmit = ({ id }: { id: string }) => {
   const { data: product, isError, isLoading } = useGetProductQuery(id);
@@ -139,6 +140,15 @@ const EditProductSubmit = ({ id }: { id: string }) => {
                 />
               </div>
             </div>
+
+            <ShippingPrice
+              register={register}
+              errors={errors}
+              defaultPrice={product.shipping ? product.shipping.price : 0}
+              defaultDescription={
+                product.shipping ? product.shipping.description : ''
+              }
+            />
 
             <div className="px-8 py-8 mb-6 bg-white rounded-md">
               <div className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-x-6">
