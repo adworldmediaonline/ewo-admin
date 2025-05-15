@@ -36,6 +36,10 @@ export interface IProduct {
   children: string;
   price: number;
   discount: number;
+  shipping?: {
+    price: number;
+    description: string;
+  };
   quantity: number;
   orderQuantity?: number;
   brand?: string;

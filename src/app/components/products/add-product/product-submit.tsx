@@ -12,6 +12,7 @@ import FormField from '../form-field';
 import { Controller } from 'react-hook-form';
 import ErrorMsg from '../../common/error-msg';
 import ProductOptions from './product-options';
+import ShippingPrice from '../shipping-price';
 
 import Tiptap from '@/components/tipTap/Tiptap';
 
@@ -118,6 +119,8 @@ const ProductSubmit = () => {
               />
             </div>
           </div>
+
+          <ShippingPrice register={register} errors={errors} />
 
           <div className="px-8 py-8 mb-6 bg-white rounded-md">
             <div className="grid sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2 gap-x-6">
