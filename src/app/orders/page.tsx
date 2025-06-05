@@ -1,6 +1,6 @@
-import Wrapper from "@/layout/wrapper";
-import Breadcrumb from "../components/breadcrumb/breadcrumb";
-import OrderArea from "../components/orders/order-area";
+import Wrapper from '@/layout/wrapper';
+import Breadcrumb from '../components/breadcrumb/breadcrumb';
+import OrderArea from '../components/orders/order-area';
 
 const OrdersPage = () => {
   return (

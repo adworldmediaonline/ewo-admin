@@ -11,6 +11,7 @@ import {
   Setting,
   Leaf,
   StuffUser,
+  Cart,
 } from '@/svg';
 
 const sidebar_menu: Array<ISidebarMenus> = [
@@ -45,42 +46,48 @@ const sidebar_menu: Array<ISidebarMenus> = [
   },
   {
     id: 5,
+    icon: Cart,
+    link: '/carts',
+    title: 'Carts',
+  },
+  {
+    id: 6,
     icon: Leaf,
     link: '/brands',
     title: 'Brand',
   },
   {
-    id: 6,
+    id: 7,
     icon: Reviews,
     link: '/reviews',
     title: 'Reviews',
   },
   {
-    id: 7,
+    id: 8,
     icon: Coupons,
     link: '/coupon',
     title: 'Coupons',
   },
   {
-    id: 8,
+    id: 9,
     icon: Profile,
     link: '/profile',
     title: 'Profile',
   },
   {
-    id: 9,
+    id: 10,
     icon: Setting,
     link: '#',
     title: 'Online store',
   },
   {
-    id: 10,
+    id: 11,
     icon: StuffUser,
     link: '/our-staff',
     title: 'Our Staff',
   },
   {
-    id: 11,
+    id: 12,
     icon: Pages,
     link: '/dashboard',
     title: 'Pages',
@@ -91,7 +98,7 @@ const sidebar_menu: Array<ISidebarMenus> = [
     ],
   },
   {
-    id: 12,
+    id: 13,
     icon: Categories,
     link: '/blog-category',
     title: 'Blog Category',
