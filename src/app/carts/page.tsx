@@ -9,7 +9,7 @@ export default function CartsPage() {
         {/* breadcrumb start */}
         <Breadcrumb title="Carts" subtitle="Cart Management" />
         {/* breadcrumb end */}
-
+        {/*  */}
         {/* cart area start */}
         <CartArea />
         {/* cart area end */}
