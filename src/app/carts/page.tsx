@@ -1,21 +1,19 @@
 import Wrapper from '@/layout/wrapper';
 import Breadcrumb from '../components/breadcrumb/breadcrumb';
-import OrderArea from '../components/orders/order-area';
+import CartArea from '../components/carts/cart-area';
 
-const OrdersPage = () => {
+export default function CartsPage() {
   return (
     <Wrapper>
       <div className="body-content px-8 py-8 bg-slate-100">
         {/* breadcrumb start */}
-        <Breadcrumb title="Orders" subtitle="Order List" />
+        <Breadcrumb title="Carts" subtitle="Cart Management" />
         {/* breadcrumb end */}
-
-        {/* order area start */}
-        <OrderArea />
-        {/* order area end */}
+        {/*  */}
+        {/* cart area start */}
+        <CartArea />
+        {/* cart area end */}
       </div>
     </Wrapper>
   );
-};
-
-export default OrdersPage;
+}

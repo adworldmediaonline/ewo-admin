@@ -40,5 +40,7 @@ export const apiSlice = createApi({
     'Stuff',
     'AllBlogCategory',
     'getBlogCategory',
+    'AllCarts',
+    'Cart',
   ],
 });

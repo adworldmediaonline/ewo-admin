@@ -1,14 +1,14 @@
-import React from "react";
-import ReactSelect from "react-select";
-import { notifySuccess } from "@/utils/toast";
-import { useUpdateStatusMutation } from "@/redux/order/orderApi";
+import React from 'react';
+import ReactSelect from 'react-select';
+import { notifySuccess } from '@/utils/toast';
+import { useUpdateStatusMutation } from '@/redux/order/orderApi';
 
 // option
 const options = [
-  { value: "delivered", label: "delivered" },
-  { value: "processing", label: "Processing" },
-  { value: "pending", label: "Pending" },
-  { value: "cancel", label: "cancel" },
+  { value: 'delivered', label: 'delivered' },
+  { value: 'processing', label: 'Processing' },
+  { value: 'pending', label: 'Pending' },
+  { value: 'cancel', label: 'cancel' },
 ];
 
 const OrderStatusChange = ({ id }: { id: string }) => {
@@ -16,8 +16,8 @@ const OrderStatusChange = ({ id }: { id: string }) => {
   const handleChange = async (value: string | undefined, id: string) => {
     if (value) {
       const res = await updateStatus({ id, status: { status: value } });
-      if ("data" in res) {
-        if ("message" in res.data) {
+      if ('data' in res) {
+        if ('message' in res.data) {
           notifySuccess(res.data.message);
         }
       }
@@ -25,7 +25,7 @@ const OrderStatusChange = ({ id }: { id: string }) => {
   };
   return (
     <ReactSelect
-      onChange={(value) => handleChange(value?.value, id)}
+      onChange={value => handleChange(value?.value, id)}
       options={options}
     />
   );
