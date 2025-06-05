@@ -70,9 +70,12 @@ const CartArea = () => {
 
   // Extract data
   const carts = data?.data || [];
-  const statistics = data?.statistics || {};
   const totalCarts = data?.pagination?.totalCarts || 0;
   const totalPages = data?.pagination?.totalPages || 1;
+
+  // Calculate statistics from carts data
+  const totalItems = carts.reduce((sum, cart) => sum + cart.totalItems, 0);
+  const totalValue = carts.reduce((sum, cart) => sum + cart.totalValue, 0);
 
   if (isLoading) {
     return (
@@ -89,14 +92,12 @@ const CartArea = () => {
     <div className="bg-white rounded-t-md rounded-b-md shadow-xs">
       {/* Statistics Cards */}
       <div className="p-6 border-b border-gray-200">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-blue-100">Total Carts</p>
-                <p className="text-2xl font-bold">
-                  {statistics.totalCarts || 0}
-                </p>
+                <p className="text-2xl font-bold">{totalCarts}</p>
               </div>
               <div className="bg-white bg-opacity-20 rounded-lg p-3">
                 <svg
@@ -110,37 +111,11 @@ const CartArea = () => {
             </div>
           </div>
 
-          <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-6 text-white">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-green-100">Active Carts</p>
-                <p className="text-2xl font-bold">
-                  {statistics.activeCarts || 0}
-                </p>
-              </div>
-              <div className="bg-white bg-opacity-20 rounded-lg p-3">
-                <svg
-                  className="w-6 h-6"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            </div>
-          </div>
-
           <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg p-6 text-white">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-yellow-100">Total Items</p>
-                <p className="text-2xl font-bold">
-                  {statistics.totalItems || 0}
-                </p>
+                <p className="text-2xl font-bold">{totalItems}</p>
               </div>
               <div className="bg-white bg-opacity-20 rounded-lg p-3">
                 <svg
@@ -163,7 +138,7 @@ const CartArea = () => {
               <div>
                 <p className="text-purple-100">Total Value</p>
                 <p className="text-2xl font-bold">
-                  {formatCurrency(statistics.totalValue || 0)}
+                  {formatCurrency(totalValue)}
                 </p>
               </div>
               <div className="bg-white bg-opacity-20 rounded-lg p-3">
