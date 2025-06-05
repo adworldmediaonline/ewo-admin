@@ -30,6 +30,12 @@ export interface CartResponse {
     totalCarts: number;
     limit: number;
   };
+  statistics: {
+    totalCarts: number;
+    activeCarts: number;
+    totalItems: number;
+    totalValue: number;
+  };
 }
 
 export interface CartQueryParams {
