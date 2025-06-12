@@ -1,4 +1,3 @@
-
 // admin add
 export interface IAdminRegisterAdd {
   name: string;
@@ -8,18 +7,24 @@ export interface IAdminRegisterAdd {
 
 // admin add
 export interface IAdminLoginAdd {
-  email: string,
-  password: string,
+  email: string;
+  password: string;
 }
 
 export interface IAdminLoginRes {
-  _id: string;
-  token: string;
-  name: string;
-  image?: string;
-  email: string;
-  phone?: string;
-  role?: string;
+  success: boolean;
+  message: string;
+  data: {
+    token: string;
+    user: {
+      _id: string;
+      name: string;
+      image?: string;
+      email: string;
+      phone?: string;
+      role?: string;
+    };
+  };
 }
 
 // Admin RegisterRes
@@ -62,7 +67,7 @@ export interface IAddStuff {
 }
 // single stuff
 export interface IStuff {
-  _id:string;
+  _id: string;
   name: string;
   image?: string;
   address?: string;
@@ -70,9 +75,9 @@ export interface IStuff {
   city?: string;
   email: string;
   phone?: string;
-  status?: "Active" | "Inactive";
+  status?: 'Active' | 'Inactive';
   password?: string;
-  role: "Admin" | "Super Admin" | "Manager" | "CEO";
+  role: 'Admin' | 'Super Admin' | 'Manager' | 'CEO';
   joiningDate?: string;
   createdAt: string;
   updatedAt: string;
@@ -81,5 +86,5 @@ export interface IStuff {
 export interface IAdminGetRes {
   status: boolean;
   message: string;
-  data: IStuff[]
+  data: IStuff[];
 }

@@ -23,6 +23,7 @@ export interface Order {
   email: string;
   contact: string;
   city: string;
+  state?: string;
   country: string;
   zipCode: string;
   subTotal: number;
@@ -33,6 +34,15 @@ export interface Order {
   paymentMethod: string;
   orderNote?: string;
   invoice: number;
+  orderId?: string;
+  isGuestOrder?: boolean;
+  firstTimeDiscount?: {
+    isApplied: boolean;
+    percentage: number;
+    amount: number;
+  };
+  firstTimeShippingDiscount?: boolean;
+  firstTimeShippingDiscountAmount?: number;
   status: string;
   createdAt?: string;
   updatedAt?: string;

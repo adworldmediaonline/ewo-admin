@@ -77,7 +77,7 @@ const sidebar_menu: Array<ISidebarMenus> = [
   {
     id: 10,
     icon: Setting,
-    link: '#',
+    link: 'https://www.eastwestoffroad.com/',
     title: 'Online store',
   },
   {

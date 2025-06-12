@@ -1,14 +1,14 @@
-"use client";
-import Image from "next/image";
-import { redirect, useRouter } from "next/navigation";
-import Link from "next/link";
-import { useDispatch, useSelector } from "react-redux";
-import React, { useRef, useState, useEffect } from "react";
-import { Menu, Search } from "@/svg";
-import { RootState } from "@/redux/store";
-import default_user from "@assets/img/users/user-10.jpg";
-import NotificationArea from "./component/notification-area";
-import { userLoggedOut } from "@/redux/auth/authSlice";
+'use client';
+import Image from 'next/image';
+import { redirect, useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useDispatch, useSelector } from 'react-redux';
+import React, { useRef, useState, useEffect } from 'react';
+import { Menu, Search } from '@/svg';
+import { RootState } from '@/redux/store';
+import default_user from '@assets/img/users/user-10.jpg';
+import NotificationArea from './component/notification-area';
+import { userLoggedOut } from '@/redux/auth/authSlice';
 
 // prop type
 type IProps = {
@@ -41,7 +41,7 @@ const Header = ({ setSideMenu }: IProps) => {
         setNotificationOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
   }, [pRef, nRef]);
 
   const handleNotificationOpen = () => {
@@ -59,7 +59,7 @@ const Header = ({ setSideMenu }: IProps) => {
         <div className="flex justify-between">
           <div className="flex items-center space-x-6 lg:space-x-0">
             <button
-              onClick={() => setSideMenu((prev) => !prev)}
+              onClick={() => setSideMenu(prev => !prev)}
               type="button"
               className="block lg:hidden text-2xl text-black"
             >
@@ -112,7 +112,7 @@ const Header = ({ setSideMenu }: IProps) => {
                     alt="user-img"
                     width={40}
                     height={40}
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: 'cover' }}
                     priority
                   />
                 ) : (
@@ -122,7 +122,7 @@ const Header = ({ setSideMenu }: IProps) => {
                     alt="user-img"
                     width={40}
                     height={40}
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: 'cover' }}
                     priority
                   />
                 )}
@@ -139,7 +139,7 @@ const Header = ({ setSideMenu }: IProps) => {
                         alt="user-img"
                         width={50}
                         height={50}
-                        style={{ objectFit: "cover" }}
+                        style={{ objectFit: 'cover' }}
                         priority
                       />
                     </div>
@@ -150,6 +150,11 @@ const Header = ({ setSideMenu }: IProps) => {
                       <p className="mb-0 text-tiny leading-none">
                         {user?.email}
                       </p>
+                      {user?.role && (
+                        <span className="inline-block px-2 py-1 text-xs bg-theme text-white rounded-md mt-1">
+                          {user.role}
+                        </span>
+                      )}
                     </div>
                   </div>
                   <ul>
@@ -172,7 +177,7 @@ const Header = ({ setSideMenu }: IProps) => {
                     <li>
                       <a
                         onClick={handleLogOut}
-                        style={{ cursor: "pointer" }}
+                        style={{ cursor: 'pointer' }}
                         className="px-5 py-2 w-full block hover:bg-gray rounded-md hover:text-theme text-base"
                       >
                         Logout
@@ -189,8 +194,8 @@ const Header = ({ setSideMenu }: IProps) => {
         <div
           className={`fixed top-0 left-0 w-full bg-white p-10 z-50 transition-transform duration-300 md:hidden ${
             searchOverlay
-              ? "translate-y-[0px]"
-              : " -translate-y-[230px] lg:translate-y-[0]"
+              ? 'translate-y-[0px]'
+              : ' -translate-y-[230px] lg:translate-y-[0]'
           }`}
         >
           <form action="#">
@@ -229,7 +234,7 @@ const Header = ({ setSideMenu }: IProps) => {
         </div>
         <div
           className={`fixed top-0 left-0 w-full h-full z-40 bg-black/70 transition-all duration-300 ${
-            searchOverlay ? "visible opacity-1" : "  invisible opacity-0 "
+            searchOverlay ? 'visible opacity-1' : '  invisible opacity-0 '
           }`}
         ></div>
       </header>
