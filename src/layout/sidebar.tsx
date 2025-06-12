@@ -1,12 +1,14 @@
 'use client';
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { getFilteredSidebarMenu } from '@/data/filtered-sidebar-menus';
 import sidebar_menu from '@/data/sidebar-menus';
 import { DownArrow } from '@/svg';
 import Link from 'next/link';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { userLoggedOut } from '@/redux/auth/authSlice';
 import { useRouter } from 'next/navigation';
+import { UserRole } from '@/utils/rolePermissions';
 
 // prop type
 type IProps = {
@@ -18,6 +20,13 @@ export default function Sidebar({ sideMenu, setSideMenu }: IProps) {
   const [isDropdown, setIsDropDown] = useState<string>('');
   const dispatch = useDispatch();
   const router = useRouter();
+
+  // Get user role from Redux state
+  const { user } = useSelector((state: any) => state.auth);
+  const userRole = user?.data?.user?.role as UserRole | undefined;
+
+  // Get filtered menu based on user role
+  const filteredSidebarMenu = getFilteredSidebarMenu(userRole);
 
   // handle active menu
   const handleMenuActive = (title: string) => {
@@ -58,7 +67,7 @@ export default function Sidebar({ sideMenu, setSideMenu }: IProps) {
             </div>
             <div className="px-4 py-5">
               <ul>
-                {sidebar_menu.map(menu => (
+                {filteredSidebarMenu.map((menu: any) => (
                   <li key={menu.id}>
                     {!menu.subMenus && menu.title !== 'Online store' && (
                       <Link
@@ -118,7 +127,7 @@ export default function Sidebar({ sideMenu, setSideMenu }: IProps) {
                           isDropdown === menu.title ? 'block' : 'hidden'
                         }`}
                       >
-                        {menu.subMenus.map((sub, i) => (
+                        {menu.subMenus.map((sub: any, i: number) => (
                           <li key={i}>
                             <Link
                               href={sub.link}
