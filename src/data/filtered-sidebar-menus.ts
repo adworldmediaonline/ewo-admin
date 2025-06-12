@@ -106,6 +106,7 @@ export const canAccessRoute = (
     '/add-product': 'canAddProducts',
     '/category': 'canViewCategories',
     '/orders': 'canViewOrders',
+    '/order-details': 'canViewOrders', // Order details should use same permission as orders
     '/carts': 'canViewCarts',
     '/brands': 'canViewBrands',
     '/reviews': 'canViewReviews',
@@ -116,10 +117,29 @@ export const canAccessRoute = (
     '/register': 'canViewProfile',
     '/login': 'canViewProfile',
     '/forgot-password': 'canViewProfile',
+    '/edit-product': 'canEditProducts', // Add edit product permission
   };
 
   const requiredPermission = routePermissions[routePath];
+
+  // Handle dynamic routes (like /order-details/[id] or /edit-product/[id])
   if (!requiredPermission) {
+    // Check for dynamic route patterns
+    if (routePath.startsWith('/order-details/')) {
+      return hasPermission(userRole, 'canViewOrders');
+    }
+    if (routePath.startsWith('/edit-product/')) {
+      return hasPermission(userRole, 'canEditProducts');
+    }
+    if (routePath.startsWith('/our-staff/')) {
+      return hasPermission(userRole, 'canViewStaff');
+    }
+    if (routePath.startsWith('/coupon/')) {
+      return hasPermission(userRole, 'canViewCoupons');
+    }
+    if (routePath.startsWith('/orders/')) {
+      return hasPermission(userRole, 'canViewOrders');
+    }
     return false;
   }
 
