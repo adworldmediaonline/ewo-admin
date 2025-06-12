@@ -15,7 +15,7 @@ const menuPermissions: Record<string, string> = {
   Profile: 'canViewProfile',
   'Our Staff': 'canViewStaff',
   'Blog Category': 'canViewBlogCategories',
-  Pages: 'canViewProfile', // Allow access to Pages for profile-related items
+  Pages: 'canManageStaff', // Only Admin can access Pages (Register, Login, etc.)
   'Online store': 'canViewProfile', // Allow access to online store for all roles that can view profile
 };
 
