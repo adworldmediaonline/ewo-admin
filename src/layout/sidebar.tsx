@@ -23,7 +23,7 @@ export default function Sidebar({ sideMenu, setSideMenu }: IProps) {
 
   // Get user role from Redux state
   const { user } = useSelector((state: any) => state.auth);
-  const userRole = user?.data?.user?.role as UserRole | undefined;
+  const userRole = user?.role as UserRole | undefined;
 
   // Get filtered menu based on user role
   const filteredSidebarMenu = getFilteredSidebarMenu(userRole);

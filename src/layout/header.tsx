@@ -16,8 +16,7 @@ type IProps = {
 };
 
 const Header = ({ setSideMenu }: IProps) => {
-  const { user: authUser } = useSelector((state: RootState) => state.auth);
-  const user = authUser?.data?.user;
+  const { user } = useSelector((state: RootState) => state.auth);
   const [searchOverlay, setSearchOverlay] = useState<boolean>(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);

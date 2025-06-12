@@ -4,8 +4,7 @@ import { useSelector } from 'react-redux';
 import { UserRole } from '@/utils/rolePermissions';
 
 export default function UnauthorizedAccess() {
-  const { user: authUser } = useSelector((state: any) => state.auth);
-  const user = authUser?.data?.user;
+  const { user } = useSelector((state: any) => state.auth);
   const userRole = user?.role as UserRole;
 
   return (

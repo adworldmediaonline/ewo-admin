@@ -99,6 +99,7 @@ export const canAccessRoute = (
 
   // Route permission mapping
   const routePermissions: Record<string, string> = {
+    '/': 'canViewDashboard', // Root route defaults to dashboard permission
     '/dashboard': 'canViewDashboard',
     '/product-list': 'canViewProducts',
     '/product-grid': 'canViewProducts',
