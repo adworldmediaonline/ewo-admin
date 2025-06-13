@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import Link from 'next/link';
 // internal
 import OrderActions from './order-actions';
+import ShippingActions from './shipping-actions';
 import { Search } from '@/svg';
 import ErrorMsg from '../common/error-msg';
 import Pagination from '../ui/Pagination';
@@ -285,6 +286,15 @@ const OrderTable = () => {
         ),
       },
       {
+        id: 'shipping',
+        header: 'Shipping',
+        cell: info => (
+          <div className={styles.shippingContainer}>
+            <ShippingActions order={info.row.original} />
+          </div>
+        ),
+      },
+      {
         id: 'actions',
         header: 'Actions',
         cell: info => (
@@ -329,6 +339,9 @@ const OrderTable = () => {
         'Status',
         'Payment Method',
         'Date',
+        'Shipping Status',
+        'Tracking Number',
+        'Carrier',
       ].join(','),
       ...filteredOrders.map(order =>
         [
@@ -340,6 +353,9 @@ const OrderTable = () => {
           order.status,
           order.paymentMethod,
           dayjs(order.createdAt).format('YYYY-MM-DD HH:mm'),
+          order.status === 'shipped' ? 'Shipped' : 'Not Shipped',
+          order.shippingDetails?.trackingNumber || '',
+          order.shippingDetails?.carrier || '',
         ].join(',')
       ),
     ].join('\n');

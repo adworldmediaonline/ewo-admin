@@ -61,6 +61,71 @@ export const authApi = apiSlice.injectEndpoints({
       },
       invalidatesTags: ['AllOrders', 'DashboardRecentOrders'],
     }),
+    // ship order with tracking
+    shipOrder: builder.mutation<
+      any,
+      {
+        id: string;
+        shippingData: {
+          trackingNumber?: string;
+          carrier: string;
+          estimatedDelivery?: string;
+        };
+      }
+    >({
+      query({ id, shippingData }) {
+        return {
+          url: `/api/shipping/ship/${id}`,
+          method: 'POST',
+          body: shippingData,
+        };
+      },
+      invalidatesTags: ['AllOrders', 'DashboardRecentOrders'],
+    }),
+    // send shipping notification
+    sendShippingNotification: builder.mutation<
+      any,
+      {
+        id: string;
+        shippingData: {
+          trackingNumber?: string;
+          carrier: string;
+          estimatedDelivery?: string;
+        };
+      }
+    >({
+      query({ id, shippingData }) {
+        return {
+          url: `/api/order/send-shipping-notification/${id}`,
+          method: 'POST',
+          body: shippingData,
+        };
+      },
+      invalidatesTags: ['AllOrders', 'DashboardRecentOrders'],
+    }),
+    // update shipping details
+    updateShippingDetails: builder.mutation<
+      any,
+      {
+        id: string;
+        shippingData: {
+          trackingNumber?: string;
+          carrier: string;
+          trackingUrl?: string;
+          estimatedDelivery?: string;
+          sendEmail?: boolean;
+        };
+      }
+    >({
+      query({ id, shippingData }) {
+        return {
+          url: `/api/order/update-shipping/${id}`,
+          method: 'PATCH',
+          body: shippingData,
+        };
+      },
+      invalidatesTags: ['AllOrders', 'DashboardRecentOrders'],
+    }),
   }),
 });
 
@@ -72,4 +137,7 @@ export const {
   useGetAllOrdersQuery,
   useUpdateStatusMutation,
   useGetSingleOrderQuery,
+  useShipOrderMutation,
+  useSendShippingNotificationMutation,
+  useUpdateShippingDetailsMutation,
 } = authApi;
