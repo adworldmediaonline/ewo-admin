@@ -23,6 +23,7 @@ export interface RolePermissions {
   canManageStaff: boolean;
   canViewBlogCategories: boolean;
   canManageBlogCategories: boolean;
+  canViewUsers: boolean;
 }
 
 // Define permissions for each role
@@ -50,6 +51,7 @@ export const rolePermissions: Record<UserRole, RolePermissions> = {
     canManageStaff: true,
     canViewBlogCategories: true,
     canManageBlogCategories: true,
+    canViewUsers: true,
   },
   'Super Admin': {
     // Super Admin has limited access - only Orders and Carts
@@ -74,6 +76,7 @@ export const rolePermissions: Record<UserRole, RolePermissions> = {
     canManageStaff: false,
     canViewBlogCategories: false,
     canManageBlogCategories: false,
+    canViewUsers: true,
   },
   Manager: {
     // Manager has similar limited access as Super Admin
@@ -98,6 +101,7 @@ export const rolePermissions: Record<UserRole, RolePermissions> = {
     canManageStaff: false,
     canViewBlogCategories: false,
     canManageBlogCategories: false,
+    canViewUsers: true,
   },
   CEO: {
     // CEO has similar limited access as Super Admin
@@ -122,6 +126,7 @@ export const rolePermissions: Record<UserRole, RolePermissions> = {
     canManageStaff: false,
     canViewBlogCategories: false,
     canManageBlogCategories: false,
+    canViewUsers: true,
   },
 };
 

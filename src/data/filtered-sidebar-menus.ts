@@ -36,22 +36,20 @@ export const getFilteredSidebarMenu = (
 
   const filteredMenu = sidebar_menu
     .filter(menu => {
+      // Always show Users menu to all roles
+      if (menu.title === 'Users') return true;
       // Check if user has permission for this menu item
       const requiredPermission = menuPermissions[menu.title];
-
       if (!requiredPermission) {
         return false; // If no permission defined, don't show
       }
-
       const hasMenuPermission = hasPermission(
         userRole,
         requiredPermission as any
       );
-
       if (!hasMenuPermission) {
         return false;
       }
-
       // If menu has submenus, check if at least one is accessible
       if (menu.subMenus) {
         const filteredSubMenus = menu.subMenus.filter(submenu => {
@@ -61,13 +59,11 @@ export const getFilteredSidebarMenu = (
           }
           return hasPermission(userRole, submenuPermission as any);
         });
-
         // Only show menu if it has at least one accessible submenu
         if (filteredSubMenus.length === 0) {
           return false;
         }
       }
-
       return true;
     })
     .map(menu => {
@@ -117,12 +113,13 @@ export const canAccessRoute = (
     '/register': 'canViewProfile',
     '/login': 'canViewProfile',
     '/forgot-password': 'canViewProfile',
-    '/edit-product': 'canEditProducts', // Add edit product permission
+    '/edit-product': 'canEditProducts',
+    '/users': 'canViewUsers',
   };
 
   const requiredPermission = routePermissions[routePath];
 
-  // Handle dynamic routes (like /order-details/[id] or /edit-product/[id])
+  // Handle dynamic routes (like /order-details/[id] or /edit-product/[id] or /users/[id])
   if (!requiredPermission) {
     // Check for dynamic route patterns
     if (routePath.startsWith('/order-details/')) {
@@ -139,6 +136,9 @@ export const canAccessRoute = (
     }
     if (routePath.startsWith('/orders/')) {
       return hasPermission(userRole, 'canViewOrders');
+    }
+    if (routePath.startsWith('/users/')) {
+      return hasPermission(userRole, 'canViewUsers');
     }
     return false;
   }
