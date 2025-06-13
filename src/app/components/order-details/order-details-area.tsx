@@ -7,6 +7,7 @@ import { useGetSingleOrderQuery } from '@/redux/order/orderApi';
 import { useReactToPrint } from 'react-to-print';
 import { notifyError, notifySuccess } from '@/utils/toast';
 import OrderStatusChange from '../orders/status-change';
+import styles from './order-details-area.module.css';
 
 // Icon Components
 const PrintIcon = ({ className }: { className?: string }) => (
