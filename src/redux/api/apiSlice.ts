@@ -20,7 +20,11 @@ export const apiSlice = createApi({
       return headers;
     },
   }),
-  endpoints: builder => ({}),
+  endpoints: builder => ({
+    getUsers: builder.query({
+      query: () => '/users',
+    }),
+  }),
   tagTypes: [
     'DashboardAmount',
     'DashboardSalesReport',
@@ -42,5 +46,6 @@ export const apiSlice = createApi({
     'getBlogCategory',
     'AllCarts',
     'Cart',
+    'Users',
   ],
 });

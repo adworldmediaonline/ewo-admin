@@ -4,7 +4,7 @@ import OrderTable from './order-table';
 
 const OrderArea = () => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* order table start */}
       <OrderTable />
       {/* order table end */}

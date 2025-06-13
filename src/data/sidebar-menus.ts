@@ -75,6 +75,12 @@ const sidebar_menu: Array<ISidebarMenus> = [
     title: 'Profile',
   },
   {
+    id: 9.5,
+    icon: Profile,
+    link: '/users',
+    title: 'Users',
+  },
+  {
     id: 10,
     icon: Setting,
     link: 'https://www.eastwestoffroad.com/',
