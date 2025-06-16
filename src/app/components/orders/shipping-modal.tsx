@@ -179,34 +179,38 @@ const ShippingModal: React.FC<ShippingModalProps> = ({
               </div>
               <h3 className="font-semibold text-gray-900">Order Details</h3>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-              <div>
-                <span className="text-gray-600">Order ID:</span>
-                <span className="ml-2 font-medium text-gray-900">
+            <div className="space-y-3 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600 whitespace-nowrap">
+                  Order ID:
+                </span>
+                <span className="font-medium text-gray-900 font-mono text-xs bg-gray-100 px-2 py-1 rounded">
                   #{order.orderId || order.invoice}
                 </span>
               </div>
-              <div>
-                <span className="text-gray-600">Customer:</span>
-                <span className="ml-2 font-medium text-gray-900">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600 whitespace-nowrap">
+                  Customer:
+                </span>
+                <span className="font-medium text-gray-900 text-right truncate max-w-[200px]">
                   {order.name}
                 </span>
               </div>
-              <div className="sm:col-span-2">
-                <span className="text-gray-600">Email:</span>
-                <span className="ml-2 font-medium text-gray-900">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600 whitespace-nowrap">Email:</span>
+                <span className="font-medium text-gray-900 text-right truncate max-w-[200px]">
                   {order.email}
                 </span>
               </div>
-              <div>
-                <span className="text-gray-600">Total:</span>
-                <span className="ml-2 font-bold text-green-600">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600 whitespace-nowrap">Total:</span>
+                <span className="font-bold text-green-600">
                   ${order.totalAmount.toFixed(2)}
                 </span>
               </div>
-              <div>
-                <span className="text-gray-600">Status:</span>
-                <span className="ml-2 font-medium text-blue-600 capitalize">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-600 whitespace-nowrap">Status:</span>
+                <span className="font-medium text-blue-600 capitalize bg-blue-50 px-2 py-1 rounded">
                   {order.status}
                 </span>
               </div>
