@@ -44,6 +44,14 @@ export interface Order {
   firstTimeShippingDiscount?: boolean;
   firstTimeShippingDiscountAmount?: number;
   status: string;
+  shippingNotificationSent?: boolean;
+  shippingDetails?: {
+    trackingNumber?: string;
+    carrier?: string;
+    trackingUrl?: string;
+    estimatedDelivery?: string;
+    shippedDate?: string;
+  };
   createdAt?: string;
   updatedAt?: string;
 }

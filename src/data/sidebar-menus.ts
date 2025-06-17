@@ -51,6 +51,12 @@ const sidebar_menu: Array<ISidebarMenus> = [
     title: 'Carts',
   },
   {
+    id: 5.5,
+    icon: Cart,
+    link: '/cart-tracking',
+    title: 'Cart Analytics',
+  },
+  {
     id: 6,
     icon: Leaf,
     link: '/brands',
