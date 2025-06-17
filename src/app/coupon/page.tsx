@@ -1,6 +1,6 @@
-import Wrapper from "@/layout/wrapper";
-import Breadcrumb from "../components/breadcrumb/breadcrumb";
-import CouponArea from "../components/coupon/coupon-area";
+import Wrapper from '@/layout/wrapper';
+import Breadcrumb from '../components/breadcrumb/breadcrumb';
+import CouponArea from '../components/coupon/coupon-area';
 
 const CouponPage = () => {
   return (

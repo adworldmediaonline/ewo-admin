@@ -47,5 +47,7 @@ export const apiSlice = createApi({
     'AllCarts',
     'Cart',
     'Users',
+    'CartAnalytics',
+    'CartTrackingEvents',
   ],
 });

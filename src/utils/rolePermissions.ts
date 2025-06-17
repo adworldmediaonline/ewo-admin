@@ -12,6 +12,7 @@ export interface RolePermissions {
   canViewOrders: boolean;
   canManageOrders: boolean;
   canViewCarts: boolean;
+  canViewCartTracking: boolean;
   canViewBrands: boolean;
   canManageBrands: boolean;
   canViewReviews: boolean;
@@ -40,6 +41,7 @@ export const rolePermissions: Record<UserRole, RolePermissions> = {
     canViewOrders: true,
     canManageOrders: true,
     canViewCarts: true,
+    canViewCartTracking: true,
     canViewBrands: true,
     canManageBrands: true,
     canViewReviews: true,
@@ -65,6 +67,7 @@ export const rolePermissions: Record<UserRole, RolePermissions> = {
     canViewOrders: true,
     canManageOrders: true,
     canViewCarts: true,
+    canViewCartTracking: false,
     canViewBrands: false,
     canManageBrands: false,
     canViewReviews: false,
@@ -90,6 +93,7 @@ export const rolePermissions: Record<UserRole, RolePermissions> = {
     canViewOrders: true,
     canManageOrders: true,
     canViewCarts: true,
+    canViewCartTracking: false,
     canViewBrands: false,
     canManageBrands: false,
     canViewReviews: false,
@@ -115,6 +119,7 @@ export const rolePermissions: Record<UserRole, RolePermissions> = {
     canViewOrders: true,
     canManageOrders: true,
     canViewCarts: true,
+    canViewCartTracking: false,
     canViewBrands: false,
     canManageBrands: false,
     canViewReviews: false,
