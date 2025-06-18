@@ -126,6 +126,25 @@ export const authApi = apiSlice.injectEndpoints({
       },
       invalidatesTags: ['AllOrders', 'DashboardRecentOrders'],
     }),
+    // send delivery notification
+    sendDeliveryNotification: builder.mutation<
+      any,
+      {
+        id: string;
+        deliveryData?: {
+          deliveredDate?: string;
+        };
+      }
+    >({
+      query({ id, deliveryData = {} }) {
+        return {
+          url: `/api/order/send-delivery-notification/${id}`,
+          method: 'POST',
+          body: deliveryData,
+        };
+      },
+      invalidatesTags: ['AllOrders', 'DashboardRecentOrders'],
+    }),
   }),
 });
 
@@ -139,5 +158,6 @@ export const {
   useGetSingleOrderQuery,
   useShipOrderMutation,
   useSendShippingNotificationMutation,
+  useSendDeliveryNotificationMutation,
   useUpdateShippingDetailsMutation,
 } = authApi;

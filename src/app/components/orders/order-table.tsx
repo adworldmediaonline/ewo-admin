@@ -135,9 +135,12 @@ const OrderTable = () => {
           return `${styles.statusBadge} ${styles.statusPending}`;
         case 'processing':
           return `${styles.statusBadge} ${styles.statusProcessing}`;
+        case 'shipped':
+          return `${styles.statusBadge} ${styles.statusShipped}`;
         case 'delivered':
           return `${styles.statusBadge} ${styles.statusDelivered}`;
         case 'cancel':
+        case 'cancelled':
           return `${styles.statusBadge} ${styles.statusCancel}`;
         default:
           return `${styles.statusBadge} ${styles.statusDefault}`;
