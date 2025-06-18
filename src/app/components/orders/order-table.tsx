@@ -4,12 +4,12 @@ import Image from 'next/image';
 import dayjs from 'dayjs';
 import Link from 'next/link';
 // internal
-import OrderActions from './order-actions';
+// import OrderActions from './order-actions';
 import ShippingActions from './shipping-actions';
 import { Search } from '@/svg';
 import ErrorMsg from '../common/error-msg';
 import Pagination from '../ui/Pagination';
-import OrderStatusChange from './status-change';
+// import OrderStatusChange from './status-change';
 import { useGetAllOrdersQuery } from '@/redux/order/orderApi';
 import usePagination from '@/hooks/use-pagination';
 import {
@@ -265,9 +265,9 @@ const OrderTable = () => {
         cell: info => (
           <div className={styles.statusContainer}>
             <StatusBadge status={info.row.original.status} />
-            <div className={styles.statusChangeContainer}>
+            {/* <div className={styles.statusChangeContainer}>
               <OrderStatusChange id={info.row.original._id} />
-            </div>
+            </div> */}
           </div>
         ),
       },
@@ -305,11 +305,11 @@ const OrderTable = () => {
             >
               View
             </Link>
-            <OrderActions
+            {/* <OrderActions
               id={info.row.original._id}
               cls={styles.inlineActions}
               inline={true}
-            />
+            /> */}
           </div>
         ),
       },
