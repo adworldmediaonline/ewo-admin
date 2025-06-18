@@ -1,7 +1,7 @@
 import Wrapper from '@/layout/wrapper';
 import CardItems from '../components/dashboard/card-items';
-import SalesReport from '../components/dashboard/sales-report';
-import RecentOrders from '../components/dashboard/recent-orders';
+// import SalesReport from '../components/dashboard/sales-report';
+// import RecentOrders from '../components/dashboard/recent-orders';
 
 export default function DashboardPage() {
   return (
@@ -19,11 +19,11 @@ export default function DashboardPage() {
         {/* card item end  */}
 
         {/* chart start */}
-        <SalesReport />
+        {/* <SalesReport /> */}
         {/* chart end */}
 
         {/* recent orders start */}
-        <RecentOrders />
+        {/* <RecentOrders /> */}
         {/* recent orders end */}
       </div>
     </Wrapper>
