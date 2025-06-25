@@ -15,6 +15,7 @@ import Tiptap from '@/components/tipTap/Tiptap';
 import { Controller } from 'react-hook-form';
 import ProductOptions from '../add-product/product-options';
 import ShippingPrice from '../shipping-price';
+import SEOFields from '../add-product/seo-fields';
 
 const EditProductSubmit = ({ id }: { id: string }) => {
   const { data: product, isError, isLoading } = useGetProductQuery(id);
@@ -201,6 +202,18 @@ const EditProductSubmit = ({ id }: { id: string }) => {
               default_value={product.imageURLs}
             />
             {/* product variations end */}
+
+            {/* SEO fields start */}
+            <SEOFields
+              register={register}
+              errors={errors}
+              defaultValues={{
+                metaTitle: product.seo?.metaTitle || '',
+                metaDescription: product.seo?.metaDescription || '',
+                metaKeywords: product.seo?.metaKeywords || '',
+              }}
+            />
+            {/* SEO fields end */}
           </div>
 
           {/* right side */}

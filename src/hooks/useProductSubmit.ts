@@ -127,6 +127,11 @@ const useProductSubmit = () => {
       videoId: data.youtube_video_Id,
       additionalInformation: additionalInformation,
       tags: tags,
+      seo: {
+        metaTitle: data.metaTitle || '',
+        metaDescription: data.metaDescription || '',
+        metaKeywords: data.metaKeywords || '',
+      },
     };
 
     if (!img) {
@@ -157,7 +162,9 @@ const useProductSubmit = () => {
         );
       }
     }
-    console.log('productData--->', productData);
+
+    
+    
     const res = await addProduct(productData as any);
     if ('error' in res) {
       if ('data' in res.error) {
@@ -204,6 +211,11 @@ const useProductSubmit = () => {
         videoId: data.youtube_video_Id,
         additionalInformation: additionalInformation,
         tags: tags,
+        seo: {
+          metaTitle: data.metaTitle || '',
+          metaDescription: data.metaDescription || '',
+          metaKeywords: data.metaKeywords || '',
+        },
       };
 
       if (!img) {
@@ -234,6 +246,8 @@ const useProductSubmit = () => {
           );
         }
       }
+
+
 
       const res = await editProduct({ id: id, data: productData as any });
       if ('error' in res) {
