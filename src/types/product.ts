@@ -61,6 +61,11 @@ export interface IProduct {
     startDate: string | null;
     endDate: string | null;
   };
+  seo?: {
+    metaTitle: string;
+    metaDescription: string;
+    metaKeywords: string;
+  };
   featured?: boolean;
   sellCount?: number;
   createdAt: string;

@@ -13,6 +13,7 @@ import { Controller } from 'react-hook-form';
 import ErrorMsg from '../../common/error-msg';
 import ProductOptions from './product-options';
 import ShippingPrice from '../shipping-price';
+import SEOFields from './seo-fields';
 
 import Tiptap from '@/components/tipTap/Tiptap';
 
@@ -165,6 +166,13 @@ const ProductSubmit = () => {
             setImageURLs={setImageURLs}
           />
           {/* product variations end */}
+
+          {/* SEO fields start */}
+          <SEOFields
+            register={register}
+            errors={errors}
+          />
+          {/* SEO fields end */}
         </div>
 
         {/* right side */}
