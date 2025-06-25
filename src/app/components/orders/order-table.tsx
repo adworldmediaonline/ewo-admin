@@ -8,10 +8,8 @@ import Link from 'next/link';
 import ShippingActions from './shipping-actions';
 import { Search } from '@/svg';
 import ErrorMsg from '../common/error-msg';
-import Pagination from '../ui/Pagination';
 // import OrderStatusChange from './status-change';
 import { useGetAllOrdersQuery } from '@/redux/order/orderApi';
-import usePagination from '@/hooks/use-pagination';
 import {
   useReactTable,
   getCoreRowModel,
@@ -19,6 +17,7 @@ import {
   getPaginationRowModel,
   flexRender,
   ColumnDef,
+  PaginationState,
 } from '@tanstack/react-table';
 import styles from './order-table.module.css';
 
@@ -103,10 +102,39 @@ const CreditCard = ({ className }: { className?: string }) => (
   </svg>
 );
 
+// Pagination Navigation Icons
+const ChevronLeft = ({ className }: { className?: string }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+  </svg>
+);
+
+const ChevronRight = ({ className }: { className?: string }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+  </svg>
+);
+
+const ChevronsLeft = ({ className }: { className?: string }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+  </svg>
+);
+
+const ChevronsRight = ({ className }: { className?: string }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+  </svg>
+);
+
 const OrderTable = () => {
   const { data: orders, isError, isLoading, error } = useGetAllOrdersQuery();
   const [searchVal, setSearchVal] = useState<string>('');
   const [selectedRows, setSelectedRows] = useState<Record<string, boolean>>({});
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
   // Filtering logic
   const filteredOrders = useMemo(() => {
@@ -123,9 +151,10 @@ const OrderTable = () => {
     });
   }, [orders?.data, searchVal]);
 
-  // Pagination
-  const paginationData = usePagination(filteredOrders, 10);
-  const { currentItems, handlePageClick, pageCount } = paginationData;
+  // Reset pagination when search changes
+  React.useEffect(() => {
+    setPagination(prev => ({ ...prev, pageIndex: 0 }));
+  }, [searchVal]);
 
   // Status badge component
   const StatusBadge = ({ status }: { status: string }) => {
@@ -320,14 +349,18 @@ const OrderTable = () => {
     [selectedRows]
   );
 
-  // TanStack Table instance
+  // TanStack Table instance with built-in pagination
   const table = useReactTable({
-    data: currentItems,
+    data: filteredOrders,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    // Add more table options as needed
+    onPaginationChange: setPagination,
+    state: {
+      pagination,
+    },
+    manualPagination: false,
   });
 
   // Export functionality
@@ -382,7 +415,7 @@ const OrderTable = () => {
     );
   } else if (!isLoading && isError) {
     content = <ErrorMsg msg="There was an error loading orders" />;
-  } else if (!isLoading && !isError && currentItems.length === 0) {
+  } else if (!isLoading && !isError && filteredOrders.length === 0) {
     content = <ErrorMsg msg="No Orders Found" />;
   } else {
     content = (
@@ -444,34 +477,123 @@ const OrderTable = () => {
         </button>
       </div>
       <div className={styles.content}>{content}</div>
-      {/* Pagination */}
-      <div className={styles.paginationContainer}>
-        <p className={styles.paginationInfo}>
-          Showing{' '}
-          {filteredOrders.length === 0
-            ? 0
-            : Math.floor((filteredOrders.length - currentItems.length) / 10) *
-                10 +
-              1}{' '}
-          to{' '}
-          {Math.min(
-            Math.floor((filteredOrders.length - currentItems.length) / 10) *
-              10 +
-              currentItems.length,
-            filteredOrders.length
-          )}{' '}
-          of {filteredOrders.length} orders
-          {filteredOrders.length !== orders?.data.length && (
-            <span className={styles.paginationFiltered}>
-              {' '}
-              (filtered from {orders?.data.length} total)
+      {/* TanStack Table Built-in Pagination */}
+      {filteredOrders.length > 0 && (
+        <div className={styles.paginationContainer}>
+          <div className={styles.paginationInfo}>
+            <span className={styles.paginationText}>
+              Showing {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} to{' '}
+              {Math.min(
+                (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
+                filteredOrders.length
+              )}{' '}
+              of {filteredOrders.length} orders
+              {filteredOrders.length !== orders?.data?.length && (
+                <span className={styles.paginationFiltered}>
+                  {' '}
+                  (filtered from {orders?.data?.length} total)
+                </span>
+              )}
             </span>
-          )}
-        </p>
-        <div className={styles.pagination}>
-          <Pagination handlePageClick={handlePageClick} pageCount={pageCount} />
+            
+            <div className={styles.pageSizeSelector}>
+              <span>Show:</span>
+              <select
+                className={styles.pageSizeSelect}
+                value={table.getState().pagination.pageSize}
+                onChange={e => {
+                  table.setPageSize(Number(e.target.value));
+                }}
+              >
+                {[5, 10, 20, 30, 50].map(pageSize => (
+                  <option key={pageSize} value={pageSize}>
+                    {pageSize}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className={styles.paginationControls}>
+            <button
+              className={`${styles.paginationButton} ${styles.paginationButtonIcon}`}
+              onClick={() => table.setPageIndex(0)}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronsLeft className={styles.paginationIcon} />
+            </button>
+            
+            <button
+              className={`${styles.paginationButton} ${styles.paginationButtonIcon}`}
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              <ChevronLeft className={styles.paginationIcon} />
+            </button>
+
+            <div className={styles.pageNumbers}>
+              {Array.from({ length: Math.min(5, table.getPageCount()) }, (_, i) => {
+                const currentPage = table.getState().pagination.pageIndex;
+                const totalPages = table.getPageCount();
+                
+                let startPage = Math.max(0, currentPage - 2);
+                let endPage = Math.min(totalPages - 1, startPage + 4);
+                
+                if (endPage - startPage < 4) {
+                  startPage = Math.max(0, endPage - 4);
+                }
+                
+                const pageIndex = startPage + i;
+                
+                if (pageIndex >= totalPages) return null;
+                
+                return (
+                  <button
+                    key={pageIndex}
+                    className={`${styles.paginationButton} ${
+                      pageIndex === currentPage ? styles.paginationButtonActive : ''
+                    }`}
+                    onClick={() => table.setPageIndex(pageIndex)}
+                  >
+                    {pageIndex + 1}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              className={`${styles.paginationButton} ${styles.paginationButtonIcon}`}
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              <ChevronRight className={styles.paginationIcon} />
+            </button>
+            
+            <button
+              className={`${styles.paginationButton} ${styles.paginationButtonIcon}`}
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              disabled={!table.getCanNextPage()}
+            >
+              <ChevronsRight className={styles.paginationIcon} />
+            </button>
+          </div>
+
+          <div className={styles.pageJump}>
+            <span>Go to page:</span>
+            <input
+              type="number"
+              className={styles.pageJumpInput}
+              min={1}
+              max={table.getPageCount()}
+              defaultValue={table.getState().pagination.pageIndex + 1}
+              onChange={e => {
+                const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                table.setPageIndex(page);
+              }}
+            />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
