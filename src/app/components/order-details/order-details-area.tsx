@@ -558,7 +558,7 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
           </div>
 
           {/* Quick Stats Section */}
-          <div className={styles.quickStats}>
+          {/* <div className={styles.quickStats}>
             <h3 className={styles.quickStatsTitle}>Quick Stats</h3>
             <div className={styles.statsGrid}>
               <div className={styles.statItem}>
@@ -576,7 +576,7 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
               <p className={styles.invoiceLabel}>Invoice Number</p>
               <p className={styles.invoiceNumber}>#{order.invoice}</p>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
