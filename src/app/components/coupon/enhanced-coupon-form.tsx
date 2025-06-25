@@ -10,9 +10,9 @@ import { useGetAllBrandsQuery } from '@/redux/brand/brandApi';
 interface IProps {
   onSubmit: (data: IAddCoupon) => void;
   isSubmitted: boolean;
-  setIsSubmitted: (value: boolean) => void;
+  setIsSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
   logo: string;
-  setLogo: (value: string) => void;
+  setLogo: React.Dispatch<React.SetStateAction<string>>;
   defaultValues?: Partial<ICoupon>;
   isEdit?: boolean;
 }
@@ -83,11 +83,15 @@ export default function EnhancedCouponForm({
   const watchApplicableType = watch('applicableType');
 
   useEffect(() => {
-    setDiscountType(watchDiscountType);
+    if (watchDiscountType) {
+      setDiscountType(watchDiscountType);
+    }
   }, [watchDiscountType]);
 
   useEffect(() => {
-    setApplicableType(watchApplicableType);
+    if (watchApplicableType) {
+      setApplicableType(watchApplicableType);
+    }
   }, [watchApplicableType]);
 
   const handleFormSubmit = (data: IAddCoupon) => {

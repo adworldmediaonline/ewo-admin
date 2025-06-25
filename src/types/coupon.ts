@@ -98,7 +98,7 @@ export interface IAddCoupon {
   priority?: number;
   
   // Status
-  status?: 'active' | 'inactive';
+  status?: 'active' | 'inactive' | 'expired' | 'exhausted';
   isPublic?: boolean;
 }
 

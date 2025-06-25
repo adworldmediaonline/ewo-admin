@@ -11,15 +11,9 @@ import { hasPermission, UserRole } from '@/utils/rolePermissions';
 import UnauthorizedAccess from '@/components/UnauthorizedAccess';
 
 export default function EnhancedCouponArea() {
-  // Get user role from Redux store
+  // Move all hooks to the top before any conditional logic
   const { user } = useSelector((state: any) => state.auth);
-  const userRole = user?.role as UserRole;
-
-  // Check if user has permission to manage coupons
-  if (!hasPermission(userRole, 'canManageCoupons')) {
-    return <UnauthorizedAccess />;
-  }
-
+  
   const {
     handleCouponSubmit,
     errors,
@@ -39,6 +33,14 @@ export default function EnhancedCouponArea() {
   const [activeTab, setActiveTab] = useState<'management' | 'analytics'>('management');
 
   const { data: coupons } = useGetAllCouponsQuery();
+
+  // Now perform the permission check after all hooks are called
+  const userRole = user?.role as UserRole;
+  
+  // Check if user has permission to manage coupons
+  if (!hasPermission(userRole, 'canManageCoupons')) {
+    return <UnauthorizedAccess />;
+  }
 
   // Handle search value
   const handleSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
