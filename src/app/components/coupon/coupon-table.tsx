@@ -67,7 +67,8 @@ const CouponTable = ({cls,setOpenSidebar,selectValue,searchValue}: IPropType) =>
                 Name
               </th>
               <TableHead title="Code" />
-              <TableHead title="Amount" />
+              <TableHead title="Discount" />
+              <TableHead title="Usage" />
               <TableHead title="Status" />
               <TableHead title="Start" />
               <TableHead title="End" />
@@ -107,19 +108,40 @@ const CouponTable = ({cls,setOpenSidebar,selectValue,searchValue}: IPropType) =>
                     </span>
                   </td>
                   <td className="px-3 py-3 font-normal text-[#55585B] text-end">
-                    {coupon.discountPercentage}%
+                    {coupon.discountType === 'percentage' 
+                      ? `${coupon.discountPercentage}%`
+                      : coupon.discountType === 'fixed_amount'
+                      ? `$${coupon.discountAmount}`
+                      : coupon.discountType === 'buy_x_get_y'
+                      ? `Buy ${coupon.buyQuantity} Get ${coupon.getQuantity}`
+                      : 'Free Shipping'
+                    }
+                  </td>
+                  <td className="px-3 py-3 font-normal text-[#55585B] text-end">
+                    <div className="text-center">
+                      <div className="font-semibold text-gray-900">
+                        {coupon.usageCount || 0}
+                      </div>
+                      {coupon.usageLimit && (
+                        <div className="text-xs text-gray-500">
+                          / {coupon.usageLimit}
+                        </div>
+                      )}
+                    </div>
                   </td>
                   <td className="px-3 py-3 font-normal text-[#55585B] text-end">
                     <span
                       className={`text-[11px] px-3 py-1 rounded-md leading-none font-medium text-end ${
-                        dayjs().isAfter(dayjs(coupon.endTime))
-                          ? "text-danger bg-danger/10"
-                          : "text-success bg-success/10"
+                        coupon.status === 'expired'
+                          ? "text-red-600 bg-red-100"
+                          : coupon.status === 'exhausted'
+                          ? "text-orange-600 bg-orange-100"
+                          : coupon.status === 'inactive'
+                          ? "text-gray-600 bg-gray-100"
+                          : "text-green-600 bg-green-100"
                       }`}
                     >
-                      {dayjs().isAfter(dayjs(coupon.endTime))
-                        ? "Expired"
-                        : "Active"}
+                      {coupon.status.charAt(0).toUpperCase() + coupon.status.slice(1)}
                     </span>
                   </td>
 
