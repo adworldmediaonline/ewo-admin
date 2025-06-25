@@ -1,17 +1,17 @@
-import Wrapper from '@/layout/wrapper';
 import OrderDetailsArea from '@/app/components/order-details/order-details-area';
-import styles from './page.module.css';
+import Wrapper from '@/layout/wrapper';
 
-const OrderInvoicePage = ({ params }: { params: { id: string } }) => {
+
+const OrderDetailsPage = ({ params }: { params: { id: string } }) => {
   return (
     <Wrapper>
-      <div className={styles.bodyContent}>
+      <div className="min-h-screen bg-gray-50">
         {/* breadcrumb start */}
         {/* <Breadcrumb title="Order Details" subtitle="Order Details" /> */}
         {/* breadcrumb end */}
 
         {/* order details area */}
-        <div className={styles.orderDetailsContainer}>
+        <div className="container mx-auto p-4">
           <OrderDetailsArea id={params.id} />
         </div>
         {/* order details area */}
@@ -20,4 +20,4 @@ const OrderInvoicePage = ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default OrderInvoicePage;
+export default OrderDetailsPage;
