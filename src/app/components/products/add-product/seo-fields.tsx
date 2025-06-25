@@ -26,20 +26,20 @@ export default function SEOFields({ register, errors, defaultValues }: SEOFields
         </p>
         <input
           {...register('metaTitle', {
-            maxLength: {
-              value: 60,
-              message: 'Meta title cannot be more than 60 characters'
-            }
+            // maxLength: {
+            //   value: 60,
+            //   message: 'Meta title cannot be more than 60 characters'
+            // }
           })}
           className="form-control"
           type="text"
           placeholder="Enter meta title for SEO"
-          maxLength={60}
+          // maxLength={60}
           defaultValue={defaultValues?.metaTitle}
         />
-        <span className="leading-4 text-tiny text-gray-500">
+        {/* <span className="leading-4 text-tiny text-gray-500">
           Recommended: 50-60 characters for optimal SEO
-        </span>
+        </span> */}
         <ErrorMsg msg={(errors?.metaTitle?.message as string) || ''} />
       </div>
 
@@ -50,20 +50,20 @@ export default function SEOFields({ register, errors, defaultValues }: SEOFields
         </p>
         <textarea
           {...register('metaDescription', {
-            maxLength: {
-              value: 160,
-              message: 'Meta description cannot be more than 160 characters'
-            }
+            // maxLength: {
+            //   value: 160,
+            //   message: 'Meta description cannot be more than 160 characters'
+            // }
           })}
           className="form-control"
           rows={3}
           placeholder="Enter meta description for SEO"
-          maxLength={160}
+          // maxLength={160}
           defaultValue={defaultValues?.metaDescription}
         />
-        <span className="leading-4 text-tiny text-gray-500">
+        {/* <span className="leading-4 text-tiny text-gray-500">
           Recommended: 150-160 characters for optimal SEO
-        </span>
+        </span> */}
         <ErrorMsg msg={(errors?.metaDescription?.message as string) || ''} />
       </div>
 
@@ -79,9 +79,9 @@ export default function SEOFields({ register, errors, defaultValues }: SEOFields
           placeholder="Enter keywords separated by commas (e.g. wireless, headphones, audio, music)"
           defaultValue={defaultValues?.metaKeywords || ''}
         />
-        <span className="leading-4 text-tiny text-gray-500">
+        {/* <span className="leading-4 text-tiny text-gray-500">
           Enter keywords separated by commas. Maximum 255 characters.
-        </span>
+        </span> */}
         <ErrorMsg msg={(errors?.metaKeywords?.message as string) || ''} />
       </div>
     </div>
