@@ -190,6 +190,12 @@
   border-color: #ef4444;
 }
 
+.statusBadge.refunded {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
+}
+
 .statusIcon {
   width: 0.875rem;
   height: 0.875rem;
@@ -971,7 +977,11 @@
   right: 0;
   width: 80px;
   height: 80px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 70%
+  );
   border-radius: 50%;
   transform: translate(25px, -25px);
 }
@@ -1076,8 +1086,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loadingContent {
@@ -1182,38 +1196,38 @@
   .contentWrapper {
     padding: 0.75rem;
   }
-  
+
   .orderHeaderSection,
   .sectionContent {
     padding: 1rem;
   }
-  
+
   .table {
     min-width: 500px;
   }
-  
+
   .tableHeader th {
     padding: 0.75rem 0.5rem;
     font-size: 0.65rem;
   }
-  
+
   .tableCell {
     padding: 0.75rem 0.5rem;
   }
-  
+
   .productInfo {
     gap: 0.5rem;
   }
-  
+
   .productImageContainer {
     width: 2.5rem;
     height: 2.5rem;
   }
-  
+
   .productTitle {
     font-size: 0.8rem;
   }
-  
+
   .quickStats {
     padding: 1rem;
   }
@@ -1258,7 +1272,7 @@
   .orderMetrics {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   .table {
     min-width: 750px;
   }
@@ -1278,7 +1292,7 @@
   .orderTitleInfo h1 {
     font-size: 2.25rem;
   }
-  
+
   .table {
     min-width: 800px;
   }
@@ -1298,5 +1312,306 @@
   .actionButtons,
   .backButton {
     display: none;
+  }
+}
+
+/* Refund Button */
+.refundButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
+}
+
+.refundButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
+  transform: translateY(-1px);
+}
+
+.refundButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.refundButton:active {
+  transform: translateY(0);
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modalTitle {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.modalCloseButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #f3f4f6;
+  color: #6b7280;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  transition: all 0.2s ease;
+}
+
+.modalCloseButton:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.modalContent {
+  padding: 24px;
+}
+
+.modalWarning {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fef3c7;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #fbbf24;
+  margin-bottom: 20px;
+}
+
+.modalWarningIcon {
+  width: 20px;
+  height: 20px;
+  color: #d97706;
+  flex-shrink: 0;
+}
+
+.modalWarning p {
+  margin: 0;
+  color: #92400e;
+  font-weight: 500;
+}
+
+.modalOrderInfo {
+  background: #f9fafb;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+.modalOrderInfo p {
+  margin: 0 0 8px 0;
+  color: #374151;
+  font-size: 14px;
+}
+
+.modalOrderInfo p:last-child {
+  margin-bottom: 0;
+}
+
+.modalReasonSection {
+  margin-bottom: 0;
+}
+
+.modalLabel {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.modalInput {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #374151;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.modalInput:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.modalTextarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #374151;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.modalTextarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.modalHint {
+  margin: 8px 0 0 0;
+  font-size: 12px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.modalTextarea::placeholder {
+  color: #9ca3af;
+}
+
+.modalActions {
+  display: flex;
+  gap: 12px;
+  padding: 20px 24px 24px;
+  border-top: 1px solid #e5e7eb;
+  justify-content: flex-end;
+}
+
+.modalCancelButton {
+  padding: 12px 20px;
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modalCancelButton:hover:not(:disabled) {
+  background: #e5e7eb;
+  border-color: #9ca3af;
+}
+
+.modalCancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modalConfirmButton {
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+}
+
+.modalConfirmButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+  transform: translateY(-1px);
+}
+
+.modalConfirmButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.modalConfirmButton:active {
+  transform: translateY(0);
+}
+
+/* Mobile Responsiveness for Modal */
+@media (max-width: 768px) {
+  .modalOverlay {
+    padding: 10px;
+  }
+
+  .modal {
+    border-radius: 12px;
+  }
+
+  .modalHeader {
+    padding: 20px 20px 12px;
+  }
+
+  .modalContent {
+    padding: 20px;
+  }
+
+  .modalActions {
+    padding: 16px 20px 20px;
+    flex-direction: column-reverse;
+  }
+
+  .modalCancelButton,
+  .modalConfirmButton {
+    width: 100%;
   }
 }

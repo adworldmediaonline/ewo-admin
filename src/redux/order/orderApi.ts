@@ -1,13 +1,13 @@
-import { apiSlice } from '../api/apiSlice';
 import {
-  IOrderAmounts,
-  ISalesReport,
-  IMostSellingCategory,
   IDashboardRecentOrders,
   IGetAllOrdersRes,
+  IMostSellingCategory,
+  IOrderAmounts,
+  ISalesReport,
   IUpdateStatusOrderRes,
   Order,
 } from '@/types/order-amount-type';
+import { apiSlice } from '../api/apiSlice';
 
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -145,6 +145,24 @@ export const authApi = apiSlice.injectEndpoints({
       },
       invalidatesTags: ['AllOrders', 'DashboardRecentOrders'],
     }),
+    // refund order
+    refundOrder: builder.mutation<
+      any,
+      {
+        id: string;
+        refundReason?: string;
+        refundAmount?: number;
+      }
+    >({
+      query({ id, refundReason, refundAmount }) {
+        return {
+          url: `/api/order/refund/${id}`,
+          method: 'POST',
+          body: { refundReason, refundAmount },
+        };
+      },
+      invalidatesTags: ['AllOrders', 'DashboardRecentOrders'],
+    }),
   }),
 });
 
@@ -160,4 +178,5 @@ export const {
   useSendShippingNotificationMutation,
   useSendDeliveryNotificationMutation,
   useUpdateShippingDetailsMutation,
+  useRefundOrderMutation,
 } = authApi;
