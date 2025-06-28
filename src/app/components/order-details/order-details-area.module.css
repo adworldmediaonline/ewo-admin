@@ -480,6 +480,49 @@
   font-weight: 500;
 }
 
+.productOptions {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.selectedOption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.availableOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.optionItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.375rem;
+  color: #374151;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.optionPrice {
+  font-size: 0.65rem;
+  color: #059669;
+  font-weight: 600;
+  background: #d1fae5;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.25rem;
+  margin-left: 0.25rem;
+}
+
 /* SKU Display */
 .skuText {
   font-size: 0.7rem;
@@ -971,7 +1014,11 @@
   right: 0;
   width: 80px;
   height: 80px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 70%
+  );
   border-radius: 50%;
   transform: translate(25px, -25px);
 }
@@ -1076,8 +1123,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .loadingContent {
@@ -1182,38 +1233,38 @@
   .contentWrapper {
     padding: 0.75rem;
   }
-  
+
   .orderHeaderSection,
   .sectionContent {
     padding: 1rem;
   }
-  
+
   .table {
     min-width: 500px;
   }
-  
+
   .tableHeader th {
     padding: 0.75rem 0.5rem;
     font-size: 0.65rem;
   }
-  
+
   .tableCell {
     padding: 0.75rem 0.5rem;
   }
-  
+
   .productInfo {
     gap: 0.5rem;
   }
-  
+
   .productImageContainer {
     width: 2.5rem;
     height: 2.5rem;
   }
-  
+
   .productTitle {
     font-size: 0.8rem;
   }
-  
+
   .quickStats {
     padding: 1rem;
   }
@@ -1258,7 +1309,7 @@
   .orderMetrics {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   .table {
     min-width: 750px;
   }
@@ -1278,7 +1329,7 @@
   .orderTitleInfo h1 {
     font-size: 2.25rem;
   }
-  
+
   .table {
     min-width: 800px;
   }
