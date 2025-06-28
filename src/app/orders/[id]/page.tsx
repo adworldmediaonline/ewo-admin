@@ -1,7 +1,6 @@
 import OrderDetailsArea from '@/app/components/order-details/order-details-area';
 import Wrapper from '@/layout/wrapper';
 
-
 const OrderDetailsPage = ({ params }: { params: { id: string } }) => {
   return (
     <Wrapper>
