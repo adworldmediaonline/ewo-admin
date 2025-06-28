@@ -298,6 +298,7 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
   const [showRefundModal, setShowRefundModal] = useState(false);
   const [refundReason, setRefundReason] = useState('');
   const [refundAmount, setRefundAmount] = useState('');
+  const [paymentIntentId, setPaymentIntentId] = useState('');
 
   const handlePrint = () => {
     window.print();
@@ -313,6 +314,32 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
 
   const handleRefundConfirm = async () => {
     try {
+      // Validation: Check if payment intent ID is required but not provided
+      const requiresPaymentIntent =
+        (!order.paymentIntent || !order.paymentIntent.id) &&
+        order.totalAmount > 0 &&
+        order.paymentMethod !== 'Free Order (100% Discount)';
+
+      if (
+        requiresPaymentIntent &&
+        (!paymentIntentId || !paymentIntentId.trim())
+      ) {
+        alert(
+          'Payment Intent ID is required for this order. Please enter the Stripe Payment Intent ID.'
+        );
+        return;
+      }
+
+      // Validate payment intent ID format if provided
+      if (
+        paymentIntentId &&
+        paymentIntentId.trim() &&
+        !paymentIntentId.trim().startsWith('pi_')
+      ) {
+        alert('Invalid Payment Intent ID format. Must start with "pi_"');
+        return;
+      }
+
       const refundData: any = {
         id,
         refundReason: refundReason || 'Refund requested by admin',
@@ -323,12 +350,18 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
         refundData.refundAmount = parseFloat(refundAmount);
       }
 
+      // Add payment intent ID if specified (for legacy orders)
+      if (paymentIntentId && paymentIntentId.trim()) {
+        refundData.paymentIntentId = paymentIntentId.trim();
+      }
+
       const result = await refundOrder(refundData).unwrap();
 
       console.log('Refund successful:', result);
       setShowRefundModal(false);
       setRefundReason('');
       setRefundAmount('');
+      setPaymentIntentId('');
 
       // Show success message with refund details
       const refundAmountText = result.stripeRefund
@@ -352,6 +385,7 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
     setShowRefundModal(false);
     setRefundReason('');
     setRefundAmount('');
+    setPaymentIntentId('');
   };
 
   if (isLoading) {
@@ -496,6 +530,37 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                     {order.totalAmount?.toFixed(2)}
                   </p>
                 </div>
+
+                {(!order.paymentIntent || !order.paymentIntent.id) &&
+                  order.totalAmount > 0 &&
+                  order.paymentMethod !== 'Free Order (100% Discount)' && (
+                    <div className={styles.modalReasonSection}>
+                      <label
+                        htmlFor="paymentIntentId"
+                        className={styles.modalLabel}
+                      >
+                        Payment Intent ID{' '}
+                        <span className={styles.required}>*</span>
+                      </label>
+                      <input
+                        id="paymentIntentId"
+                        type="text"
+                        value={paymentIntentId}
+                        onChange={e => setPaymentIntentId(e.target.value)}
+                        className={styles.modalInput}
+                        placeholder="pi_1xxxxxxxxxxxxxxxxxxxxxxx"
+                      />
+                      <p className={styles.modalHint}>
+                        This order doesn't have a stored payment intent ID.
+                        Please enter the Stripe Payment Intent ID to process the
+                        refund.
+                      </p>
+                      <p className={styles.modalWarningHint}>
+                        ⚠️ You can find this in your Stripe dashboard under the
+                        payment for this order.
+                      </p>
+                    </div>
+                  )}
 
                 <div className={styles.modalReasonSection}>
                   <label htmlFor="refundReason" className={styles.modalLabel}>

@@ -1524,6 +1524,18 @@
   font-style: italic;
 }
 
+.modalWarningHint {
+  margin: 4px 0 0 0;
+  font-size: 12px;
+  color: #f59e0b;
+  font-weight: 500;
+}
+
+.required {
+  color: #ef4444;
+  font-weight: 600;
+}
+
 .modalTextarea::placeholder {
   color: #9ca3af;
 }

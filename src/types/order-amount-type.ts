@@ -1,4 +1,4 @@
-import { IProduct, IOrderProduct } from './product';
+import { IOrderProduct } from './product';
 
 // user
 interface IUser {
@@ -51,6 +51,25 @@ export interface Order {
     trackingUrl?: string;
     estimatedDelivery?: string;
     shippedDate?: string;
+  };
+  // Payment Intent for Stripe refunds
+  paymentIntent?: {
+    id: string;
+    amount?: number;
+    currency?: string;
+    status?: string;
+  };
+  // Refund related fields
+  refundedAt?: string;
+  refundReason?: string;
+  refundedBy?: string;
+  refundEmailSent?: boolean;
+  stripeRefund?: {
+    id: string;
+    amount: number;
+    status: string;
+    reason?: string;
+    created?: number;
   };
   createdAt?: string;
   updatedAt?: string;

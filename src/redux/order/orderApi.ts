@@ -152,13 +152,14 @@ export const authApi = apiSlice.injectEndpoints({
         id: string;
         refundReason?: string;
         refundAmount?: number;
+        paymentIntentId?: string;
       }
     >({
-      query({ id, refundReason, refundAmount }) {
+      query({ id, refundReason, refundAmount, paymentIntentId }) {
         return {
           url: `/api/order/refund/${id}`,
           method: 'POST',
-          body: { refundReason, refundAmount },
+          body: { refundReason, refundAmount, paymentIntentId },
         };
       },
       invalidatesTags: ['AllOrders', 'DashboardRecentOrders'],
