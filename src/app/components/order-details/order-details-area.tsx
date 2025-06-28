@@ -302,40 +302,40 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
   };
 
   // Helper function to render product options
-  const renderProductOptions = (options: any) => {
-    if (!options) return null;
+  // const renderProductOptions = (options: any) => {
+  //   if (!options) return null;
 
-    // Handle array of options
-    if (Array.isArray(options)) {
-      return options.map((option: any, index: number) => (
-        <span key={option._id || index} className={styles.optionItem}>
-          {safeRenderString(option.title)}
-          {option.price > 0 && (
-            <span className={styles.optionPrice}>
-              (+${safeRenderNumber(option.price).toFixed(2)})
-            </span>
-          )}
-        </span>
-      ));
-    }
+  //   // Handle array of options
+  //   if (Array.isArray(options)) {
+  //     return options.map((option: any, index: number) => (
+  //       <span key={option._id || index} className={styles.optionItem}>
+  //         {safeRenderString(option.title)}
+  //         {option.price > 0 && (
+  //           <span className={styles.optionPrice}>
+  //             (+${safeRenderNumber(option.price).toFixed(2)})
+  //           </span>
+  //         )}
+  //       </span>
+  //     ));
+  //   }
 
-    // Handle single option object
-    if (typeof options === 'object' && options.title) {
-      return (
-        <span className={styles.optionItem}>
-          {safeRenderString(options.title)}
-          {options.price > 0 && (
-            <span className={styles.optionPrice}>
-              (+${safeRenderNumber(options.price).toFixed(2)})
-            </span>
-          )}
-        </span>
-      );
-    }
+  //   // Handle single option object
+  //   if (typeof options === 'object' && options.title) {
+  //     return (
+  //       <span className={styles.optionItem}>
+  //         {safeRenderString(options.title)}
+  //         {options.price > 0 && (
+  //           <span className={styles.optionPrice}>
+  //             (+${safeRenderNumber(options.price).toFixed(2)})
+  //           </span>
+  //         )}
+  //       </span>
+  //     );
+  //   }
 
-    // Handle string
-    return safeRenderString(options);
-  };
+  //   // Handle string
+  //   return safeRenderString(options);
+  // };
 
   const handlePrint = () => {
     window.print();
@@ -544,13 +544,13 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                                 <h4 className={styles.productTitle}>
                                   {safeRenderString(item.title, 'Product Name')}
                                 </h4>
-                                {item.options && (
+                                {/* {item.options && (
                                   <div className={styles.productOptions}>
                                     <div className={styles.availableOptions}>
                                       {renderProductOptions(item.options)}
                                     </div>
                                   </div>
-                                )}
+                                )} */}
                               </div>
                             </div>
                           </td>
@@ -899,12 +899,7 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                   <div className={styles.pricingRow}>
                     <span className={styles.pricingLabel}>Subtotal</span>
                     <span className={styles.pricingValue}>
-                      $
-                      {(
-                        order.totalAmount -
-                        (order.shippingCost || 0) +
-                        (order.discount || 0)
-                      ).toFixed(2)}
+                      ${order?.subTotal?.toFixed(2)}
                     </span>
                   </div>
                   {(order.shippingCost || 0) > 0 && (
@@ -925,6 +920,18 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                       </span>
                     </div>
                   )}
+
+                  {order.firstTimeDiscount?.isApplied && (
+                    <div className={styles.pricingRow}>
+                      <span className={styles.pricingLabel}>
+                        First-time Discount
+                      </span>
+                      <span className={styles.pricingValue}>
+                        -${order.firstTimeDiscount.amount.toFixed(2)}
+                      </span>
+                    </div>
+                  )}
+
                   <div className={`${styles.pricingRow} ${styles.totalRow}`}>
                     <span className={styles.pricingLabel}>Total</span>
                     <span className={styles.pricingValue}>

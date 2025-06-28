@@ -1,4 +1,4 @@
-import { IProduct, IOrderProduct } from './product';
+import { IOrderProduct } from './product';
 
 // user
 interface IUser {
@@ -51,6 +51,11 @@ export interface Order {
     trackingUrl?: string;
     estimatedDelivery?: string;
     shippedDate?: string;
+  };
+  firstTimeDiscountAmount?: {
+    isApplied: boolean;
+    percentage: number;
+    amount: number;
   };
   createdAt?: string;
   updatedAt?: string;
