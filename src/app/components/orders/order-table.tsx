@@ -1,23 +1,23 @@
 'use client';
-import React, { useMemo, useState } from 'react';
-import Image from 'next/image';
 import dayjs from 'dayjs';
+import Image from 'next/image';
 import Link from 'next/link';
+import React, { useMemo, useState } from 'react';
 // internal
 // import OrderActions from './order-actions';
-import ShippingActions from './shipping-actions';
 import { Search } from '@/svg';
 import ErrorMsg from '../common/error-msg';
+import ShippingActions from './shipping-actions';
 // import OrderStatusChange from './status-change';
 import { useGetAllOrdersQuery } from '@/redux/order/orderApi';
 import {
-  useReactTable,
+  ColumnDef,
+  PaginationState,
+  flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
-  flexRender,
-  ColumnDef,
-  PaginationState,
+  useReactTable,
 } from '@tanstack/react-table';
 import styles from './order-table.module.css';
 
@@ -104,26 +104,66 @@ const CreditCard = ({ className }: { className?: string }) => (
 
 // Pagination Navigation Icons
 const ChevronLeft = ({ className }: { className?: string }) => (
-  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M15 19l-7-7 7-7"
+    />
   </svg>
 );
 
 const ChevronRight = ({ className }: { className?: string }) => (
-  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M9 5l7 7-7 7"
+    />
   </svg>
 );
 
 const ChevronsLeft = ({ className }: { className?: string }) => (
-  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+    />
   </svg>
 );
 
 const ChevronsRight = ({ className }: { className?: string }) => (
-  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M13 5l7 7-7 7M5 5l7 7-7 7"
+    />
   </svg>
 );
 
@@ -206,8 +246,8 @@ const OrderTable = () => {
         <p className={styles.customerName}>
           {order.isGuestOrder ? order.name : order.user?.name || order.name}
         </p>
-        <p className={styles.customerEmail}>{order.email}</p>
-        {order.isGuestOrder && <span className={styles.guestBadge}>Guest</span>}
+        {/* <p className={styles.customerEmail}>{order.email}</p>
+        {order.isGuestOrder && <span className={styles.guestBadge}>Guest</span>} */}
       </div>
     </div>
   );
@@ -482,9 +522,14 @@ const OrderTable = () => {
         <div className={styles.paginationContainer}>
           <div className={styles.paginationInfo}>
             <span className={styles.paginationText}>
-              Showing {table.getState().pagination.pageIndex * table.getState().pagination.pageSize + 1} to{' '}
+              Showing{' '}
+              {table.getState().pagination.pageIndex *
+                table.getState().pagination.pageSize +
+                1}{' '}
+              to{' '}
               {Math.min(
-                (table.getState().pagination.pageIndex + 1) * table.getState().pagination.pageSize,
+                (table.getState().pagination.pageIndex + 1) *
+                  table.getState().pagination.pageSize,
                 filteredOrders.length
               )}{' '}
               of {filteredOrders.length} orders
@@ -495,7 +540,7 @@ const OrderTable = () => {
                 </span>
               )}
             </span>
-            
+
             <div className={styles.pageSizeSelector}>
               <span>Show:</span>
               <select
@@ -522,7 +567,7 @@ const OrderTable = () => {
             >
               <ChevronsLeft className={styles.paginationIcon} />
             </button>
-            
+
             <button
               className={`${styles.paginationButton} ${styles.paginationButtonIcon}`}
               onClick={() => table.previousPage()}
@@ -532,33 +577,38 @@ const OrderTable = () => {
             </button>
 
             <div className={styles.pageNumbers}>
-              {Array.from({ length: Math.min(5, table.getPageCount()) }, (_, i) => {
-                const currentPage = table.getState().pagination.pageIndex;
-                const totalPages = table.getPageCount();
-                
-                let startPage = Math.max(0, currentPage - 2);
-                let endPage = Math.min(totalPages - 1, startPage + 4);
-                
-                if (endPage - startPage < 4) {
-                  startPage = Math.max(0, endPage - 4);
+              {Array.from(
+                { length: Math.min(5, table.getPageCount()) },
+                (_, i) => {
+                  const currentPage = table.getState().pagination.pageIndex;
+                  const totalPages = table.getPageCount();
+
+                  let startPage = Math.max(0, currentPage - 2);
+                  let endPage = Math.min(totalPages - 1, startPage + 4);
+
+                  if (endPage - startPage < 4) {
+                    startPage = Math.max(0, endPage - 4);
+                  }
+
+                  const pageIndex = startPage + i;
+
+                  if (pageIndex >= totalPages) return null;
+
+                  return (
+                    <button
+                      key={pageIndex}
+                      className={`${styles.paginationButton} ${
+                        pageIndex === currentPage
+                          ? styles.paginationButtonActive
+                          : ''
+                      }`}
+                      onClick={() => table.setPageIndex(pageIndex)}
+                    >
+                      {pageIndex + 1}
+                    </button>
+                  );
                 }
-                
-                const pageIndex = startPage + i;
-                
-                if (pageIndex >= totalPages) return null;
-                
-                return (
-                  <button
-                    key={pageIndex}
-                    className={`${styles.paginationButton} ${
-                      pageIndex === currentPage ? styles.paginationButtonActive : ''
-                    }`}
-                    onClick={() => table.setPageIndex(pageIndex)}
-                  >
-                    {pageIndex + 1}
-                  </button>
-                );
-              })}
+              )}
             </div>
 
             <button
@@ -568,7 +618,7 @@ const OrderTable = () => {
             >
               <ChevronRight className={styles.paginationIcon} />
             </button>
-            
+
             <button
               className={`${styles.paginationButton} ${styles.paginationButtonIcon}`}
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
