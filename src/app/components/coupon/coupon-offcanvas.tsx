@@ -1,13 +1,12 @@
-import React from 'react';
 import { CloseTwo } from '@/svg';
-import GlobalImgUpload from '../category/global-img-upload';
+import React from 'react';
 import {
   Control,
   FieldErrors,
   UseFormHandleSubmit,
   UseFormRegister,
 } from 'react-hook-form';
-import CouponFormField from '../brand/form-field-two';
+import EnhancedCouponForm from './enhanced-coupon-form';
 
 // prop type
 type IPropType = {
@@ -40,96 +39,58 @@ const CouponOffcanvas = ({ propsItems }: IPropType) => {
     register,
     control,
   } = propsItems;
+
   return (
     <>
       <div
-        className={`offcanvas-area fixed top-0 right-0 h-full bg-white w-[280px] sm:w-[400px] z-[999] overflow-y-scroll overscroll-y-contain scrollbar-hide shadow-md translate-x-[calc(100%+80px)]  transition duration-300 ${
+        className={`offcanvas-area fixed top-0 right-0 h-full bg-white w-[90vw] max-w-4xl z-[999] overflow-y-scroll overscroll-y-contain scrollbar-hide shadow-xl translate-x-[calc(100%+80px)] transition duration-300 ${
           openSidebar ? 'offcanvas-opened' : ''
         }`}
       >
-        <div className="flex flex-col justify-between h-full">
-          {/* main wrap */}
-          <form onSubmit={handleSubmit(data => handleCouponSubmit(data))}>
-            <div className="flex items-center space-x-3 py-3 px-8 shadow-md sticky top-0 left-0 right-0 w-full z-[99] bg-white">
+        <div className="flex flex-col h-full">
+          {/* Header */}
+          <div className="flex items-center justify-between py-4 px-6 border-b border-gray-200 bg-white sticky top-0 z-[99]">
+            <div className="flex items-center space-x-3">
               <button
                 onClick={() => setOpenSidebar(false)}
-                className="text-black offcanvas-close-btn"
+                className="text-gray-500 hover:text-gray-700 transition-colors"
               >
                 <CloseTwo />
               </button>
-              <p className="mb-0 text-[15px] font-medium text-[#82808a]">
-                Enter Coupon Details
-              </p>
-            </div>
-            {/* <!-- main content --> */}
-            <div className="px-8 pt-6">
-              <div className="">
-                {/* coupon image upload */}
-                <div className="bg-white">
-                  <GlobalImgUpload
-                    isSubmitted={isSubmitted}
-                    setImage={setLogo}
-                    image={logo}
-                    setIsSubmitted={setIsSubmitted}
-                  />
-                </div>
-                {/* coupon image upload */}
-                <CouponFormField
-                  register={register}
-                  errors={errors}
-                  name="Name"
-                  isReq={true}
-                />
-                <CouponFormField
-                  register={register}
-                  errors={errors}
-                  name="Code"
-                  isReq={true}
-                />
-                <CouponFormField
-                  register={register}
-                  errors={errors}
-                  name="endTime"
-                  isReq={true}
-                  type="date"
-                />
-                <CouponFormField
-                  register={register}
-                  errors={errors}
-                  name="discountPercentage"
-                  isReq={true}
-                />
-                <CouponFormField
-                  register={register}
-                  errors={errors}
-                  name="minimumAmount"
-                  isReq={true}
-                />
+              <div>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Create New Coupon
+                </h2>
+                <p className="text-sm text-gray-500">
+                  Configure your coupon settings and restrictions
+                </p>
               </div>
             </div>
-            <div className="sm:flex items-center sm:space-x-3 py-6 px-8 sticky bottom-0 left-0 right-0 w-full z-[99] bg-white shadow-_md mt-8 flex-wrap sm:flex-nowrap">
-              <button
-                type="submit"
-                className="tp-btn w-full sm:w-1/2 items-center justify-around mb-2 sm:mb-0"
-              >
-                Add Coupon
-              </button>
-              <button
-                onClick={() => setOpenSidebar(false)}
-                className="tp-btn w-full sm:w-1/2 items-center justify-around border border-gray6 bg-white text-black hover:text-white hover:border-danger hover:bg-danger"
-              >
-                Cancel
-              </button>
+            <div className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">
+              Enhanced Form
             </div>
-          </form>
+          </div>
+
+          {/* Enhanced Form Content */}
+          <div className="flex-1 p-6 bg-gray-50">
+            <EnhancedCouponForm
+              onSubmit={handleCouponSubmit}
+              isSubmitted={isSubmitted}
+              setIsSubmitted={setIsSubmitted}
+              logo={logo}
+              setLogo={setLogo}
+            />
+          </div>
         </div>
       </div>
+
+      {/* Backdrop */}
       <div
         onClick={() => setOpenSidebar(false)}
-        className={`body-overlay fixed bg-black top-0 left-0 w-full h-full z-[60] invisible opacity-0 transition-all duration-300 ${
-          openSidebar ? 'opened' : ''
+        className={`fixed inset-0 bg-black bg-opacity-50 z-[998] transition-opacity duration-300 ${
+          openSidebar ? 'opacity-100 visible' : 'opacity-0 invisible'
         }`}
-      ></div>
+      />
     </>
   );
 };

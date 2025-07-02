@@ -1,11 +1,17 @@
 'use client';
-import React, { useState, useEffect } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { IAddCoupon, ICoupon } from '@/types/coupon';
-import GlobalImgUpload from '../category/global-img-upload';
-import { useGetAllProductsQuery } from '@/redux/product/productApi';
-import { useGetAllCategoriesQuery } from '@/redux/category/categoryApi';
 import { useGetAllBrandsQuery } from '@/redux/brand/brandApi';
+import { useGetAllCategoriesQuery } from '@/redux/category/categoryApi';
+import { useGetAllProductsQuery } from '@/redux/product/productApi';
+import { IAddCoupon, ICoupon } from '@/types/coupon';
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import ReactSelect, { MultiValue } from 'react-select';
+import GlobalImgUpload from '../category/global-img-upload';
+
+interface SelectOption {
+  value: string;
+  label: string;
+}
 
 interface IProps {
   onSubmit: (data: IAddCoupon) => void;
@@ -26,12 +32,20 @@ export default function EnhancedCouponForm({
   defaultValues,
   isEdit = false,
 }: IProps) {
-
   const [discountType, setDiscountType] = useState<string>(
     defaultValues?.discountType || 'percentage'
   );
   const [applicableType, setApplicableType] = useState<string>(
     defaultValues?.applicableType || 'all'
+  );
+  const [selectedProducts, setSelectedProducts] = useState<string[]>(
+    defaultValues?.applicableProducts || []
+  );
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    defaultValues?.applicableCategories || []
+  );
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(
+    defaultValues?.applicableBrands || []
   );
 
   const {
@@ -58,6 +72,9 @@ export default function EnhancedCouponForm({
       usageLimitPerUser: defaultValues?.usageLimitPerUser || undefined,
       applicableType: defaultValues?.applicableType || 'all',
       productType: defaultValues?.productType || '',
+      applicableProducts: defaultValues?.applicableProducts || [],
+      applicableCategories: defaultValues?.applicableCategories || [],
+      applicableBrands: defaultValues?.applicableBrands || [],
       stackable: defaultValues?.stackable || false,
       priority: defaultValues?.priority || 0,
       status: defaultValues?.status || 'active',
@@ -79,41 +96,47 @@ export default function EnhancedCouponForm({
   const { data: categories } = useGetAllCategoriesQuery();
   const { data: brands } = useGetAllBrandsQuery();
 
-  const watchDiscountType = watch('discountType');
-  const watchApplicableType = watch('applicableType');
+  // Watch for discount type changes
+  const watchedDiscountType = watch('discountType');
+  const watchedApplicableType = watch('applicableType');
 
   useEffect(() => {
-    if (watchDiscountType) {
-      setDiscountType(watchDiscountType);
-    }
-  }, [watchDiscountType]);
+    setDiscountType(watchedDiscountType || 'percentage');
+  }, [watchedDiscountType]);
 
   useEffect(() => {
-    if (watchApplicableType) {
-      setApplicableType(watchApplicableType);
-    }
-  }, [watchApplicableType]);
+    setApplicableType(watchedApplicableType || 'all');
+  }, [watchedApplicableType]);
+
+  // Prepare options for ReactSelect
+  const productOptions: SelectOption[] =
+    products?.data?.map(product => ({
+      value: product._id,
+      label: `${product.title} (${product.sku})`,
+    })) || [];
+
+  const categoryOptions: SelectOption[] =
+    categories?.result?.map(category => ({
+      value: category.parent,
+      label: category.parent,
+    })) || [];
+
+  const brandOptions: SelectOption[] =
+    brands?.result?.map((brand: { _id: string; name: string }) => ({
+      value: brand.name,
+      label: brand.name,
+    })) || [];
 
   const handleFormSubmit = (data: IAddCoupon) => {
-    const formData = {
+    const formData: IAddCoupon = {
       ...data,
       logo,
-      startTime: data.startTime ? new Date(data.startTime).toISOString() : undefined,
-      endTime: new Date(data.endTime).toISOString(),
+      applicableProducts:
+        applicableType === 'product' ? selectedProducts : undefined,
+      applicableCategories:
+        applicableType === 'category' ? selectedCategories : undefined,
+      applicableBrands: applicableType === 'brand' ? selectedBrands : undefined,
     };
-
-    // Clean up conditional fields
-    if (formData.discountType !== 'percentage') {
-      delete formData.discountPercentage;
-    }
-    if (formData.discountType !== 'fixed_amount') {
-      delete formData.discountAmount;
-    }
-    if (formData.discountType !== 'buy_x_get_y') {
-      delete formData.buyQuantity;
-      delete formData.getQuantity;
-    }
-
     onSubmit(formData);
   };
 
@@ -122,7 +145,7 @@ export default function EnhancedCouponForm({
       {/* Basic Information */}
       <div className="bg-white p-6 rounded-lg shadow-sm">
         <h3 className="text-lg font-semibold mb-4">Basic Information</h3>
-        
+
         {/* Logo Upload */}
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -179,7 +202,9 @@ export default function EnhancedCouponForm({
             style={{ textTransform: 'uppercase' }}
           />
           {errors.couponCode && (
-            <p className="text-red-500 text-sm mt-1">{errors.couponCode.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.couponCode.message}
+            </p>
           )}
         </div>
 
@@ -205,7 +230,9 @@ export default function EnhancedCouponForm({
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             {errors.endTime && (
-              <p className="text-red-500 text-sm mt-1">{errors.endTime.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.endTime.message}
+              </p>
             )}
           </div>
         </div>
@@ -221,7 +248,9 @@ export default function EnhancedCouponForm({
             Discount Type *
           </label>
           <select
-            {...register('discountType', { required: 'Discount type is required' })}
+            {...register('discountType', {
+              required: 'Discount type is required',
+            })}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="percentage">Percentage Discount</option>
@@ -249,7 +278,9 @@ export default function EnhancedCouponForm({
               placeholder="Enter percentage (0-100)"
             />
             {errors.discountPercentage && (
-              <p className="text-red-500 text-sm mt-1">{errors.discountPercentage.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.discountPercentage.message}
+              </p>
             )}
           </div>
         )}
@@ -270,7 +301,9 @@ export default function EnhancedCouponForm({
               placeholder="Enter discount amount"
             />
             {errors.discountAmount && (
-              <p className="text-red-500 text-sm mt-1">{errors.discountAmount.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.discountAmount.message}
+              </p>
             )}
           </div>
         )}
@@ -291,7 +324,9 @@ export default function EnhancedCouponForm({
                 placeholder="Buy quantity"
               />
               {errors.buyQuantity && (
-                <p className="text-red-500 text-sm mt-1">{errors.buyQuantity.message}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.buyQuantity.message}
+                </p>
               )}
             </div>
             <div>
@@ -308,7 +343,9 @@ export default function EnhancedCouponForm({
                 placeholder="Get quantity"
               />
               {errors.getQuantity && (
-                <p className="text-red-500 text-sm mt-1">{errors.getQuantity.message}</p>
+                <p className="text-red-500 text-sm mt-1">
+                  {errors.getQuantity.message}
+                </p>
               )}
             </div>
           </div>
@@ -335,7 +372,9 @@ export default function EnhancedCouponForm({
               placeholder="Minimum order amount"
             />
             {errors.minimumAmount && (
-              <p className="text-red-500 text-sm mt-1">{errors.minimumAmount.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.minimumAmount.message}
+              </p>
             )}
           </div>
           <div>
@@ -403,17 +442,131 @@ export default function EnhancedCouponForm({
           </select>
         </div>
 
+        {/* Product Selection */}
+        {applicableType === 'product' && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Select Products *
+            </label>
+            <ReactSelect
+              isMulti
+              value={productOptions.filter((option: SelectOption) =>
+                selectedProducts.includes(option.value)
+              )}
+              onChange={(selectedOptions: MultiValue<SelectOption>) => {
+                const values = selectedOptions
+                  ? selectedOptions.map((opt: SelectOption) => opt.value)
+                  : [];
+                setSelectedProducts(values);
+              }}
+              options={productOptions}
+              placeholder="Search and select products..."
+              className="react-select-container"
+              classNamePrefix="react-select"
+              isSearchable
+              isClearable
+              maxMenuHeight={200}
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              {selectedProducts.length} product(s) selected
+            </p>
+            {selectedProducts.length === 0 && applicableType === 'product' && (
+              <p className="text-red-500 text-sm mt-1">
+                Please select at least one product
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Category Selection */}
         {applicableType === 'category' && (
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Product Category
+              Select Categories *
+            </label>
+            <ReactSelect
+              isMulti
+              value={categoryOptions.filter((option: SelectOption) =>
+                selectedCategories.includes(option.value)
+              )}
+              onChange={(selectedOptions: MultiValue<SelectOption>) => {
+                const values = selectedOptions
+                  ? selectedOptions.map((opt: SelectOption) => opt.value)
+                  : [];
+                setSelectedCategories(values);
+              }}
+              options={categoryOptions}
+              placeholder="Search and select categories..."
+              className="react-select-container"
+              classNamePrefix="react-select"
+              isSearchable
+              isClearable
+              maxMenuHeight={200}
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              {selectedCategories.length} categor(ies) selected
+            </p>
+            {selectedCategories.length === 0 &&
+              applicableType === 'category' && (
+                <p className="text-red-500 text-sm mt-1">
+                  Please select at least one category
+                </p>
+              )}
+          </div>
+        )}
+
+        {/* Brand Selection */}
+        {applicableType === 'brand' && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Select Brands *
+            </label>
+            <ReactSelect
+              isMulti
+              value={brandOptions.filter((option: SelectOption) =>
+                selectedBrands.includes(option.value)
+              )}
+              onChange={(selectedOptions: MultiValue<SelectOption>) => {
+                const values = selectedOptions
+                  ? selectedOptions.map((opt: SelectOption) => opt.value)
+                  : [];
+                setSelectedBrands(values);
+              }}
+              options={brandOptions}
+              placeholder="Search and select brands..."
+              className="react-select-container"
+              classNamePrefix="react-select"
+              isSearchable
+              isClearable
+              maxMenuHeight={200}
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              {selectedBrands.length} brand(s) selected
+            </p>
+            {selectedBrands.length === 0 && applicableType === 'brand' && (
+              <p className="text-red-500 text-sm mt-1">
+                Please select at least one brand
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* Legacy Category Field for Backward Compatibility */}
+        {applicableType === 'category' && (
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Product Category (Legacy)
             </label>
             <input
               {...register('productType')}
               type="text"
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter product category"
+              placeholder="Enter product category (for backward compatibility)"
             />
+            <p className="text-sm text-gray-500 mt-1">
+              This field is kept for backward compatibility. Use the
+              multi-select above for better control.
+            </p>
           </div>
         )}
       </div>
@@ -478,9 +631,7 @@ export default function EnhancedCouponForm({
               type="checkbox"
               className="mr-2"
             />
-            <span className="text-sm text-gray-700">
-              New users only
-            </span>
+            <span className="text-sm text-gray-700">New users only</span>
           </label>
         </div>
       </div>
@@ -503,4 +654,4 @@ export default function EnhancedCouponForm({
       </div>
     </form>
   );
-} 
+}
