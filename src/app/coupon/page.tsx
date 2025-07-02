@@ -1,10 +1,10 @@
 'use client';
-import { useSelector } from 'react-redux';
+import UnauthorizedAccess from '@/components/UnauthorizedAccess';
 import Wrapper from '@/layout/wrapper';
+import { hasPermission, UserRole } from '@/utils/rolePermissions';
+import { useSelector } from 'react-redux';
 import Breadcrumb from '../components/breadcrumb/breadcrumb';
 import EnhancedCouponArea from '../components/coupon/enhanced-coupon-area';
-import { hasPermission, UserRole } from '@/utils/rolePermissions';
-import UnauthorizedAccess from '@/components/UnauthorizedAccess';
 
 export default function CouponPage() {
   // Get user role from Redux store
@@ -24,7 +24,10 @@ export default function CouponPage() {
     <Wrapper>
       <div className="body-content px-8 py-8 bg-slate-100">
         {/* breadcrumb start */}
-        <Breadcrumb title="Coupon Management" subtitle="Admin Only - Coupon List" />
+        <Breadcrumb
+          title="Coupon Management"
+          subtitle="Admin Only - Coupon List"
+        />
         {/* breadcrumb end */}
 
         {/* coupon area start */}
