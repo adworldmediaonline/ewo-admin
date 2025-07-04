@@ -302,40 +302,40 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
   };
 
   // Helper function to render product options
-  // const renderProductOptions = (options: any) => {
-  //   if (!options) return null;
+  const renderProductOptions = (options: any) => {
+    if (!options) return null;
 
-  //   // Handle array of options
-  //   if (Array.isArray(options)) {
-  //     return options.map((option: any, index: number) => (
-  //       <span key={option._id || index} className={styles.optionItem}>
-  //         {safeRenderString(option.title)}
-  //         {option.price > 0 && (
-  //           <span className={styles.optionPrice}>
-  //             (+${safeRenderNumber(option.price).toFixed(2)})
-  //           </span>
-  //         )}
-  //       </span>
-  //     ));
-  //   }
+    // Handle array of options
+    if (Array.isArray(options)) {
+      return options.map((option: any, index: number) => (
+        <span key={option._id || index} className={styles.optionItem}>
+          {safeRenderString(option.title)}
+          {option.price > 0 && (
+            <span className={styles.optionPrice}>
+              (+${safeRenderNumber(option.price).toFixed(2)})
+            </span>
+          )}
+        </span>
+      ));
+    }
 
-  //   // Handle single option object
-  //   if (typeof options === 'object' && options.title) {
-  //     return (
-  //       <span className={styles.optionItem}>
-  //         {safeRenderString(options.title)}
-  //         {options.price > 0 && (
-  //           <span className={styles.optionPrice}>
-  //             (+${safeRenderNumber(options.price).toFixed(2)})
-  //           </span>
-  //         )}
-  //       </span>
-  //     );
-  //   }
+    // Handle single option object
+    if (typeof options === 'object' && options.title) {
+      return (
+        <span className={styles.optionItem}>
+          {safeRenderString(options.title)}
+          {options.price > 0 && (
+            <span className={styles.optionPrice}>
+              (+${safeRenderNumber(options.price).toFixed(2)})
+            </span>
+          )}
+        </span>
+      );
+    }
 
-  //   // Handle string
-  //   return safeRenderString(options);
-  // };
+    // Handle string
+    return safeRenderString(options);
+  };
 
   const handlePrint = () => {
     window.print();
@@ -544,13 +544,13 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                                 <h4 className={styles.productTitle}>
                                   {safeRenderString(item.title, 'Product Name')}
                                 </h4>
-                                {/* {item.options && (
+                                {item.options && (
                                   <div className={styles.productOptions}>
                                     <div className={styles.availableOptions}>
                                       {renderProductOptions(item.options)}
                                     </div>
                                   </div>
-                                )} */}
+                                )}
                               </div>
                             </div>
                           </td>
