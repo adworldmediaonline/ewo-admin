@@ -1351,3 +1351,371 @@
     display: none;
   }
 }
+
+/* Payment Management Styles */
+.paymentManagementGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.paymentStatusCard,
+.paymentActionsCard {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+}
+
+.paymentStatusCard h3,
+.paymentActionsCard h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.paymentDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.paymentRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.paymentRow:last-child {
+  border-bottom: none;
+  font-weight: 600;
+}
+
+.amount {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.refundedAmount {
+  font-weight: 600;
+  color: #e53e3e;
+}
+
+.refundableAmount {
+  font-weight: 600;
+  color: #48bb78;
+}
+
+.actionButtons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.refundButton,
+.cancelButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.refundButton {
+  background: #4299e1;
+  color: white;
+}
+
+.refundButton:hover:not(:disabled) {
+  background: #3182ce;
+}
+
+.cancelButton {
+  background: #e53e3e;
+  color: white;
+}
+
+.cancelButton:hover:not(:disabled) {
+  background: #c53030;
+}
+
+.refundButton:disabled,
+.cancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.buttonIcon {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Refund History */
+.refundHistory {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.refundHistory h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.refundList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.refundItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.refundDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.refundId {
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 0.875rem;
+}
+
+.refundReason {
+  color: #718096;
+  font-size: 0.875rem;
+  text-transform: capitalize;
+}
+
+.refundDate {
+  color: #a0aec0;
+  font-size: 0.75rem;
+}
+
+.refundAmount {
+  font-weight: 600;
+  color: #e53e3e;
+  font-size: 1.125rem;
+}
+
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modalHeader h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  color: #718096;
+  transition: color 0.2s ease;
+}
+
+.closeButton:hover {
+  color: #2d3748;
+}
+
+.closeIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.modalBody {
+  padding: 1.5rem;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup:last-child {
+  margin-bottom: 0;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2d3748;
+  font-size: 0.875rem;
+}
+
+.input,
+.select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+  background: white;
+}
+
+.input:focus,
+.select:focus {
+  outline: none;
+  border-color: #4299e1;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.cancelWarning {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #fed7d7;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.warningIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #e53e3e;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.cancelWarning p {
+  margin: 0;
+  color: #742a2a;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.modalFooter {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+  border-radius: 0 0 0.75rem 0.75rem;
+}
+
+.cancelModalButton {
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #4a5568;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelModalButton:hover {
+  background: #f7fafc;
+  border-color: #cbd5e0;
+}
+
+.confirmRefundButton {
+  padding: 0.75rem 1.5rem;
+  background: #4299e1;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.confirmRefundButton:hover:not(:disabled) {
+  background: #3182ce;
+}
+
+.confirmRefundButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.confirmCancelButton {
+  padding: 0.75rem 1.5rem;
+  background: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.confirmCancelButton:hover:not(:disabled) {
+  background: #c53030;
+}
+
+.confirmCancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .paymentManagementGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .modalOverlay {
+    padding: 0.5rem;
+  }
+
+  .modal {
+    max-width: 100%;
+  }
+}

@@ -1,8 +1,14 @@
 'use client';
-import { useGetSingleOrderQuery } from '@/redux/order/orderApi';
+import {
+  useCancelOrderMutation,
+  useGetPaymentDetailsQuery,
+  useGetSingleOrderQuery,
+  useProcessRefundMutation,
+} from '@/redux/order/orderApi';
 import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 import styles from './order-details-area.module.css';
 
 // Icon Components
@@ -268,12 +274,103 @@ const AlertCircle = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const RefundIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z"
+    />
+  </svg>
+);
+
+const CancelIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"
+    />
+  </svg>
+);
+
 interface OrderDetailsAreaProps {
   id: string;
 }
 
 export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
   const { data: orderData, error, isLoading } = useGetSingleOrderQuery(id);
+  const { data: paymentData, refetch: refetchPaymentData } =
+    useGetPaymentDetailsQuery(id);
+  const [processRefund, { isLoading: isRefunding }] =
+    useProcessRefundMutation();
+  const [cancelOrder, { isLoading: isCancelling }] = useCancelOrderMutation();
+
+  // Modal states
+  const [showRefundModal, setShowRefundModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [refundAmount, setRefundAmount] = useState('');
+  const [refundReason, setRefundReason] = useState('requested_by_customer');
+  const [cancelReason, setCancelReason] = useState('requested_by_customer');
+
+  // Handle refund submission
+  const handleRefund = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!refundAmount || parseFloat(refundAmount) <= 0) return;
+
+    try {
+      await processRefund({
+        id,
+        refundData: {
+          amount: Math.round(parseFloat(refundAmount) * 100), // Convert to cents
+          reason: refundReason,
+        },
+      }).unwrap();
+
+      setShowRefundModal(false);
+      setRefundAmount('');
+      refetchPaymentData();
+      alert('Refund processed successfully!');
+    } catch (error: any) {
+      alert(`Refund failed: ${error.data?.message || error.message}`);
+    }
+  };
+
+  // Handle order cancellation
+  const handleCancel = async () => {
+    try {
+      await cancelOrder({
+        id,
+        cancelData: { reason: cancelReason },
+      }).unwrap();
+
+      setShowCancelModal(false);
+      refetchPaymentData();
+      alert('Order cancelled successfully!');
+    } catch (error: any) {
+      alert(`Cancellation failed: ${error.data?.message || error.message}`);
+    }
+  };
+
+  // Calculate refundable amount
+  const getRefundableAmount = () => {
+    if (!paymentData?.data) return 0;
+    const totalAmount = paymentData.data.totalAmount || 0;
+    const refundedAmount = (paymentData.data.refundedAmount || 0) / 100; // Convert from cents
+    return Math.max(0, totalAmount - refundedAmount);
+  };
 
   // Helper function to safely render string values from potentially nested objects
   const safeRenderString = (value: any, fallback: string = ''): string => {
@@ -497,6 +594,114 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
               </div>
             )}
           </div>
+
+          {/* Payment Management Section */}
+          {order.paymentMethod === 'Card' &&
+            order.status !== 'cancel' &&
+            paymentData?.data?.refundable && (
+              <div className={styles.section}>
+                <div className={styles.sectionHeader}>
+                  <h2 className={styles.sectionTitle}>
+                    <CreditCard className={styles.sectionIcon} />
+                    Payment Management
+                  </h2>
+                </div>
+                <div className={styles.sectionContent}>
+                  <div className={styles.paymentManagementGrid}>
+                    {/* Payment Status */}
+                    <div className={styles.paymentStatusCard}>
+                      <h3>Payment Status</h3>
+                      <div className={styles.paymentDetails}>
+                        <div className={styles.paymentRow}>
+                          <span>Total Paid:</span>
+                          <span className={styles.amount}>
+                            ${order.totalAmount?.toFixed(2)}
+                          </span>
+                        </div>
+                        <div className={styles.paymentRow}>
+                          <span>Refunded:</span>
+                          <span className={styles.refundedAmount}>
+                            $
+                            {(
+                              (paymentData?.data?.refundedAmount || 0) / 100
+                            ).toFixed(2)}
+                          </span>
+                        </div>
+                        <div className={styles.paymentRow}>
+                          <span>Refundable:</span>
+                          <span className={styles.refundableAmount}>
+                            ${getRefundableAmount().toFixed(2)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className={styles.paymentActionsCard}>
+                      <h3>Actions</h3>
+                      <div className={styles.actionButtons}>
+                        {getRefundableAmount() > 0 && (
+                          <button
+                            onClick={() => setShowRefundModal(true)}
+                            className={styles.refundButton}
+                            disabled={isRefunding}
+                          >
+                            <RefundIcon className={styles.buttonIcon} />
+                            Process Refund
+                          </button>
+                        )}
+                        {order.status !== 'shipped' &&
+                          order.status !== 'delivered' && (
+                            <button
+                              onClick={() => setShowCancelModal(true)}
+                              className={styles.cancelButton}
+                              disabled={isCancelling}
+                            >
+                              <CancelIcon className={styles.buttonIcon} />
+                              Cancel Order
+                            </button>
+                          )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Refund History */}
+                  {paymentData?.data?.paymentIntent?.refunds &&
+                    paymentData.data.paymentIntent.refunds.length > 0 && (
+                      <div className={styles.refundHistory}>
+                        <h3>Refund History</h3>
+                        <div className={styles.refundList}>
+                          {paymentData.data.paymentIntent.refunds.map(
+                            (refund: any, index: number) => (
+                              <div
+                                key={refund.refundId || index}
+                                className={styles.refundItem}
+                              >
+                                <div className={styles.refundDetails}>
+                                  <span className={styles.refundId}>
+                                    #{refund.refundId}
+                                  </span>
+                                  <span className={styles.refundReason}>
+                                    {refund.reason}
+                                  </span>
+                                  <span className={styles.refundDate}>
+                                    {dayjs(refund.createdAt).format(
+                                      'MMM D, YYYY h:mm A'
+                                    )}
+                                  </span>
+                                </div>
+                                <div className={styles.refundAmount}>
+                                  ${(refund.amount / 100).toFixed(2)}
+                                </div>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
+                    )}
+                </div>
+              </div>
+            )}
 
           {/* Order Items Section */}
           <div className={styles.section}>
@@ -965,6 +1170,140 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
           </div> */}
         </div>
       </div>
+
+      {/* Refund Modal */}
+      {showRefundModal && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setShowRefundModal(false)}
+        >
+          <div className={styles.modal} onClick={e => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3>Process Refund</h3>
+              <button
+                onClick={() => setShowRefundModal(false)}
+                className={styles.closeButton}
+              >
+                <XCircle className={styles.closeIcon} />
+              </button>
+            </div>
+            <form onSubmit={handleRefund}>
+              <div className={styles.modalBody}>
+                <div className={styles.formGroup}>
+                  <label htmlFor="refundAmount">Refund Amount ($)</label>
+                  <input
+                    id="refundAmount"
+                    type="number"
+                    step="0.01"
+                    min="0.01"
+                    max={getRefundableAmount()}
+                    value={refundAmount}
+                    onChange={e => setRefundAmount(e.target.value)}
+                    placeholder={`Max: $${getRefundableAmount().toFixed(2)}`}
+                    required
+                    className={styles.input}
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label htmlFor="refundReason">Reason</label>
+                  <select
+                    id="refundReason"
+                    value={refundReason}
+                    onChange={e => setRefundReason(e.target.value)}
+                    className={styles.select}
+                  >
+                    <option value="requested_by_customer">
+                      Requested by Customer
+                    </option>
+                    <option value="duplicate">Duplicate Charge</option>
+                    <option value="fraudulent">Fraudulent</option>
+                  </select>
+                </div>
+              </div>
+              <div className={styles.modalFooter}>
+                <button
+                  type="button"
+                  onClick={() => setShowRefundModal(false)}
+                  className={styles.cancelModalButton}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isRefunding || !refundAmount}
+                  className={styles.confirmRefundButton}
+                >
+                  {isRefunding ? 'Processing...' : 'Process Refund'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Cancel Order Modal */}
+      {showCancelModal && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setShowCancelModal(false)}
+        >
+          <div className={styles.modal} onClick={e => e.stopPropagation()}>
+            <div className={styles.modalHeader}>
+              <h3>Cancel Order</h3>
+              <button
+                onClick={() => setShowCancelModal(false)}
+                className={styles.closeButton}
+              >
+                <XCircle className={styles.closeIcon} />
+              </button>
+            </div>
+            <div className={styles.modalBody}>
+              <div className={styles.cancelWarning}>
+                <AlertCircle className={styles.warningIcon} />
+                <p>
+                  Are you sure you want to cancel this order?
+                  {order.paymentMethod === 'Card' &&
+                    ' A full refund will be processed automatically.'}
+                  This action cannot be undone.
+                </p>
+              </div>
+              <div className={styles.formGroup}>
+                <label htmlFor="cancelReason">Cancellation Reason</label>
+                <select
+                  id="cancelReason"
+                  value={cancelReason}
+                  onChange={e => setCancelReason(e.target.value)}
+                  className={styles.select}
+                >
+                  <option value="requested_by_customer">
+                    Requested by Customer
+                  </option>
+                  <option value="out_of_stock">Out of Stock</option>
+                  <option value="payment_failed">Payment Failed</option>
+                  <option value="duplicate">Duplicate Order</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <div className={styles.modalFooter}>
+              <button
+                type="button"
+                onClick={() => setShowCancelModal(false)}
+                className={styles.cancelModalButton}
+              >
+                Keep Order
+              </button>
+              <button
+                onClick={handleCancel}
+                disabled={isCancelling}
+                className={styles.confirmCancelButton}
+              >
+                {isCancelling ? 'Cancelling...' : 'Cancel Order'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
