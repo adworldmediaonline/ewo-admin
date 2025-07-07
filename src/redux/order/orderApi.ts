@@ -1,13 +1,13 @@
-import { apiSlice } from '../api/apiSlice';
 import {
-  IOrderAmounts,
-  ISalesReport,
-  IMostSellingCategory,
   IDashboardRecentOrders,
   IGetAllOrdersRes,
+  IMostSellingCategory,
+  IOrderAmounts,
+  ISalesReport,
   IUpdateStatusOrderRes,
   Order,
 } from '@/types/order-amount-type';
+import { apiSlice } from '../api/apiSlice';
 
 export const authApi = apiSlice.injectEndpoints({
   overrideExisting: true,
@@ -145,6 +145,50 @@ export const authApi = apiSlice.injectEndpoints({
       },
       invalidatesTags: ['AllOrders', 'DashboardRecentOrders'],
     }),
+    // process refund
+    processRefund: builder.mutation<
+      any,
+      {
+        id: string;
+        refundData: {
+          amount?: number;
+          reason?: string;
+        };
+      }
+    >({
+      query({ id, refundData }) {
+        return {
+          url: `/api/order/refund/${id}`,
+          method: 'POST',
+          body: refundData,
+        };
+      },
+      invalidatesTags: ['AllOrders', 'DashboardRecentOrders'],
+    }),
+    // cancel order
+    cancelOrder: builder.mutation<
+      any,
+      {
+        id: string;
+        cancelData?: {
+          reason?: string;
+        };
+      }
+    >({
+      query({ id, cancelData = {} }) {
+        return {
+          url: `/api/order/cancel/${id}`,
+          method: 'POST',
+          body: cancelData,
+        };
+      },
+      invalidatesTags: ['AllOrders', 'DashboardRecentOrders'],
+    }),
+    // get payment details
+    getPaymentDetails: builder.query<any, string>({
+      query: id => `/api/order/payment-details/${id}`,
+      keepUnusedDataFor: 300,
+    }),
   }),
 });
 
@@ -160,4 +204,7 @@ export const {
   useSendShippingNotificationMutation,
   useSendDeliveryNotificationMutation,
   useUpdateShippingDetailsMutation,
+  useProcessRefundMutation,
+  useCancelOrderMutation,
+  useGetPaymentDetailsQuery,
 } = authApi;
