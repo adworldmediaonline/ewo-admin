@@ -49,5 +49,7 @@ export const apiSlice = createApi({
     'Users',
     'CartAnalytics',
     'CartTrackingEvents',
+    'AllContacts',
+    'Contact',
   ],
 });
