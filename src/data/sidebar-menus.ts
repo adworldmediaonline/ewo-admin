@@ -12,6 +12,7 @@ import {
   Leaf,
   StuffUser,
   Cart,
+  Contact,
 } from '@/svg';
 
 const sidebar_menu: Array<ISidebarMenus> = [
@@ -73,6 +74,12 @@ const sidebar_menu: Array<ISidebarMenus> = [
     icon: Coupons,
     link: '/coupon',
     title: 'Coupons',
+  },
+  {
+    id: 8.5,
+    icon: Contact,
+    link: '/contact-queries',
+    title: 'Contact Queries',
   },
   {
     id: 9,

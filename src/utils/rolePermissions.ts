@@ -19,6 +19,8 @@ export interface RolePermissions {
   canManageReviews: boolean;
   canViewCoupons: boolean;
   canManageCoupons: boolean;
+  canViewContacts: boolean;
+  canManageContacts: boolean;
   canViewProfile: boolean;
   canViewStaff: boolean;
   canManageStaff: boolean;
@@ -48,6 +50,8 @@ export const rolePermissions: Record<UserRole, RolePermissions> = {
     canManageReviews: true,
     canViewCoupons: true,
     canManageCoupons: true,
+    canViewContacts: true,
+    canManageContacts: true,
     canViewProfile: true,
     canViewStaff: true,
     canManageStaff: true,
@@ -74,6 +78,8 @@ export const rolePermissions: Record<UserRole, RolePermissions> = {
     canManageReviews: false,
     canViewCoupons: false,
     canManageCoupons: false,
+    canViewContacts: true,
+    canManageContacts: true,
     canViewProfile: true,
     canViewStaff: false,
     canManageStaff: false,
@@ -100,6 +106,8 @@ export const rolePermissions: Record<UserRole, RolePermissions> = {
     canManageReviews: false,
     canViewCoupons: false,
     canManageCoupons: false,
+    canViewContacts: true,
+    canManageContacts: true,
     canViewProfile: true,
     canViewStaff: false,
     canManageStaff: false,
@@ -126,6 +134,8 @@ export const rolePermissions: Record<UserRole, RolePermissions> = {
     canManageReviews: false,
     canViewCoupons: false,
     canManageCoupons: false,
+    canViewContacts: true,
+    canManageContacts: true,
     canViewProfile: true,
     canViewStaff: false,
     canManageStaff: false,
