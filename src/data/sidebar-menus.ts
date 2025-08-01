@@ -48,12 +48,6 @@ const sidebar_menu: Array<ISidebarMenus> = [
   {
     id: 5,
     icon: Cart,
-    link: '/carts',
-    title: 'Carts',
-  },
-  {
-    id: 5.5,
-    icon: Cart,
     link: '/cart-tracking',
     title: 'Cart Tracking',
   },

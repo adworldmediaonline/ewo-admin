@@ -8,7 +8,6 @@ const menuPermissions: Record<string, string> = {
   Products: 'canViewProducts',
   Category: 'canViewCategories',
   Orders: 'canViewOrders',
-  Carts: 'canViewCarts',
   'Cart Tracking': 'canViewCartTracking',
   Brand: 'canViewBrands',
   Reviews: 'canViewReviews',
@@ -105,7 +104,6 @@ export const canAccessRoute = (
     '/category': 'canViewCategories',
     '/orders': 'canViewOrders',
     '/order-details': 'canViewOrders', // Order details should use same permission as orders
-    '/carts': 'canViewCarts',
     '/cart-tracking': 'canViewCartTracking',
     '/brands': 'canViewBrands',
     '/reviews': 'canViewReviews',
