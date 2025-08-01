@@ -1,6 +1,6 @@
 import { ISidebarMenus } from '../types/menu-types';
-import sidebar_menu from './sidebar-menus';
 import { UserRole, hasPermission } from '../utils/rolePermissions';
+import sidebar_menu from './sidebar-menus';
 
 // Map menu items to their required permissions
 const menuPermissions: Record<string, string> = {
@@ -8,8 +8,7 @@ const menuPermissions: Record<string, string> = {
   Products: 'canViewProducts',
   Category: 'canViewCategories',
   Orders: 'canViewOrders',
-  Carts: 'canViewCarts',
-  'Cart Analytics': 'canViewCartTracking',
+  'Cart Tracking': 'canViewCartTracking',
   Brand: 'canViewBrands',
   Reviews: 'canViewReviews',
   Coupons: 'canViewCoupons',
@@ -105,7 +104,6 @@ export const canAccessRoute = (
     '/category': 'canViewCategories',
     '/orders': 'canViewOrders',
     '/order-details': 'canViewOrders', // Order details should use same permission as orders
-    '/carts': 'canViewCarts',
     '/cart-tracking': 'canViewCartTracking',
     '/brands': 'canViewBrands',
     '/reviews': 'canViewReviews',

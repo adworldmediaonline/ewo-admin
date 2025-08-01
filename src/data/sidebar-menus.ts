@@ -1,19 +1,19 @@
-import { ISidebarMenus } from './../types/menu-types';
 import {
-  Dashboard,
+  Cart,
   Categories,
+  Contact,
   Coupons,
+  Dashboard,
+  Leaf,
   Orders,
   Pages,
   Products,
   Profile,
   Reviews,
   Setting,
-  Leaf,
   StuffUser,
-  Cart,
-  Contact,
 } from '@/svg';
+import { ISidebarMenus } from './../types/menu-types';
 
 const sidebar_menu: Array<ISidebarMenus> = [
   {
@@ -48,14 +48,8 @@ const sidebar_menu: Array<ISidebarMenus> = [
   {
     id: 5,
     icon: Cart,
-    link: '/carts',
-    title: 'Carts',
-  },
-  {
-    id: 5.5,
-    icon: Cart,
     link: '/cart-tracking',
-    title: 'Cart Analytics',
+    title: 'Cart Tracking',
   },
   {
     id: 6,
