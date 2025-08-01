@@ -130,12 +130,12 @@
 
 .table {
   width: 100%;
-  min-width: 1200px;
+  min-width: 1400px;
   background-color: white;
   border-radius: 0.75rem;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid #e5e7eb;
-  table-layout: fixed;
+  table-layout: auto;
   border-collapse: separate;
   border-spacing: 0;
 }
@@ -156,9 +156,9 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   border-bottom: 1px solid #e5e7eb;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  word-wrap: break-word;
+  word-break: break-words;
+  hyphens: auto;
 }
 
 /* Specific column widths */
@@ -176,8 +176,8 @@
 
 .headerCell:nth-child(3) {
   /* Customer */
-  width: 250px;
-  min-width: 250px;
+  width: 300px;
+  min-width: 300px;
 }
 
 .headerCell:nth-child(4) {
@@ -206,8 +206,8 @@
 
 .headerCell:nth-child(8) {
   /* Shipping */
-  width: 280px;
-  min-width: 280px;
+  width: 350px;
+  min-width: 350px;
 }
 
 .headerCell:nth-child(9) {
@@ -242,10 +242,12 @@
 .tableCell {
   padding: 1.25rem 1.5rem;
   font-size: 1rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
   vertical-align: top;
   border-bottom: 1px solid #f3f4f6;
+  word-wrap: break-word;
+  word-break: break-words;
+  hyphens: auto;
+  max-width: 0;
 }
 
 /* Specific cell alignments and behaviors */
@@ -263,7 +265,7 @@
 
 .tableCell:nth-child(3) {
   /* Customer */
-  width: 250px;
+  width: 300px;
 }
 
 .tableCell:nth-child(4) {
@@ -288,7 +290,7 @@
 
 .tableCell:nth-child(8) {
   /* Shipping */
-  width: 280px;
+  width: 350px;
 }
 
 .tableCell:nth-child(9) {
@@ -355,25 +357,24 @@
 .customerDetails {
   min-width: 0;
   flex: 1;
-  overflow: hidden;
 }
 
 .customerName {
   font-size: 0.875rem;
   font-weight: 600;
   color: #111827;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   margin-bottom: 0.125rem;
+  word-wrap: break-word;
+  word-break: break-words;
+  hyphens: auto;
 }
 
 .customerEmail {
   font-size: 0.75rem;
   color: #6b7280;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-wrap: break-word;
+  word-break: break-words;
+  hyphens: auto;
 }
 
 .guestBadge {
@@ -424,10 +425,8 @@
   font-weight: 600;
   background-color: #dbeafe;
   color: #1e40af;
-  white-space: nowrap;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .paymentIcon {
@@ -723,27 +722,27 @@
   .paginationContainer {
     padding: 0.75rem;
   }
-  
+
   .paginationInfo {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
   }
-  
+
   .paginationControls {
     gap: 0.25rem;
   }
-  
+
   .paginationButton {
     min-width: 1.75rem;
     height: 1.75rem;
     font-size: 0.8rem;
   }
-  
+
   .pageNumbers {
     gap: 0.1rem;
   }
-  
+
   .pageJump {
     margin-top: 0.5rem;
   }
