@@ -130,12 +130,12 @@
 
 .table {
   width: 100%;
-  min-width: 1400px;
+  min-width: 1450px;
   background-color: white;
   border-radius: 0.75rem;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   border: 1px solid #e5e7eb;
-  table-layout: auto;
+  table-layout: fixed;
   border-collapse: separate;
   border-spacing: 0;
 }
@@ -148,7 +148,7 @@
 }
 
 .headerCell {
-  padding: 1rem 1.5rem;
+  padding: 1rem 2rem;
   text-align: left;
   font-size: 1.125rem;
   font-weight: 700;
@@ -170,8 +170,8 @@
 
 .headerCell:nth-child(2) {
   /* Order ID */
-  width: 140px;
-  min-width: 140px;
+  width: 200px;
+  min-width: 200px;
 }
 
 .headerCell:nth-child(3) {
@@ -240,14 +240,13 @@
 }
 
 .tableCell {
-  padding: 1.25rem 1.5rem;
+  padding: 1.25rem 2rem;
   font-size: 1rem;
   vertical-align: top;
   border-bottom: 1px solid #f3f4f6;
   word-wrap: break-word;
   word-break: break-words;
   hyphens: auto;
-  max-width: 0;
 }
 
 /* Specific cell alignments and behaviors */
@@ -259,7 +258,7 @@
 
 .tableCell:nth-child(2) {
   /* Order ID */
-  width: 140px;
+  width: 200px;
   white-space: nowrap;
 }
 
@@ -316,15 +315,20 @@
   font-size: 1rem;
   color: #1f2937;
   white-space: nowrap;
+  word-break: normal;
+  word-wrap: normal;
+  hyphens: none;
 }
 
 /* Customer Info Styles */
 .customerInfo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
   width: 100%;
   max-width: 100%;
+  min-width: 0;
+  padding-left: 0.5rem;
 }
 
 .customerAvatar {
