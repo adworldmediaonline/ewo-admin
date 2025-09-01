@@ -108,6 +108,28 @@ export default function EnhancedCouponForm({
     setApplicableType(watchedApplicableType || 'all');
   }, [watchedApplicableType]);
 
+  // Clear selections when applicable type changes
+  useEffect(() => {
+    if (watchedApplicableType === 'all') {
+      // Clear all selections when switching to "all"
+      setSelectedProducts([]);
+      setSelectedCategories([]);
+      setSelectedBrands([]);
+    } else if (watchedApplicableType === 'product') {
+      // Clear categories and brands when switching to products
+      setSelectedCategories([]);
+      setSelectedBrands([]);
+    } else if (watchedApplicableType === 'category') {
+      // Clear products and brands when switching to categories
+      setSelectedProducts([]);
+      setSelectedBrands([]);
+    } else if (watchedApplicableType === 'brand') {
+      // Clear products and categories when switching to brands
+      setSelectedProducts([]);
+      setSelectedCategories([]);
+    }
+  }, [watchedApplicableType]);
+
   // Prepare options for ReactSelect
   const productOptions: SelectOption[] =
     products?.data?.map(product => ({
@@ -131,11 +153,10 @@ export default function EnhancedCouponForm({
     const formData: IAddCoupon = {
       ...data,
       logo,
-      applicableProducts:
-        applicableType === 'product' ? selectedProducts : undefined,
+      applicableProducts: applicableType === 'product' ? selectedProducts : [],
       applicableCategories:
-        applicableType === 'category' ? selectedCategories : undefined,
-      applicableBrands: applicableType === 'brand' ? selectedBrands : undefined,
+        applicableType === 'category' ? selectedCategories : [],
+      applicableBrands: applicableType === 'brand' ? selectedBrands : [],
     };
     onSubmit(formData);
   };
@@ -440,6 +461,11 @@ export default function EnhancedCouponForm({
             <option value="product">Specific Products</option>
             <option value="brand">Specific Brands</option>
           </select>
+          {applicableType === 'all' && (
+            <p className="text-sm text-green-600 mt-1">
+              ✓ This coupon will apply to all products in your store
+            </p>
+          )}
         </div>
 
         {/* Product Selection */}

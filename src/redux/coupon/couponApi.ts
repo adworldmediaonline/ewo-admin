@@ -18,12 +18,18 @@ export const authApi = apiSlice.injectEndpoints({
     // getUserOrders
     getAllCoupons: builder.query<ICoupon[], void>({
       query: () => `/api/coupon`,
+      transformResponse: (response: { success: boolean; data: ICoupon[] }) => {
+        return response.data || [];
+      },
       providesTags: ['AllCoupons'],
       keepUnusedDataFor: 600,
     }),
     // get single coupon
     getCoupon: builder.query<ICoupon, string>({
       query: id => `/api/coupon/${id}`,
+      transformResponse: (response: { success: boolean; data: ICoupon }) => {
+        return response.data;
+      },
       providesTags: ['Coupon'],
     }),
     // editCategory
@@ -53,11 +59,16 @@ export const authApi = apiSlice.injectEndpoints({
       },
       invalidatesTags: ['AllCoupons'],
     }),
-    
+
     // validate coupon
     validateCoupon: builder.mutation<
       { success: boolean; message: string; data: any },
-      { couponCode: string; cartItems?: any[]; cartTotal?: number; userId?: string }
+      {
+        couponCode: string;
+        cartItems?: any[];
+        cartTotal?: number;
+        userId?: string;
+      }
     >({
       query(data) {
         return {
@@ -67,7 +78,7 @@ export const authApi = apiSlice.injectEndpoints({
         };
       },
     }),
-    
+
     // get coupon analytics
     getCouponAnalytics: builder.query<
       { success: boolean; data: ICouponAnalytics },
@@ -81,7 +92,7 @@ export const authApi = apiSlice.injectEndpoints({
       },
       providesTags: ['Coupon'],
     }),
-    
+
     // get overall analytics
     getOverallAnalytics: builder.query<
       { success: boolean; data: any },
@@ -95,7 +106,7 @@ export const authApi = apiSlice.injectEndpoints({
       },
       providesTags: ['AllCoupons'],
     }),
-    
+
     // bulk update coupons
     bulkUpdateCoupons: builder.mutation<
       { success: boolean; message: string; data: any },
@@ -110,7 +121,7 @@ export const authApi = apiSlice.injectEndpoints({
       },
       invalidatesTags: ['AllCoupons'],
     }),
-    
+
     // duplicate coupon
     duplicateCoupon: builder.mutation<
       { success: boolean; message: string; data: ICoupon },
@@ -125,7 +136,7 @@ export const authApi = apiSlice.injectEndpoints({
       },
       invalidatesTags: ['AllCoupons'],
     }),
-    
+
     // get valid coupons
     getValidCoupons: builder.query<
       { success: boolean; data: ICoupon[] },
