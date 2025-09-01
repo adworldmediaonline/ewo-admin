@@ -1,6 +1,6 @@
-import Wrapper from "@/layout/wrapper";
-import Breadcrumb from "../components/breadcrumb/breadcrumb";
-import AddCategory from "../components/category/add-category";
+import Wrapper from '@/layout/wrapper';
+import Breadcrumb from '../components/breadcrumb/breadcrumb';
+import AddCategory from '../components/category/add-category';
 
 const CategoryPage = () => {
   return (

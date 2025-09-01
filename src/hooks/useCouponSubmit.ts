@@ -118,33 +118,83 @@ const useCouponSubmit = () => {
     }
   };
 
-  //handle Submit edit Category (legacy function - keeping for backward compatibility)
-  const handleSubmitEditCoupon = async (data: any, id: string) => {
+  // Enhanced submit handler for editing coupon
+  const handleSubmitEditCoupon = async (data: IAddCoupon, id: string) => {
     try {
+      // Prepare coupon data with the enhanced structure (same as add coupon)
       const coupon_data = {
         logo: logo,
-        title: data?.name,
-        couponCode: data?.code,
-        endTime: dayjs(data.endtime).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
-        discountPercentage: data?.discountpercentage,
-        minimumAmount: data?.minimumamount,
+        title: data.title,
+        description: data.description,
+        couponCode: data.couponCode,
+        startTime: data.startTime
+          ? dayjs(data.startTime).format('YYYY-MM-DDTHH:mm:ss.SSSZ')
+          : undefined,
+        endTime: dayjs(data.endTime).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+
+        // Discount Configuration
+        discountType: data.discountType || 'percentage',
+        discountPercentage: data.discountPercentage,
+        discountAmount: data.discountAmount,
+        buyQuantity: data.buyQuantity,
+        getQuantity: data.getQuantity,
+
+        // Usage Restrictions
+        minimumAmount: data.minimumAmount,
+        maximumAmount: data.maximumAmount,
+        usageLimit: data.usageLimit,
+        usageLimitPerUser: data.usageLimitPerUser,
+
+        // Product/Category Restrictions
+        applicableType: data.applicableType || 'all',
+        productType: data.productType,
+        applicableProducts: data.applicableProducts,
+        applicableCategories: data.applicableCategories,
+        applicableBrands: data.applicableBrands,
+
+        // User Restrictions
+        userRestrictions: data.userRestrictions,
+
+        // Advanced Settings
+        stackable: data.stackable,
+        priority: data.priority,
+
+        // Status
+        status: data.status || 'active',
+        isPublic: data.isPublic !== false,
       };
+
+      console.log('Updating coupon data:', coupon_data);
+
       const res = await editCoupon({ id, data: coupon_data });
       if ('error' in res) {
         if ('data' in res.error) {
-          const errorData = res.error.data as { message?: string };
-          if (typeof errorData.message === 'string') {
+          const errorData = res.error.data as {
+            message?: string;
+            errorMessages?: Array<{ path: string; message: string }>;
+          };
+          if (
+            errorData.errorMessages &&
+            Array.isArray(errorData.errorMessages)
+          ) {
+            // Handle validation errors
+            const errorMsg = errorData.errorMessages
+              .map(err => `${err.path}: ${err.message}`)
+              .join(', ');
+            return notifyError(errorMsg);
+          } else if (typeof errorData.message === 'string') {
             return notifyError(errorData.message);
           }
         }
+        return notifyError('Failed to update coupon');
       } else {
-        notifySuccess('Coupon update successfully');
+        notifySuccess('Coupon updated successfully');
         router.push('/coupon');
         setIsSubmitted(true);
         reset();
       }
     } catch (error) {
-      console.log(error);
+      console.log('Coupon update error:', error);
       notifyError('Something went wrong');
     }
   };

@@ -34,7 +34,7 @@ export default function EnhancedCouponArea() {
     'management'
   );
 
-  const { data: coupons } = useGetAllCouponsQuery();
+  const { data: coupons, isLoading, isError } = useGetAllCouponsQuery();
 
   // Now perform the permission check after all hooks are called
   const userRole = user?.role as UserRole;
@@ -42,6 +42,32 @@ export default function EnhancedCouponArea() {
   // Check if user has permission to manage coupons
   if (!hasPermission(userRole, 'canManageCoupons')) {
     return <UnauthorizedAccess />;
+  }
+
+  // Show loading state while fetching data
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading coupons...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state if there's an error
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="text-red-500 text-4xl mb-4">⚠️</div>
+          <p className="text-gray-600">
+            Failed to load coupons. Please try again.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   // Handle search value
@@ -191,7 +217,7 @@ export default function EnhancedCouponArea() {
                           Total Coupons
                         </p>
                         <p className="text-xl font-bold text-blue-900">
-                          {coupons?.length || 0}
+                          {(coupons || []).length}
                         </p>
                       </div>
                     </div>
@@ -219,8 +245,10 @@ export default function EnhancedCouponArea() {
                           Active
                         </p>
                         <p className="text-xl font-bold text-green-900">
-                          {coupons?.filter(c => c.status === 'active').length ||
-                            0}
+                          {
+                            (coupons || []).filter(c => c.status === 'active')
+                              .length
+                          }
                         </p>
                       </div>
                     </div>
@@ -248,14 +276,18 @@ export default function EnhancedCouponArea() {
                           Expiring Soon
                         </p>
                         <p className="text-xl font-bold text-orange-900">
-                          {coupons?.filter(c => {
-                            const endDate = new Date(c.endTime);
-                            const now = new Date();
-                            const sevenDaysFromNow = new Date(
-                              now.getTime() + 7 * 24 * 60 * 60 * 1000
-                            );
-                            return endDate > now && endDate <= sevenDaysFromNow;
-                          }).length || 0}
+                          {
+                            (coupons || []).filter(c => {
+                              const endDate = new Date(c.endTime);
+                              const now = new Date();
+                              const sevenDaysFromNow = new Date(
+                                now.getTime() + 7 * 24 * 60 * 60 * 1000
+                              );
+                              return (
+                                endDate > now && endDate <= sevenDaysFromNow
+                              );
+                            }).length
+                          }
                         </p>
                       </div>
                     </div>
@@ -283,10 +315,10 @@ export default function EnhancedCouponArea() {
                           Total Usage
                         </p>
                         <p className="text-xl font-bold text-purple-900">
-                          {coupons?.reduce(
+                          {(coupons || []).reduce(
                             (sum, c) => sum + (c.usageCount || 0),
                             0
-                          ) || 0}
+                          )}
                         </p>
                       </div>
                     </div>

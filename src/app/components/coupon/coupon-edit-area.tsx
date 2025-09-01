@@ -1,95 +1,56 @@
 'use client';
-import React from 'react';
-import CouponTable from './coupon-table';
 import useCouponSubmit from '@/hooks/useCouponSubmit';
 import { useGetCouponQuery } from '@/redux/coupon/couponApi';
-import Loading from '../common/loading';
 import ErrorMsg from '../common/error-msg';
-import GlobalImgUpload from '../category/global-img-upload';
-import CouponFormField from '../brand/form-field-two';
+import Loading from '../common/loading';
+import CouponTable from './coupon-table';
+import EnhancedCouponForm from './enhanced-coupon-form';
 
 const CouponEditArea = ({ id }: { id: string }) => {
   const {
-    errors,
-    handleSubmit,
+    handleSubmitEditCoupon,
     isSubmitted,
     logo,
-    register,
     setIsSubmitted,
     setLogo,
     setOpenSidebar,
-    control,
-    handleSubmitEditCoupon,
   } = useCouponSubmit();
-  // get specific product
+
+  // get specific coupon
   const { data: coupon, isError, isLoading } = useGetCouponQuery(id);
+
   // decide to render
   let content = null;
   if (isLoading) {
     content = <Loading loading={isLoading} spinner="fade" />;
   }
   if (!coupon && isError) {
-    content = <ErrorMsg msg="There was an error" />;
+    content = <ErrorMsg msg="There was an error loading the coupon" />;
   }
   if (coupon && !isError) {
     content = (
       <>
         <div className="col-span-12 lg:col-span-4">
-          <form
-            onSubmit={handleSubmit(data => handleSubmitEditCoupon(data, id))}
-          >
-            <div className="mb-6 bg-white px-8 py-8 rounded-md">
-              {/* coupon image upload */}
-              <div className="bg-white">
-                <GlobalImgUpload
-                  isSubmitted={isSubmitted}
-                  setImage={setLogo}
-                  image={logo}
-                  setIsSubmitted={setIsSubmitted}
-                  default_img={coupon.logo}
-                />
-              </div>
-              {/* coupon image upload */}
-              <CouponFormField
-                register={register}
-                errors={errors}
-                name="Name"
-                isReq={true}
-                default_val={coupon.title}
-              />
-              <CouponFormField
-                register={register}
-                errors={errors}
-                name="Code"
-                isReq={true}
-                default_val={coupon.couponCode}
-              />
-              <CouponFormField
-                register={register}
-                errors={errors}
-                name="endTime"
-                isReq={true}
-                type="date"
-                default_val={coupon.endTime}
-              />
-              <CouponFormField
-                register={register}
-                errors={errors}
-                name="discountPercentage"
-                isReq={true}
-                default_val={coupon.discountPercentage}
-              />
-              <CouponFormField
-                register={register}
-                errors={errors}
-                name="minimumAmount"
-                isReq={true}
-                default_val={coupon.minimumAmount}
-              />
-
-              <button className="tp-btn px-7 py-2">Edit Coupon</button>
+          <div className="mb-6 bg-white px-8 py-8 rounded-md">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-2">
+                Edit Coupon
+              </h2>
+              <p className="text-sm text-gray-600">
+                Update coupon settings and restrictions
+              </p>
             </div>
-          </form>
+
+            <EnhancedCouponForm
+              onSubmit={data => handleSubmitEditCoupon(data, id)}
+              isSubmitted={isSubmitted}
+              setIsSubmitted={setIsSubmitted}
+              logo={logo}
+              setLogo={setLogo}
+              defaultValues={coupon}
+              isEdit={true}
+            />
+          </div>
         </div>
       </>
     );
