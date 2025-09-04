@@ -1,5 +1,4 @@
 import {
-  Cart,
   Categories,
   Contact,
   Coupons,
@@ -45,12 +44,12 @@ const sidebar_menu: Array<ISidebarMenus> = [
     link: '/orders',
     title: 'Orders',
   },
-  {
-    id: 5,
-    icon: Cart,
-    link: '/cart-tracking',
-    title: 'Cart Tracking',
-  },
+  // {
+  //   id: 5,
+  //   icon: Cart,
+  //   link: '/cart-tracking',
+  //   title: 'Cart Tracking',
+  // },
   {
     id: 6,
     icon: Leaf,
