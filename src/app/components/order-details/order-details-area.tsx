@@ -306,6 +306,38 @@ const CancelIcon = ({ className }: { className?: string }) => (
   </svg>
 );
 
+const CopyIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+    />
+  </svg>
+);
+
+const CheckIcon = ({ className }: { className?: string }) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M5 13l4 4L19 7"
+    />
+  </svg>
+);
+
 interface OrderDetailsAreaProps {
   id: string;
 }
@@ -324,6 +356,9 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
   const [refundAmount, setRefundAmount] = useState('');
   const [refundReason, setRefundReason] = useState('requested_by_customer');
   const [cancelReason, setCancelReason] = useState('requested_by_customer');
+  const [copiedAddress, setCopiedAddress] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
+  const [copiedPhone, setCopiedPhone] = useState(false);
 
   // Handle refund submission
   const handleRefund = async (e: React.FormEvent) => {
@@ -361,6 +396,68 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
       alert('Order cancelled successfully!');
     } catch (error: any) {
       alert(`Cancellation failed: ${error.data?.message || error.message}`);
+    }
+  };
+
+  // Handle copy address
+  const handleCopyAddress = async () => {
+    const addressText = `${order.name}\n${order.address}\n${order.city}, ${order.state} ${order.zipCode}\n${order.country}`;
+
+    try {
+      await navigator.clipboard.writeText(addressText);
+      setCopiedAddress(true);
+      setTimeout(() => setCopiedAddress(false), 2000);
+    } catch (error) {
+      console.error('Failed to copy address:', error);
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = addressText;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopiedAddress(true);
+      setTimeout(() => setCopiedAddress(false), 2000);
+    }
+  };
+
+  // Handle copy email
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(order.email);
+      setCopiedEmail(true);
+      setTimeout(() => setCopiedEmail(false), 2000);
+    } catch (error) {
+      console.error('Failed to copy email:', error);
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = order.email;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopiedEmail(true);
+      setTimeout(() => setCopiedEmail(false), 2000);
+    }
+  };
+
+  // Handle copy phone
+  const handleCopyPhone = async () => {
+    try {
+      await navigator.clipboard.writeText(order.contact);
+      setCopiedPhone(true);
+      setTimeout(() => setCopiedPhone(false), 2000);
+    } catch (error) {
+      console.error('Failed to copy phone:', error);
+      // Fallback for older browsers
+      const textArea = document.createElement('textarea');
+      textArea.value = order.contact;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      setCopiedPhone(true);
+      setTimeout(() => setCopiedPhone(false), 2000);
     }
   };
 
@@ -848,23 +945,95 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                 <div className={styles.contactItem}>
                   <Mail className={styles.contactIcon} />
                   <div className={styles.contactDetails}>
-                    <span className={styles.contactLabel}>Email Address</span>
+                    <div className={styles.contactLabelWithCopy}>
+                      <span className={styles.contactLabel}>Email Address</span>
+                      <button
+                        onClick={handleCopyEmail}
+                        className={`${styles.copyButton} ${
+                          copiedEmail ? styles.copySuccess : ''
+                        }`}
+                        title="Copy email address"
+                        type="button"
+                      >
+                        {copiedEmail ? (
+                          <>
+                            <CheckIcon className={styles.copyIcon} />
+                            <span className={styles.copyTooltip}>Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <CopyIcon className={styles.copyIcon} />
+                            <span className={styles.copyTooltip}>
+                              Copy Email
+                            </span>
+                          </>
+                        )}
+                      </button>
+                    </div>
                     <span className={styles.contactText}>{order.email}</span>
                   </div>
                 </div>
                 <div className={styles.contactItem}>
                   <Phone className={styles.contactIcon} />
                   <div className={styles.contactDetails}>
-                    <span className={styles.contactLabel}>Phone Number</span>
+                    <div className={styles.contactLabelWithCopy}>
+                      <span className={styles.contactLabel}>Phone Number</span>
+                      <button
+                        onClick={handleCopyPhone}
+                        className={`${styles.copyButton} ${
+                          copiedPhone ? styles.copySuccess : ''
+                        }`}
+                        title="Copy phone number"
+                        type="button"
+                      >
+                        {copiedPhone ? (
+                          <>
+                            <CheckIcon className={styles.copyIcon} />
+                            <span className={styles.copyTooltip}>Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <CopyIcon className={styles.copyIcon} />
+                            <span className={styles.copyTooltip}>
+                              Copy Phone
+                            </span>
+                          </>
+                        )}
+                      </button>
+                    </div>
                     <span className={styles.contactText}>{order.contact}</span>
                   </div>
                 </div>
                 <div className={styles.contactItem}>
                   <MapPin className={styles.contactIcon} />
                   <div className={styles.contactDetails}>
-                    <span className={styles.contactLabel}>
-                      Shipping Address
-                    </span>
+                    <div className={styles.contactLabelWithCopy}>
+                      <span className={styles.contactLabel}>
+                        Shipping Address
+                      </span>
+                      <button
+                        onClick={handleCopyAddress}
+                        className={`${styles.copyButton} ${
+                          copiedAddress ? styles.copySuccess : ''
+                        }`}
+                        title="Copy shipping address"
+                        type="button"
+                      >
+                        {copiedAddress ? (
+                          <>
+                            <CheckIcon className={styles.copyIcon} />
+                            <span className={styles.copyTooltip}>Copied!</span>
+                          </>
+                        ) : (
+                          <>
+                            <CopyIcon className={styles.copyIcon} />
+                            <span className={styles.copyTooltip}>
+                              Copy Address
+                            </span>
+                          </>
+                        )}
+                      </button>
+                    </div>
                     <address className={styles.contactText}>
                       <span className={styles.addressName}>{order.name}</span>
                       <span className={styles.addressLine}>
