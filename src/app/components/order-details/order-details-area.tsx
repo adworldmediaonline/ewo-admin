@@ -495,36 +495,36 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
     return fallback;
   };
 
-  // Helper function to render product options
+  // Helper function to render product options (handles both selectedOption and options array)
   const renderProductOptions = (options: any) => {
     if (!options) return null;
 
-    // Handle array of options
-    if (Array.isArray(options)) {
-      return options.map((option: any, index: number) => (
-        <span key={option._id || index} className={styles.optionItem}>
-          {safeRenderString(option.title)}
-          {option.price > 0 && (
-            <span className={styles.optionPrice}>
-              (+${safeRenderNumber(option.price).toFixed(2)})
-            </span>
-          )}
-        </span>
-      ));
-    }
-
-    // Handle single option object
-    if (typeof options === 'object' && options.title) {
+    // Handle single selectedOption object (preferred format)
+    if (typeof options === 'object' && !Array.isArray(options) && options.title) {
       return (
         <span className={styles.optionItem}>
           {safeRenderString(options.title)}
-          {options.price > 0 && (
+          {Number(options.price || 0) > 0 && (
             <span className={styles.optionPrice}>
-              (+${safeRenderNumber(options.price).toFixed(2)})
+              (+${Number(options.price || 0).toFixed(2)})
             </span>
           )}
         </span>
       );
+    }
+
+    // Handle array of options (legacy support)
+    if (Array.isArray(options)) {
+      return options.map((option: any, index: number) => (
+        <span key={option._id || index} className={styles.optionItem}>
+          {safeRenderString(option.title)}
+          {Number(option.price || 0) > 0 && (
+            <span className={styles.optionPrice}>
+              (+${Number(option.price || 0).toFixed(2)})
+            </span>
+          )}
+        </span>
+      ));
     }
 
     // Handle string
@@ -630,9 +630,8 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                 </p>
               </div>
               <div
-                className={`${styles.statusBadge} ${
-                  styles[statusColor] || styles.pending
-                }`}
+                className={`${styles.statusBadge} ${styles[statusColor] || styles.pending
+                  }`}
               >
                 {statusColor === 'delivered' && (
                   <CheckCircle className={styles.statusIcon} />
@@ -642,8 +641,8 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                 )}
                 {(statusColor === 'pending' ||
                   statusColor === 'processing') && (
-                  <Clock className={styles.statusIcon} />
-                )}
+                    <Clock className={styles.statusIcon} />
+                  )}
                 {order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
               </div>
             </div>
@@ -846,10 +845,10 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                                 <h4 className={styles.productTitle}>
                                   {safeRenderString(item.title, 'Product Name')}
                                 </h4>
-                                {item.options && (
+                                {(item.selectedOption || item.options) && (
                                   <div className={styles.productOptions}>
                                     <div className={styles.availableOptions}>
-                                      {renderProductOptions(item.options)}
+                                      {renderProductOptions(item.selectedOption || item.options)}
                                     </div>
                                   </div>
                                 )}
@@ -868,14 +867,14 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                           </td>
                           <td className={styles.tableCell}>
                             <span className={styles.priceText}>
-                              ${safeRenderNumber(item.price).toFixed(2)}
+                              ${safeRenderNumber(item.finalPriceDiscount || 0).toFixed(2)}
                             </span>
                           </td>
                           <td className={styles.tableCell}>
                             <span className={styles.totalPrice}>
                               $
                               {(
-                                safeRenderNumber(item.price) *
+                                safeRenderNumber(item.finalPriceDiscount || 0) *
                                 (item.orderQuantity || 0)
                               ).toFixed(2)}
                             </span>
@@ -930,9 +929,8 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                       : order.user?.name || order.name}
                   </h3>
                   <span
-                    className={`${styles.customerType} ${
-                      order.isGuestOrder ? styles.guest : styles.registered
-                    }`}
+                    className={`${styles.customerType} ${order.isGuestOrder ? styles.guest : styles.registered
+                      }`}
                   >
                     {order.isGuestOrder
                       ? 'Guest Customer'
@@ -949,9 +947,8 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                       <span className={styles.contactLabel}>Email Address</span>
                       <button
                         onClick={handleCopyEmail}
-                        className={`${styles.copyButton} ${
-                          copiedEmail ? styles.copySuccess : ''
-                        }`}
+                        className={`${styles.copyButton} ${copiedEmail ? styles.copySuccess : ''
+                          }`}
                         title="Copy email address"
                         type="button"
                       >
@@ -980,9 +977,8 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                       <span className={styles.contactLabel}>Phone Number</span>
                       <button
                         onClick={handleCopyPhone}
-                        className={`${styles.copyButton} ${
-                          copiedPhone ? styles.copySuccess : ''
-                        }`}
+                        className={`${styles.copyButton} ${copiedPhone ? styles.copySuccess : ''
+                          }`}
                         title="Copy phone number"
                         type="button"
                       >
@@ -1013,9 +1009,8 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                       </span>
                       <button
                         onClick={handleCopyAddress}
-                        className={`${styles.copyButton} ${
-                          copiedAddress ? styles.copySuccess : ''
-                        }`}
+                        className={`${styles.copyButton} ${copiedAddress ? styles.copySuccess : ''
+                          }`}
                         title="Copy shipping address"
                         type="button"
                       >
@@ -1096,17 +1091,16 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                     <div className={styles.timelineConnector}></div>
                     <div className={styles.timelineContent}>
                       <div
-                        className={`${styles.timelineIcon} ${
-                          order.status === 'processing' ||
-                          order.status === 'shipped' ||
-                          order.status === 'delivered'
+                        className={`${styles.timelineIcon} ${order.status === 'processing' ||
+                            order.status === 'shipped' ||
+                            order.status === 'delivered'
                             ? styles.completed
                             : styles.pending
-                        }`}
+                          }`}
                       >
                         {order.status === 'processing' ||
-                        order.status === 'shipped' ||
-                        order.status === 'delivered' ? (
+                          order.status === 'shipped' ||
+                          order.status === 'delivered' ? (
                           <CheckCircle className={styles.timelineIconInner} />
                         ) : (
                           <div className={styles.timelineIconDot}></div>
@@ -1114,13 +1108,12 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                       </div>
                       <div className={styles.timelineDetails}>
                         <h4
-                          className={`${styles.timelineName} ${
-                            order.status === 'processing' ||
-                            order.status === 'shipped' ||
-                            order.status === 'delivered'
+                          className={`${styles.timelineName} ${order.status === 'processing' ||
+                              order.status === 'shipped' ||
+                              order.status === 'delivered'
                               ? styles.completed
                               : styles.pending
-                          }`}
+                            }`}
                         >
                           Order Processing
                         </h4>
@@ -1141,15 +1134,14 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                     <div className={styles.timelineConnector}></div>
                     <div className={styles.timelineContent}>
                       <div
-                        className={`${styles.timelineIcon} ${
-                          order.status === 'shipped' ||
-                          order.status === 'delivered'
+                        className={`${styles.timelineIcon} ${order.status === 'shipped' ||
+                            order.status === 'delivered'
                             ? styles.completed
                             : styles.pending
-                        }`}
+                          }`}
                       >
                         {order.status === 'shipped' ||
-                        order.status === 'delivered' ? (
+                          order.status === 'delivered' ? (
                           <Truck className={styles.timelineIconInner} />
                         ) : (
                           <div className={styles.timelineIconDot}></div>
@@ -1157,12 +1149,11 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                       </div>
                       <div className={styles.timelineDetails}>
                         <h4
-                          className={`${styles.timelineName} ${
-                            order.status === 'shipped' ||
-                            order.status === 'delivered'
+                          className={`${styles.timelineName} ${order.status === 'shipped' ||
+                              order.status === 'delivered'
                               ? styles.completed
                               : styles.pending
-                          }`}
+                            }`}
                         >
                           Order Shipped
                         </h4>
@@ -1182,11 +1173,10 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                   <li className={styles.timelineItem}>
                     <div className={styles.timelineContent}>
                       <div
-                        className={`${styles.timelineIcon} ${
-                          order.status === 'delivered'
+                        className={`${styles.timelineIcon} ${order.status === 'delivered'
                             ? styles.completed
                             : styles.pending
-                        }`}
+                          }`}
                       >
                         {order.status === 'delivered' ? (
                           <CheckCircle className={styles.timelineIconInner} />
@@ -1196,11 +1186,10 @@ export default function OrderDetailsArea({ id }: OrderDetailsAreaProps) {
                       </div>
                       <div className={styles.timelineDetails}>
                         <h4
-                          className={`${styles.timelineName} ${
-                            order.status === 'delivered'
+                          className={`${styles.timelineName} ${order.status === 'delivered'
                               ? styles.completed
                               : styles.pending
-                          }`}
+                            }`}
                         >
                           Order Delivered
                         </h4>

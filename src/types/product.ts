@@ -68,13 +68,20 @@ export interface IProduct {
   };
   featured?: boolean;
   sellCount?: number;
+  finalPriceDiscount?: number;
+  updatedPrice?: number;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface IOrderProduct extends IProduct {
   orderQuantity: number;
+  selectedOption?: {
+    title: string;
+    price: number;
+  };
+  basePrice?: number;
 }
 
 export interface IAddProduct
-  extends Omit<IProduct, '_id' | 'reviews' | 'sellCount'> {}
+  extends Omit<IProduct, '_id' | 'reviews' | 'sellCount'> { }
